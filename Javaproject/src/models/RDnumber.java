@@ -1,6 +1,9 @@
-public class MyFirstApp {
-    public static void main(String[] args) {
-        System.out.println("I Rule!");
-        System.out.println("cai moi ne");
+package Javaproject.src.models;
+import java.util.Random;
+public class RDnumber{
+    public static int RandNum(){
+        Random r = new Random();
+        int num =r.nextInt(1000);
+        return num;
     }
 }
