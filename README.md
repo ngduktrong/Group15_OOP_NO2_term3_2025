@@ -1,5 +1,5 @@
-<h1> Tiêu đề </h1>
-<h2>Hệ thống quản lý rạp chiếu phim </h2> 
+
+<h1>Hệ thống quản lý rạp chiếu phim </h1> 
 
 <h2> Thành Viên Nhóm </h2>
 
