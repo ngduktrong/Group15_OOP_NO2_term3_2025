@@ -5,7 +5,7 @@
 
    - Nguyễn Đức Trọng -	23010594
      
-   - Dương Hừng Mạnh  - 23010597
+   - Dương Hùng Mạnh  - 23010597
 
 <h2> Readme Giới thiệu Project </h2>
 [Link](https://ngductrong.github.io/Group15_OOP_NO2_term3_2025)
