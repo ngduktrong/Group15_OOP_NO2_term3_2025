@@ -2,20 +2,20 @@ package Javaproject.src.models;
 import Javaproject.src.models.RapPhim;
 
 public class PhongChieu {
-    public int maPhong;
+    public int MaPhong;
     public String tenPhong;
     public RapPhim rapPhim;
     public int SoLuongGhe;
     public String loaiPhong;
     public PhongChieu(int maPhong, String tenPhong, RapPhim rapPhim, int soLuongGhe, String loaiPhong) {
-        this.maPhong = maPhong;
+        this.MaPhong = maPhong;
         this.tenPhong = tenPhong;
         this.rapPhim = rapPhim;
         SoLuongGhe = soLuongGhe;
         this.loaiPhong = loaiPhong;
     }
     public void HienThiPhongChieu(){
-        System.out.println("Ma phong: " + maPhong);
+        System.out.println("Ma phong: " + MaPhong);
         System.out.println("Ten phong: " + tenPhong);
         System.out.println("Rap phim: " + rapPhim.TenRap);
         System.out.println("Ma Rap:" + rapPhim.MaRap);

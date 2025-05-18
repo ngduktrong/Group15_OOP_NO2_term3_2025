@@ -4,7 +4,7 @@ import Javaproject.src.models.RapPhim;
 import java.util.Scanner;
 
 public class PhongChieuReview {
-    public void NhapPhongChieu(RapPhim rapPhim){
+    public PhongChieu NhapPhongChieu(RapPhim rapPhim){
         Scanner input = new Scanner(System.in);
         System.out.println("Nhap vao ma phong: ");
         int maPhong = input.nextInt();
@@ -22,7 +22,7 @@ public class PhongChieuReview {
         System.out.println("Thong tin phong chieu:");
         phongChieu.HienThiPhongChieu();
         
-        
+        return phongChieu;   
     }
     
 }
