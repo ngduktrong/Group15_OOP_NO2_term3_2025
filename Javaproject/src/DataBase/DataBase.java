@@ -6,11 +6,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-public class Database {
+public class DataBase {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/store_management";
+    private static final String URL = "jdbc:mysql://localhost:3306/quanlyrcp?useSSL=false&serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "123456"; //
+    private static final String PASSWORD = "15102005"; 
 
     public static Connection getConnection() {
 
