@@ -8,7 +8,7 @@ public class NhanVien {
     public String SoDienThoai;
     public String Email;
 
-    public NhanVien(int MaNHanVien , String Ten , String ChucVu, String Calam,String SoDienThoai,String Email){
+    public NhanVien(int MaNhanVien , String Ten , String ChucVu, String CaLam,String SoDienThoai,String Email){
        this.MaNhanVien=MaNhanVien; 
         this.Ten=Ten;
         this.ChucVu=ChucVu;
