@@ -1,8 +1,8 @@
 package com.group15.Review;
+import java.util.Scanner;
 
 import com.group15.models.PhongChieu;
 import com.group15.models.RapPhim;
-import java.util.Scanner;
 
 public class PhongChieuReview {
     public PhongChieu nhapPhongChieu(RapPhim rapPhim){
@@ -25,4 +25,5 @@ public class PhongChieuReview {
         
         return phongChieu;   
     }
+    
 }

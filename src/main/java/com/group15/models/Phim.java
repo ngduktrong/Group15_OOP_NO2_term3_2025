@@ -1,12 +1,12 @@
 package com.group15.models;
 
 public class Phim {
-    private int maPhim;
-    private String tenPhim;
-    private String daoDien;
-    private String ngayCongChieu;
-    private String theLoai;
-    private String thoiLuongPhim;
+    private final int maPhim; // Thêm dòng này
+    private final String tenPhim;
+    private final String daoDien;
+    private final String ngayCongChieu;
+    private final String theLoai;
+    private final String thoiLuongPhim;
 
     // Constructor
     public Phim(int maPhim, String tenPhim, String daoDien, String ngayCongChieu, String theLoai, String thoiLuongPhim) {
