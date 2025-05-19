@@ -16,7 +16,7 @@ public class RapPhimReview {
         System.out.print("Nhap so dien thoai: ");
         String soDienThoai = input.nextLine();
         RapPhim rapPhim = new RapPhim(maRap, tenRap, diaChi, soDienThoai);
-        rapPhim.hienThiRapPhim();
+
         
         return rapPhim;
     }
