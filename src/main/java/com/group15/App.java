@@ -1,13 +1,9 @@
 package com.group15;
-
-/**
- * Hello world!
- *
- */
-public class App 
-{
+import com.group15.Review.KhachHangReview;
+public class App {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
+      KhachHangReview KV = new KhachHangReview();
+      KV.NhapKhachHang();
     }
 }
