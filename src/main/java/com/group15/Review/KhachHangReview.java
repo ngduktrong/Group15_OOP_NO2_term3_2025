@@ -5,8 +5,8 @@ import java.util.Scanner;
 import com.group15.models.KhachHang;
 
 public class KhachHangReview {
-    public void nhapKhachHang() {
-        try (Scanner input = new Scanner(System.in)) {
+    public void NhapKhachHang() {
+            Scanner input = new Scanner(System.in);
             System.out.println("Nhap vao ma khach hang:");
             int maKhachHang = input.nextInt();
             input.nextLine();
@@ -19,6 +19,7 @@ public class KhachHangReview {
             KhachHang kh = new KhachHang(maKhachHang, ten, soDienThoai, email);
             System.out.println("Thong tin khach hang:");
             kh.hienthithongtinkhachhang();
-        }
+            
+            input.close();
     }
 }
