@@ -1,10 +1,11 @@
-package Javaproject.src.Review;
-import Javaproject.src.models.PhongChieu;
-import Javaproject.src.models.RapPhim;
+package com.group15.Review;
+
+import com.group15.models.PhongChieu;
+import com.group15.models.RapPhim;
 import java.util.Scanner;
 
 public class PhongChieuReview {
-    public PhongChieu NhapPhongChieu(RapPhim rapPhim){
+    public PhongChieu nhapPhongChieu(RapPhim rapPhim){
         Scanner input = new Scanner(System.in);
         System.out.println("Nhap vao ma phong: ");
         int maPhong = input.nextInt();
@@ -20,9 +21,8 @@ public class PhongChieuReview {
         PhongChieu phongChieu = new PhongChieu(maPhong, tenPhong, rapPhim, soLuongGhe, loaiPhong);
         
         System.out.println("Thong tin phong chieu:");
-        phongChieu.HienThiPhongChieu();
+        phongChieu.hienThiPhongChieu();
         
         return phongChieu;   
     }
-    
 }

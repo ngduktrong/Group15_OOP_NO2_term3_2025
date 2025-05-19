@@ -1,30 +1,30 @@
 package com.group15.models;
 
-import java.time.LocalDate;
-
 public class Phim {
-    public int MaPhim;
-    public String TenPhim;
-    public String DaoDien;
-    public LocalDate NgayCongChieu;
-    public String TheLoai;
-    public String ThoiLuong;
+    private int maPhim;
+    private String tenPhim;
+    private String daoDien;
+    private String ngayCongChieu;
+    private String theLoai;
+    private String thoiLuongPhim;
 
-    public Phim(int MaPhim, String TenPhim, String DaoDien, LocalDate NgayCongChieu, String TheLoai, String ThoiLuong) {
-        this.MaPhim=MaPhim;
-        this.TenPhim=TenPhim;
-        this.DaoDien=DaoDien;
-        this.NgayCongChieu=NgayCongChieu;
-        this.TheLoai=TheLoai;
-        this.ThoiLuong=ThoiLuong;
+    // Constructor
+    public Phim(int maPhim, String tenPhim, String daoDien, String ngayCongChieu, String theLoai, String thoiLuongPhim) {
+        this.maPhim = maPhim;
+        this.tenPhim = tenPhim;
+        this.daoDien = daoDien;
+        this.ngayCongChieu = ngayCongChieu;
+        this.theLoai = theLoai;
+        this.thoiLuongPhim = thoiLuongPhim;
     }
 
-    public void hienthithongtinphim() {
-        System.out.println("Ma Phim: "+MaPhim);
-        System.out.println("Ten Phim: "+TenPhim);
-        System.out.println("Dao Dien: "+DaoDien);
-        System.out.println("Ngay Cong Chieu: "+NgayCongChieu);
-        System.out.println("The Loai: "+TheLoai);
-        System.out.println("Thoi Luong: "+ThoiLuong);
+    // Phương thức hiển thị thông tin phim
+    public void hienThiThongTinPhim() {
+        System.out.println("Mã phim: " + maPhim);
+        System.out.println("Tên phim: " + tenPhim);
+        System.out.println("Đạo diễn: " + daoDien);
+        System.out.println("Ngày công chiếu: " + ngayCongChieu);
+        System.out.println("Thể loại: " + theLoai);
+        System.out.println("Thời lượng phim: " + thoiLuongPhim);
     }
 }

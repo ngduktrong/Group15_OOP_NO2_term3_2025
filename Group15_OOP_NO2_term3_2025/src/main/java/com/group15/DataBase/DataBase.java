@@ -1,10 +1,10 @@
-package DataBase;
 package com.group15.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+// ...rest of your code...
 
 public class DataBase {
 

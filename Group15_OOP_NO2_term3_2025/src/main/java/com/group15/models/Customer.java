@@ -1,9 +1,9 @@
 package com.group15.models;
 public class Customer {
-    private int makhachhang;
-    private String ten;
-    private String sodienthoai;
-    private String email;
+    private final int makhachhang;
+    private final String ten;
+    private final String sodienthoai;
+    private final String email;
 
     public Customer(int makhachhang, String ten, String sodienthoai, String email) {
         this.makhachhang = makhachhang;
