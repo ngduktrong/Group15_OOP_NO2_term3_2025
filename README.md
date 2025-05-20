@@ -4,7 +4,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 <h2>Mục Tiêu </h2>
 1. Giao diện
 
-    - Giao diện đồ họa bằng JavaFX cho dự án
+    - Giao diện đồ họa bằng Java cho dự án
       
 2. Chức năng chính
    + Quản lý Phim :
@@ -23,6 +23,9 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 
 <h2> Readme Giới thiệu Project </h2>
 [Link](https://ngduktrong.github.io/Group15_OOP_NO2_term3_2025/)
+
+[Link](anh.jmg.png)
+[Link](anh2.hmg.png)
 
 
 
