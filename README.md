@@ -45,7 +45,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 <h3>UML Class Diagram</h3>
 
 ![Sơ đồ class ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/%E1%BA%A2nh%20ch%E1%BB%A5p%20m%C3%A0n%20h%C3%ACnh%202025-05-20%20114859.png?raw=true)
-<h3>Sơ đồ Squence Diagram </h3>
+<h3>UML Squence Diagram </h3>
 ![Sơ đồ squence]()
 
 
