@@ -47,6 +47,8 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 ![Sơ đồ class ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/%E1%BA%A2nh%20ch%E1%BB%A5p%20m%C3%A0n%20h%C3%ACnh%202025-05-20%20114859.png?raw=true)
 <h3>UML Squence Diagram </h3>
 ![Sơ đồ squence](https://raw.githubusercontent.com/ngduktrong/Group15_OOP_NO2_term3_2025/3331520bc93b3cfbefb48066d6aa6b5243f8cc87/Screenshot%202025-05-20%20120942.png)
+<h3> UML Chức năng Đăng nhập </h3>
+![Sơ đồ login](https://raw.githubusercontent.com/ngduktrong/Group15_OOP_NO2_term3_2025/c08089f4b67ff7fbe1f24208ab4cd3bcc3753b6f/img/ChucNanglogin.png)
 
 
 
