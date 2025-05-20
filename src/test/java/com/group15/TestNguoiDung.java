@@ -4,7 +4,6 @@ import com.group15.models.NguoiDung;
 
 public class TestNguoiDung {
     public static void main(String[] args) {
-        // Tạo đối tượng bằng constructor đầy đủ tham số
         NguoiDung nguoiDung2 = new NguoiDung(
                 2,
                 "Tran Thi B",
