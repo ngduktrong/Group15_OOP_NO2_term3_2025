@@ -52,12 +52,5 @@ public class NhanVien {
     public void setEmail(String Email) {
         this.Email = Email;
     }
-    public void hienthithongtinnhanvien(){
-        System.out.println("Ma nhan vien:"+MaNhanVien);
-        System.out.println("Ten:"+Ten);
-        System.out.println("ChucVu:"+ChucVu);
-        System.out.println("Ca lam:"+CaLam);
-        System.out.println("So dien thoai:"+SoDienThoai);
-        System.out.println("Email:"+Email);
-    }
+    
 }
