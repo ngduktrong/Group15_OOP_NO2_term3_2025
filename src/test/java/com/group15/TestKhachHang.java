@@ -1,4 +1,5 @@
 package com.group15;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -6,12 +7,13 @@ import com.group15.models.KhachHang;
 import com.group15.Review.KhachHangReview;
 
 public class TestKhachHang {
+
     KhachHangReview KH = new KhachHangReview();
 
     public void addKhachHang(){
-        KhachHang kh1=new KhachHang(1,"Nguyen Van An","0123456789","An@gmail.com");
-        KhachHang kh2=new KhachHang(2,"Nguyen thi van","0123456788","van@gmail.com");
-        KhachHang kh3=new KhachHang(3,"Nguyen kieu trinh","0123456787","trinh@gmail.com");
+        KhachHang kh1 = new KhachHang(1, "Nguyen Van An", "0123456789", "an@gmail.com");
+        KhachHang kh2 = new KhachHang(2, "Nguyen Thi Van", "0123456788", "van@gmail.com");
+        KhachHang kh3 = new KhachHang(3, "Nguyen Kieu Trinh", "0123456787", "trinh@gmail.com");
 
         KH.addKhachHang(kh1);
         KH.addKhachHang(kh2);
@@ -49,10 +51,9 @@ public class TestKhachHang {
         int maKhachHang = input.nextInt();
 
         int sizeBefore = KH.getKhachHangList().size();
-        KH.getDeleteKhachHang(maKhachHang);
-        int sizeAfter = KH.getKhachHangList().size();
+        ArrayList<KhachHang> updatedList = KH.getDeleteKhachHang(maKhachHang);
 
-        if (sizeAfter < sizeBefore) {
+        if (updatedList.size() < sizeBefore) {
             System.out.println("Xoa thanh cong khach hang co ma: " + maKhachHang);
         } else {
             System.out.println("Khong tim thay khach hang co ma: " + maKhachHang);
@@ -60,28 +61,15 @@ public class TestKhachHang {
 
         KH.HienThiKhachHang();
     }
-    public static void main(String[] args) {
-        TestKhachHang test = new TestKhachHang();
-        Scanner input = new Scanner(System.in);
-        
-        System.out.println("Chon thao tac: ");
-        System.out.println("1. Them khach hang");
-        System.out.println("2. Sua thong tin khach hang");
-        System.out.println("3. Xoa khach hang");
-        int choice = input.nextInt();
 
-        switch (choice) {
-            case 1:
-                test.addKhachHang();
-                break;
-            case 2:
-                test.testEditKhachHang();
-                break;
-            case 3:
-                test.testDeleteKhachHang();
-                break;
-            default:
-                System.out.println("Lua chon khong hop le.");
-        }
+    public static void main(String[] args){
+        TestKhachHang test = new TestKhachHang();
+        test.addKhachHang();
+
+        System.out.println("\n=== Sua khach hang ===");
+        test.testEditKhachHang();
+
+        System.out.println("\n=== Xoa khach hang ===");
+        test.testDeleteKhachHang();
     }
 }
