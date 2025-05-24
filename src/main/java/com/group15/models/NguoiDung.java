@@ -7,8 +7,7 @@ public class NguoiDung {
     private String email;
     private String loaiNguoiDung; // KhachHang hoặc NhanVien
 
-    public NguoiDung() {
-    }
+   
 
     public NguoiDung(int maNguoiDung, String hoTen, String soDienThoai, String email, String loaiNguoiDung) {
         this.maNguoiDung = maNguoiDung;

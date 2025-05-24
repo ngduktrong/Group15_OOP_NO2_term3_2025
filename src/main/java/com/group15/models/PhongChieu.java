@@ -1,4 +1,5 @@
 package com.group15.models;
+import com.group15.models.RapPhim;
 
 public class PhongChieu {
     public int MaPhong;
