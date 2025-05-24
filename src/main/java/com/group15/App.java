@@ -5,5 +5,7 @@ public class App {
     {
       KhachHangReview KV = new KhachHangReview();
       KV.NhapKhachHang();
+      
+
     }
 }
