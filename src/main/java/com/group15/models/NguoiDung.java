@@ -1,71 +1,78 @@
 package com.group15.models;
 
 public class NguoiDung {
-    private int maNguoiDung;
-    private String hoTen;
-    private String soDienThoai;
-    private String email;
-    private String loaiNguoiDung; // KhachHang hoặc NhanVien
+    
+    @DBTable(columnName = "MaNguoiDung", isPrimaryKey = true)
+    private int MaNguoiDung;
+    
+    @DBTable(columnName = "HoTen")
+    private String HoTen;
 
-    public NguoiDung() {
-    }
+    @DBTable(columnName = "SoDienThoai")
+    private String SoDienThoai;
+    @DBTable(columnName = "Email")
+    private String Email;
+    @DBTable(columnName = "LoaiNguoiDung")
+    private String LoaiNguoiDung; // KhachHang hoặc NhanVien
+
+   
 
     public NguoiDung(int maNguoiDung, String hoTen, String soDienThoai, String email, String loaiNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
-        this.loaiNguoiDung = loaiNguoiDung;
+        this.MaNguoiDung = maNguoiDung;
+        this.HoTen = hoTen;
+        this.SoDienThoai = soDienThoai;
+        this.Email = email;
+        this.LoaiNguoiDung = loaiNguoiDung;
     }
 
     public int getMaNguoiDung() {
-        return maNguoiDung;
+        return MaNguoiDung;
     }
 
     public void setMaNguoiDung(int maNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
+        this.MaNguoiDung = maNguoiDung;
     }
 
     public String getHoTen() {
-        return hoTen;
+        return HoTen;
     }
 
     public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+        this.HoTen = hoTen;
     }
 
     public String getSoDienThoai() {
-        return soDienThoai;
+        return SoDienThoai;
     }
 
     public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+        this.SoDienThoai = soDienThoai;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.Email = email;
     }
 
     public String getLoaiNguoiDung() {
-        return loaiNguoiDung;
+        return LoaiNguoiDung;
     }
 
     public void setLoaiNguoiDung(String loaiNguoiDung) {
-        this.loaiNguoiDung = loaiNguoiDung;
+        this.LoaiNguoiDung = loaiNguoiDung;
     }
 
     @Override
     public String toString() {
         return "NguoiDung{" +
-                "maNguoiDung=" + maNguoiDung +
-                ", hoTen='" + hoTen + '\'' +
-                ", soDienThoai='" + soDienThoai + '\'' +
-                ", email='" + email + '\'' +
-                ", loaiNguoiDung='" + loaiNguoiDung + '\'' +
+                "maNguoiDung=" + MaNguoiDung +
+                ", hoTen='" + HoTen + '\'' +
+                ", soDienThoai='" + SoDienThoai + '\'' +
+                ", email='" + Email + '\'' +
+                ", loaiNguoiDung='" + LoaiNguoiDung + '\'' +
                 '}';
     }
 }
