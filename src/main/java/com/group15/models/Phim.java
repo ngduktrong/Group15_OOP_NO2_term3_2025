@@ -11,7 +11,7 @@ public class Phim {
     private String DaoDien;
     private String DuongDanPoster;
 
-    public Phim(String TenPhim, int ThoiLuong, String NgayKhoiChieu, String NuocSanXuat, String DinhDang, String MoTa, String DaoDien, String DuongDanPoster) {
+    public Phim(String TenPhim,int MaPhim, int ThoiLuong, String NgayKhoiChieu, String NuocSanXuat, String DinhDang, String MoTa, String DaoDien, String DuongDanPoster) {
         this.MaPhim = MaPhim;
         this.TenPhim = TenPhim;
         this.ThoiLuong = ThoiLuong;
