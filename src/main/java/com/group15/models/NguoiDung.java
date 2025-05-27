@@ -1,20 +1,6 @@
 package com.group15.models;
 
 public class NguoiDung {
-    
-    @DBTable(columnName = "MaNguoiDung", isPrimaryKey = true)
-    private int MaNguoiDung;
-    
-    @DBTable(columnName = "HoTen")
-    private String HoTen;
-
-    @DBTable(columnName = "SoDienThoai")
-    private String SoDienThoai;
-    @DBTable(columnName = "Email")
-    private String Email;
-    @DBTable(columnName = "LoaiNguoiDung")
-    private String LoaiNguoiDung; // KhachHang hoặc NhanVien
-
    
 
     public NguoiDung(int maNguoiDung, String hoTen, String soDienThoai, String email, String loaiNguoiDung) {

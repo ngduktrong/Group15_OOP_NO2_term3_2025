@@ -6,7 +6,7 @@ import com.group15.Review.PhimReview;
 import com.group15.models.Phim;
 
 public class TestPhim {
-    PhimReview pr = new PhimReview(); // Sử dụng chung 1 PhimReview
+    PhimReview pr = new PhimReview(); 
 
     public void addSamplePhim() {
         Phim p1 = new Phim("Avengers: Endgame", 1001, 181, "2019-04-26", "USA", "IMAX", "Superhero movie", "Anthony Russo", "endgame.jpg");
@@ -117,9 +117,9 @@ public class TestPhim {
 
     public static void main(String[] args) {
         TestPhim test = new TestPhim();
-        test.addSamplePhim(); // ✅ Load dữ liệu mẫu 1 lần
-        test.addPhimTuNguoiDung(); // Thêm từ người dùng
-        test.findPhim(); // Tìm phim
-        test.testEditDelete(); // Sửa và xóa
+        test.addSamplePhim(); 
+        test.addPhimTuNguoiDung(); 
+        test.findPhim(); 
+        test.testEditDelete(); 
     }
 }

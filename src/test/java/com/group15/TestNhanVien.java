@@ -1,9 +1,9 @@
 package com.group15;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-import com.group15.models.NhanVien;
 import com.group15.Review.NhanVienReview;
+import com.group15.models.NhanVien;
 
 public class TestNhanVien {
     
