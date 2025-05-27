@@ -1,4 +1,5 @@
 package com.group15.models;
+import com.group15.Review.NguoiDungReview;
 
 public class KhachHang {
     private int MaKhachHang;

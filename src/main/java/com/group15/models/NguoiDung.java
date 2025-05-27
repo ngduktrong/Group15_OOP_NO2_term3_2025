@@ -18,11 +18,11 @@ public class NguoiDung {
    
 
     public NguoiDung(int maNguoiDung, String hoTen, String soDienThoai, String email, String loaiNguoiDung) {
-        this.MaNguoiDung = MaNguoiDung;
-        this.HoTen = HoTen;
-        this.SoDienThoai = SoDienThoai;
-        this.Email = Email;
-        this.LoaiNguoiDung = LoaiNguoiDung;
+        this.MaNguoiDung = maNguoiDung;
+        this.HoTen = hoTen;
+        this.SoDienThoai = soDienThoai;
+        this.Email = email;
+        this.LoaiNguoiDung = loaiNguoiDung;
     }
 
     public int getMaNguoiDung() {
@@ -65,14 +65,5 @@ public class NguoiDung {
         this.LoaiNguoiDung = LoaiNguoiDung;
     }
 
-    @Override
-    public String toString() {
-        return "NguoiDung{" +
-                "maNguoiDung=" + MaNguoiDung +
-                ", hoTen='" + HoTen + '\'' +
-                ", soDienThoai='" + SoDienThoai + '\'' +
-                ", email='" + Email + '\'' +
-                ", loaiNguoiDung='" + LoaiNguoiDung + '\'' +
-                '}';
-    }
+    
 }
