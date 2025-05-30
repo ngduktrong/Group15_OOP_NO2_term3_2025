@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.group15.AppTest" time="0.045" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.group15.AppTest" time="0.06" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="24"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\test-classes;C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\classes;C:\Users\Admin\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\Admin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="java.class.path" value="C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\test-classes;C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\classes;C:\Users\Admin\.m2\repository\com\mysql\mysql-connector-j\8.0.33\mysql-connector-j-8.0.33.jar;C:\Users\Admin\.m2\repository\com\google\protobuf\protobuf-java\3.21.9\protobuf-java-3.21.9.jar;C:\Users\Admin\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\Admin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -15,10 +15,10 @@
     <property name="user.country" value="VN"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Oracle_JDK-24\bin"/>
-    <property name="sun.java.command" value="C:\Users\Admin\AppData\Local\Temp\surefire10922665812303898965\surefirebooter-20250519182043162_3.jar C:\Users\Admin\AppData\Local\Temp\surefire10922665812303898965 2025-05-19T18-20-42_864-jvmRun1 surefire-20250519182043162_1tmp surefire_0-20250519182043162_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Admin\AppData\Local\Temp\surefire9332507864369540039\surefirebooter-20250527214745653_3.jar C:\Users\Admin\AppData\Local\Temp\surefire9332507864369540039 2025-05-27T21-47-45_362-jvmRun1 surefire-20250527214745653_1tmp surefire_0-20250527214745653_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="com.group15.AppTest"/>
-    <property name="surefire.test.class.path" value="C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\test-classes;C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\classes;C:\Users\Admin\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\Admin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
+    <property name="test" value="com.group15.AppTest#testApp"/>
+    <property name="surefire.test.class.path" value="C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\test-classes;C:\OOP\Group15_OOP_NO2_term3_2025\Group15_OOP_NO2_term3_2025\target\classes;C:\Users\Admin\.m2\repository\com\mysql\mysql-connector-j\8.0.33\mysql-connector-j-8.0.33.jar;C:\Users\Admin\.m2\repository\com\google\protobuf\protobuf-java\3.21.9\protobuf-java-3.21.9.jar;C:\Users\Admin\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\Admin\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Admin"/>
     <property name="user.language" value="vi"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Admin\AppData\Local\Temp\surefire10922665812303898965\surefirebooter-20250519182043162_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Admin\AppData\Local\Temp\surefire9332507864369540039\surefirebooter-20250527214745653_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="24.0.1+9-30"/>
@@ -60,5 +60,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="68.0"/>
   </properties>
-  <testcase name="testApp" classname="com.group15.AppTest" time="0.005"/>
+  <testcase name="testApp" classname="com.group15.AppTest" time="0.007"/>
 </testsuite>
