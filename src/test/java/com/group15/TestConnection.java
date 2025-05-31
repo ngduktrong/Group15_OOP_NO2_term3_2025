@@ -8,11 +8,11 @@ public class TestConnection {
     public static void main(String[] args) {
         try (Connection conn = DataBase.getConnection()) {
             if (conn != null) {
-                System.out.println("Kết nối thành công tới MySQL!");
+                System.out.println("Ket noi thanh cong MySQL!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Kết nối thất bại!");
+            System.out.println("Ket noi that bai !");
         }
     }
 }
