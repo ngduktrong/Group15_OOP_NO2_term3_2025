@@ -1,5 +1,4 @@
 package com.group15.models;
-import com.group15.Review.NguoiDungReview;
 
 public class KhachHang {
     private int MaKhachHang;
@@ -38,10 +37,13 @@ public class KhachHang {
     public void setEmail(String Email) {
         this.Email = Email;
     }
-    public void hienthithongtinkhachhang(){
-        System.out.println("Ma Khach Hang:" +MaKhachHang);
-        System.out.println("Ten:"+Ten);
-        System.out.println("So Dien Thoai:"+SoDienThoai);
-        System.out.println("Email:"+Email);
+@Override
+    public String toString() {
+        return "KhachHang{" +
+                "MaKhachHang=" + MaKhachHang +
+                ", Ten='" + Ten + '\'' +
+                ", SoDienThoai='" + SoDienThoai + '\'' +
+                ", Email='" + Email + '\'' +
+                '}';
     }
 }

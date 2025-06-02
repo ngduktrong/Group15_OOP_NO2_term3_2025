@@ -1,6 +1,9 @@
 package com.group15.models;
 
 public class NhanVien {
+    public enum ChucVu {
+        Admin , QuanLy, ThuNgan, BanVe
+    }
     private int MaNhanVien;
     private String Ten;
     private String ChucVu;
@@ -9,7 +12,7 @@ public class NhanVien {
     private String Email;
 
     public NhanVien(int MaNhanVien , String Ten , String ChucVu, String CaLam,String SoDienThoai,String Email){
-       this.MaNhanVien=MaNhanVien; 
+        this.MaNhanVien=MaNhanVien;
         this.Ten=Ten;
         this.ChucVu=ChucVu;
         this.CaLam=CaLam;

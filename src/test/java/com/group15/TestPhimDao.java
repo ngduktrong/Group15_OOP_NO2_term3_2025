@@ -1,5 +1,6 @@
 package com.group15;
 
+import com.group15.dao.PhimDao;
 import com.group15.models.Phim;
 
 public class TestPhimDao {

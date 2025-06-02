@@ -1,4 +1,4 @@
-package com.group15;
+package com.group15.dao;
 // PhimDao.java
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,8 +38,8 @@ public class PhimDao {
         List<Phim> list = new ArrayList<>();
         String sql = "SELECT * FROM phim";
         try (Connection conn = DataBase.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Phim phim = new Phim(
                     rs.getString("TenPhim"),
@@ -64,7 +64,7 @@ public class PhimDao {
     public boolean delete(int maPhim) {
         String sql = "DELETE FROM phim WHERE MaPhim = ?";
         try (Connection conn = DataBase.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPhim);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -77,7 +77,7 @@ public class PhimDao {
     public boolean update(Phim phim) {
         String sql = "UPDATE phim SET TenPhim=?, ThoiLuong=?, NgayKhoiChieu=?, NuocSanXuat=?, DinhDang=?, MoTa=?, DaoDien=?, DuongDanPoster=? WHERE MaPhim=?";
         try (Connection conn = DataBase.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, phim.getTenPhim());
             ps.setInt(2, phim.getThoiLuong());
             ps.setString(3, phim.getNgayKhoiChieu());

@@ -1,25 +1,26 @@
 package com.group15.models;
 public class Ghe {
-    private int SoGhe ;
-    private String MaPhong ;
+    private int soGhe;
+    private String maPhong;
+    public int getSoGhe() {
+        return soGhe;
+    }
+    public void setSoGhe(int soGhe) {
+        this.soGhe = soGhe;
+    }
+    public String getMaPhong() {
+        return maPhong;
+    }
+    public void setMaPhong(String maPhong) {
+        this.maPhong = maPhong;
+    }
+    public Ghe(int soGhe, String maPhong) {
+        this.soGhe = soGhe;
+        this.maPhong = maPhong;
+    }
 
-    public int getSoghe(){
-        return SoGhe ;
-    }
-    public void setSoGhe(int MaGhe){
-        this.SoGhe = SoGhe ;
-    }
-    public String getMaPhong(){
-        return MaPhong ;
-    }
-    public void setMaPhong(String MaPhong){
-        this.MaPhong = MaPhong ;
-    }
-    public Ghe(int SoGhe, String MaPhong) {
-        this.SoGhe = SoGhe;
-        this.MaPhong = MaPhong;
-    }
-    public Ghe(){
-        super(); // Super lớp con muốn gọi construc lớp cha 
+    // Constructor không tham số
+    public Ghe() {
+        // Mặc định: không cần gọi super() nếu không kế thừa lớp cha
     }
 }

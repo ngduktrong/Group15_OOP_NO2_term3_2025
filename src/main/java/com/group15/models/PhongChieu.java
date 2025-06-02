@@ -1,6 +1,4 @@
 package com.group15.models;
-import com.group15.models.RapPhim;
-
 public class PhongChieu {
     private int MaPhong ;
     private String TenPhong;

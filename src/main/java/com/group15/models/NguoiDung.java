@@ -1,6 +1,10 @@
 package com.group15.models;
 
 public class NguoiDung {
+    public enum LoaiNguoiDungEnum {
+        khachhang ,
+        nhanvien
+    }
     private int MaNguoiDung;
     private String HoTen;
     private String SoDienThoai;
@@ -54,6 +58,5 @@ public class NguoiDung {
     public void setLoaiNguoiDung(String LoaiNguoiDung) {
         this.LoaiNguoiDung = LoaiNguoiDung;
     }
-
     
 }
