@@ -1,3 +1,19 @@
+-- Tắt ràng buộc để xóa bảng
+
+SET FOREIGN_KEY_CHECKS = 0;
+SET @tables = NULL;
+SELECT GROUP_CONCAT(table_schema, '.', table_name)
+	INTO @tables
+	FROM information_schema.tables
+	WHERE table_schema = 'quanlyrcp';
+SET @tables = CONCAT('DROP TABLE ', @tables);
+PREPARE stmt FROM @tables;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+SET FOREIGN_KEY_CHECKS = 1;
+
+USE quanlyrcp;
+
 -- Bảng NguoiDung
 CREATE TABLE IF NOT EXISTS NguoiDung (
 	MaNguoiDung INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,10 +31,10 @@ CREATE TABLE IF NOT EXISTS KhachHang (
 );
 
 -- Bảng ResetToken
-CREATE TABLE IF NOT EXISTS ResetToKen (
+CREATE TABLE IF NOT EXISTS ResetToken (
 	Token VARCHAR(255) PRIMARY KEY, 
     Email NVARCHAR(100) NOT NULL, 
-    expiration_time TIMESTAMP NOT NULL, 
+    expirarion_time TIMESTAMP NOT NULL, 
     FOREIGN KEY (Email) REFERENCES NguoiDung(Email) ON DELETE CASCADE
 );
 
@@ -99,7 +115,7 @@ CREATE TABLE  IF NOT EXISTS Ve (
     SoGhe NVARCHAR(5) NOT NULL ,
     MaHoaDon INT NULL ,
     GiaVe DECIMAL(10,2) CHECK ( GiaVe >= 0 ) NOT NULL ,
-    TrangThai ENUM ('available ' , 'booked' , 'paid' , 'cancelled ' , 'pending' ) DEFAULT 'available' NOT NULL , 
+    TrangThai ENUM ('available ', 'booked', 'paid', 'cancelled ', 'pending'), 
     NgayDat DATETIME NULL ,
     FOREIGN KEY (MaSuatChieu) REFERENCES SuatChieu(MaSuatChieu) ON DELETE CASCADE ,
     FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon) ON DELETE SET NULL , 
@@ -113,3 +129,92 @@ CREATE TABLE IF NOT EXISTS ChiTietHoaDon (
     FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon) ON DELETE CASCADE ,
     FOREIGN KEY (MaVe) REFERENCES Ve(MaVe) ON DELETE CASCADE 
 );
+
+
+-- ========================================
+-- DU LIEU MAU CHO HE THONG QUAN LY RCP
+-- ========================================
+
+USE quanlyrcp;
+
+-- 1. THEM PHIM
+INSERT INTO Phim (TenPhim, ThoiLuong, NgayKhoiChieu, NuocSanXuat, DinhDang, MoTa, DaoDien, DuongDanPoster) VALUES
+('Minions', 90, '2024-01-15', 'USA', '3D', 'Phiêu lưu của Minions', 'Pierre Coffin', 'poster_minions.jpg'),
+('Doremon Movie',' 50 ' , '2025-05-23', 'JPN' ,'5D','Cuộc phiêu lưu đến hành tinh khỉ ' ,' Puskas' ,'doremon.jpg ') ;
+
+-- 2. THEM PHONG CHIEU
+INSERT INTO PhongChieu (TenPhong, SoLuongGhe, LoaiPhong) VALUES
+('Phòng 1', 50, '2D'),
+('Phòng 2', 30, '3D');
+
+-- 3. THEM GHE
+-- Phòng 1 (50 ghế: A01 - E10)
+SET @i := -1;
+INSERT INTO Ghe (MaPhong, SoGhe)
+SELECT 1, CONCAT(CHAR(65 + FLOOR(i/10)), LPAD((i%10)+1, 2, '0'))
+FROM (SELECT @i := @i + 1 AS i FROM mysql.help_topic LIMIT 50) AS tmp;
+
+-- Phòng 2 (30 ghế: A01 - C10)
+SET @i := -1;
+INSERT INTO Ghe (MaPhong, SoGhe)
+SELECT 2, CONCAT(CHAR(65 + FLOOR(i/10)), LPAD((i%10)+1, 2, '0'))
+FROM (SELECT @i := @i + 1 AS i FROM mysql.help_topic LIMIT 30) AS tmp;
+
+-- 4. THEM SUAT CHIEU
+INSERT INTO SuatChieu (MaPhim, MaPhong, NgayGioChieu) VALUES
+(1, 1, '2025-05-20 18:30:00'),
+(2, 2, '2025-05-21 15:00:00');
+
+-- 5. THEM NGUOI DUNG (5 khach, 5 nhan vien)
+INSERT INTO NguoiDung (HoTen, SoDienThoai, Email, LoaiNguoiDung) VALUES
+('Nguyen Duc Trong ', '0983241301', '23010594@st.phenikaa-uni.edu.vn', 'NhanVien'),
+('Tran Thi B', '0911000002', 'b@example.com', 'KhachHang'),
+('Le Van C', '0911000003', 'c@example.com', 'KhachHang'),
+('Pham Thi D', '0911000004', 'd@example.com', 'KhachHang'),
+('Hoang Van E', '0911000005', 'e@example.com', 'KhachHang'),
+('Nguyen Van F', '0911000006', 'f@example.com', 'NhanVien'),
+('Tran Thi G', '0911000007', 'g@example.com', 'NhanVien'),
+('Le Van H', '0911000008', 'h@example.com', 'NhanVien'),
+('Pham Thi I', '0911000009', 'i@example.com', 'NhanVien'),
+('Hoang Van K', '0911000010', 'k@example.com', 'NhanVien');
+
+-- 6. THEM KHACH HANG
+INSERT INTO KhachHang (MaNguoiDung, DiemTichLuy) VALUES
+(1, 100), (2, 250), (3, 0), (4, 50), (5, 150);
+
+-- 7. THEM NHAN VIEN
+INSERT INTO NhanVien (MaNguoiDung, ChucVu, Luong, VaiTro) VALUES
+(6, 'Quản lý rạp', 15000000, 'QuanLy'),
+(7, 'Bán vé', 8000000, 'BanVe'),
+(8, 'Thu ngân', 9000000, 'ThuNgan'),
+(9, 'Admin hệ thống', 20000000, 'Admin'),
+(10, 'Nhân viên hỗ trợ', 7500000, 'BanVe');
+
+-- 8. THEM TAI KHOAN
+INSERT INTO TaiKhoan (TenDangNhap, MatKhau, LoaiTaiKhoan, MaNguoiDung) VALUES
+('userA', 'matkhauA', 'user', 1),
+('userB', 'matkhauB', 'user', 2),
+('userC', 'matkhauC', 'user', 3),
+('userD', 'matkhauD', 'user', 4),
+('userE', 'matkhauE', 'user', 5),
+('adminF', 'matkhauF', 'admin', 6),
+('adminG', 'matkhauG', 'admin', 7),
+('adminH', 'matkhauH', 'admin', 8),
+('adminI', 'matkhauI', 'admin', 9),
+('adminK', 'matkhauK', 'admin', 10);
+
+-- 9. THEM HOA DON
+INSERT INTO HoaDon (MaNhanVien, MaKhachHang, TongTien) VALUES
+(6, 1, 100000),
+(7, 2, 150000);
+
+-- 10. THEM VE
+INSERT INTO Ve (MaSuatChieu, MaPhong, SoGhe, MaHoaDon, GiaVe, TrangThai, NgayDat) VALUES
+(1, 1, 'A01', 1, 100000, 'paid', NOW()),
+(2, 2, 'A02', 2, 150000, 'paid', NOW());
+
+-- 11. THEM CHI TIET HOA DON
+INSERT INTO ChiTietHoaDon (MaHoaDon, MaVe) VALUES
+(1, 1),
+(2, 2);
+USE quanlyrcp;
