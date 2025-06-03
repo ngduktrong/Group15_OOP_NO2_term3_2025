@@ -18,7 +18,6 @@ com\group15\models\PhongChieu.class
 com\group15\models\Ve$TrangThaiVe.class
 com\group15\Review\SuatChieuReview.class
 com\group15\models\Ve.class
-com\group15\models\NguoiDung$LoaiNguoiDungEnum.class
 com\group15\models\TaiKhoan.class
 com\group15\Review\KhachHangReview.class
 com\group15\models\HoaDon.class
