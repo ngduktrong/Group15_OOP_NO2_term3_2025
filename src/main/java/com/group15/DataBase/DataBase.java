@@ -13,7 +13,7 @@ public class DataBase {
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            throw new RuntimeException("❌ Không thể kết nối tới MySQL", e);
+            throw new RuntimeException(" Không thể kết nối tới MySQL", e);
         }
     }
 }
