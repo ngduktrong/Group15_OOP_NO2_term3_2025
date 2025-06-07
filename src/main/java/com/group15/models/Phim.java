@@ -10,6 +10,9 @@ public class Phim {
     private String MoTa;
     private String DaoDien;
     private String DuongDanPoster;
+    public Phim() {
+        
+    }
 
     public Phim(String TenPhim,int MaPhim, int ThoiLuong, String NgayKhoiChieu, String NuocSanXuat, String DinhDang, String MoTa, String DaoDien, String DuongDanPoster) {
         this.MaPhim = MaPhim;
@@ -78,6 +81,7 @@ public class Phim {
 public void setMaPhim(int MaPhim) {
         this.MaPhim = MaPhim;
     }
+    
 
 
     @Override
