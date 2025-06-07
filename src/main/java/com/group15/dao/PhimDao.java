@@ -25,7 +25,7 @@ public class PhimDao {
             ps.setString(8, p.getDaoDien());
             ps.setString(9, p.getDuongDanPoster());
             ps.executeUpdate();
-            System.out.println("Đã thêm phim: " + p.getTenPhim());
+            System.out.println("da them phim: " + p.getTenPhim());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class PhimDao {
             ps.setString(8, p.getDuongDanPoster());
             ps.setInt(9, p.getMaPhim());
             ps.executeUpdate();
-            System.out.println("Đã cập nhật phim id=" + p.getMaPhim());
+            System.out.println("da cap nhat phim co ma id=" + p.getMaPhim());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,7 +115,7 @@ public class PhimDao {
 
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println("Đã xoá phim id=" + id);
+            System.out.println("da xoa phim co id=" + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

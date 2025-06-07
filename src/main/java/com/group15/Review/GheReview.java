@@ -5,17 +5,17 @@ import com.group15.models.Ghe;
 public class GheReview {
     private ArrayList<Ghe> gheList = new ArrayList<>();
 
-    // Thêm ghế
+   
     public void addGhe(Ghe ghe) {
         gheList.add(ghe);
     }
 
-    // Lấy danh sách ghế
+ 
     public ArrayList<Ghe> getAll() {
         return gheList;
     }
 
-    // Xóa ghế theo index
+   
     public boolean deleteGhe(int index) {
         if (index >= 0 && index < gheList.size()) {
             gheList.remove(index);
@@ -24,10 +24,10 @@ public class GheReview {
         return false;
     }
 
-    // In danh sách ghế
+    
     public void printAll() {
         if (gheList.isEmpty()) {
-            System.out.println("Danh sách ghế trống.");
+            System.out.println("Danh sach ghe trong.");
             return;
         }
         for (Ghe ghe : gheList) {

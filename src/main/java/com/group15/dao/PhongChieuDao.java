@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PhongChieuDao {
-    // CREATE
+    
     public void create(PhongChieu p) {
         String sql = "INSERT INTO PhongChieu(MaPhong, TenPhong, SoLuongGhe, LoaiPhong) VALUES(?,?,?,?)";
         try (Connection c = DataBase.getConnection();
@@ -20,13 +20,13 @@ public class PhongChieuDao {
             ps.setInt(3, p.getSoLuongGhe());
             ps.setString(4, p.getLoaiPhong());
             ps.executeUpdate();
-            System.out.println("Đã thêm phòng chiếu: " + p.getTenPhong());
+            System.out.println("da them phong chieu: " + p.getTenPhong());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // READ by ID
+    
     public PhongChieu getById(int id) {
         String sql = "SELECT * FROM PhongChieu WHERE MaPhong = ?";
         try (Connection c = DataBase.getConnection();
@@ -48,7 +48,7 @@ public class PhongChieuDao {
         return null;
     }
 
-    // READ all
+   
     public List<PhongChieu> getAll() {
         List<PhongChieu> list = new ArrayList<>();
         String sql = "SELECT * FROM PhongChieu";
@@ -70,7 +70,7 @@ public class PhongChieuDao {
         return list;
     }
 
-    // UPDATE
+    
     public void update(PhongChieu p) {
         String sql = "UPDATE PhongChieu SET TenPhong=?, SoLuongGhe=?, LoaiPhong=? WHERE MaPhong=?";
         try (Connection c = DataBase.getConnection();
@@ -81,13 +81,13 @@ public class PhongChieuDao {
             ps.setString(3, p.getLoaiPhong());
             ps.setInt(4, p.getMaPhong());
             ps.executeUpdate();
-            System.out.println("Đã cập nhật phòng chiếu ID=" + p.getMaPhong());
+            System.out.println("da cap nhat phong chieu co id=" + p.getMaPhong());
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // DELETE
+  
     public void delete(int id) {
         String sql = "DELETE FROM PhongChieu WHERE MaPhong=?";
         try (Connection c = DataBase.getConnection();
@@ -95,7 +95,7 @@ public class PhongChieuDao {
 
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println("Đã xoá phòng chiếu ID=" + id);
+            System.out.println("da xoa phong chieu co id=" + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -19,8 +19,8 @@ public class Ghe {
         this.maPhong = maPhong;
     }
 
-    // Constructor không tham số
+   
     public Ghe() {
-        // Mặc định: không cần gọi super() nếu không kế thừa lớp cha
+      
     }
 }

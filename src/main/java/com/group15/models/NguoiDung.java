@@ -50,7 +50,7 @@ public class NguoiDung {
         this.loaiNguoiDung = loaiNguoiDung;
     }
 
-    // Getter & Setter
+   
 
     public Integer getMaNguoiDung() {
         return maNguoiDung;

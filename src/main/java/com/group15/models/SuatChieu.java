@@ -13,7 +13,7 @@ public class SuatChieu {
     }
 
     public SuatChieu() {
-        super(); // Super lớp con muốn gọi constructor lớp cha
+        super(); 
     }
 
     public int getMaSuatChieu() {

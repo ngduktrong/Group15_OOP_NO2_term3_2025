@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VeDao {
-    // Thêm vé mới
+    
     public void insert(Ve ve) {
         String sql = "INSERT INTO Ve (MaVe, MaSuatChieu, MaPhong, SoGhe, MaHoaDon, GiaVe, TrangThai, NgayDat) "
                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -28,7 +28,7 @@ public class VeDao {
         }
     }
 
-    // Lấy vé theo ID
+    
     public Ve getById(int id) {
         String sql = "SELECT * FROM Ve WHERE MaVe = ?";
         try (Connection conn = DataBase.getConnection();
@@ -53,7 +53,7 @@ public class VeDao {
         return null;
     }
 
-    // Lấy tất cả vé
+   
     public List<Ve> getAll() {
         List<Ve> list = new ArrayList<>();
         String sql = "SELECT * FROM Ve";
@@ -78,7 +78,7 @@ public class VeDao {
         return list;
     }
 
-    // Cập nhật vé
+    
     public void update(Ve ve) {
         String sql = "UPDATE Ve SET MaSuatChieu=?, MaPhong=?, SoGhe=?, MaHoaDon=?, GiaVe=?, TrangThai=?, NgayDat=? "
                    + "WHERE MaVe=?";
@@ -98,7 +98,7 @@ public class VeDao {
         }
     }
 
-    // Xóa vé
+    
     public void delete(int id) {
         String sql = "DELETE FROM Ve WHERE MaVe=?";
         try (Connection conn = DataBase.getConnection();

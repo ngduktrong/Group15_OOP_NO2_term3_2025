@@ -5,7 +5,7 @@ import com.group15.models.Phim;
 
 public class PhimReview {
     private ArrayList<Phim> st = new ArrayList<>();
-    // Thêm phim
+    
     public ArrayList<Phim> addPhim(Phim phim) {
         st.add(phim);
         return st;
@@ -18,7 +18,7 @@ public class PhimReview {
         }
         return null;
     }
-    // Tìm phim theo tên và mã
+    
     public Phim getPhimByTenVaMa(String tenPhim, int maPhim) {
         for (Phim p : st) {
             if (p.getTenPhim().equalsIgnoreCase(tenPhim) && p.getMaPhim() == maPhim) {
@@ -27,18 +27,17 @@ public class PhimReview {
         }
         return null;
     }
-    // Sửa phim theo mã phim
     public boolean editPhimById(int maPhim, Phim newPhimData) {
         for (int i = 0; i < st.size(); i++) {
             if (st.get(i).getMaPhim() == maPhim) {
-                // Cập nhật dữ liệu
+                
                 st.set(i, newPhimData);
                 return true;
             }
         }
-        return false; // Không tìm thấy phim để sửa
+        return false; 
     }
-    // Xóa phim theo mã
+    
     public boolean deletePhimById(int maPhim) {
         for (int i = 0; i < st.size(); i++) {
             if (st.get(i).getMaPhim() == maPhim) {
