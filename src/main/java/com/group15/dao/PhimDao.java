@@ -1,58 +1,83 @@
+// src/com/group15/dao/PhimDAO.java
 package com.group15.dao;
-// PhimDao.java
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import com.group15.DataBase.*;
+import com.group15.models.Phim;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group15.DataBase.DataBase;
-import com.group15.models.Phim;
-
 public class PhimDao {
-    // Thêm phim
-    public boolean insert(Phim phim) {
-        String sql = "INSERT INTO phim (MaPhim, TenPhim, ThoiLuong, NgayKhoiChieu, NuocSanXuat, DinhDang, MoTa, DaoDien, DuongDanPoster) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DataBase.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, phim.getMaPhim());
-            ps.setString(2, phim.getTenPhim());
-            ps.setInt(3, phim.getThoiLuong());
-            ps.setString(4, phim.getNgayKhoiChieu());
-            ps.setString(5, phim.getNuocSanXuat());
-            ps.setString(6, phim.getDinhDang());
-            ps.setString(7, phim.getMoTa());
-            ps.setString(8, phim.getDaoDien());
-            ps.setString(9, phim.getDuongDanPoster());
-            return ps.executeUpdate() > 0;
+    // CREATE
+    public void create(Phim p) {
+        String sql = "INSERT INTO Phim(MaPhim, TenPhim, ThoiLuong, NgayKhoiChieu, NuocSanXuat, DinhDang, MoTa, DaoDien, DuongDanPoster) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (Connection c = DataBase.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, p.getMaPhim());
+            ps.setString(2, p.getTenPhim());
+            ps.setInt(3, p.getThoiLuong());
+            ps.setString(4, p.getNgayKhoiChieu());
+            ps.setString(5, p.getNuocSanXuat());
+            ps.setString(6, p.getDinhDang());
+            ps.setString(7, p.getMoTa());
+            ps.setString(8, p.getDaoDien());
+            ps.setString(9, p.getDuongDanPoster());
+            ps.executeUpdate();
+            System.out.println("Đã thêm phim: " + p.getTenPhim());
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
 
-    // Lấy tất cả phim
+    // READ by ID
+    public Phim getById(int id) {
+        String sql = "SELECT * FROM Phim WHERE MaPhim = ?";
+        try (Connection c = DataBase.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Phim p = new Phim();
+                p.setMaPhim(rs.getInt("MaPhim"));
+                p.setTenPhim(rs.getString("TenPhim"));
+                p.setThoiLuong(rs.getInt("ThoiLuong"));
+                p.setNgayKhoiChieu(rs.getString("NgayKhoiChieu"));
+                p.setNuocSanXuat(rs.getString("NuocSanXuat"));
+                p.setDinhDang(rs.getString("DinhDang"));
+                p.setMoTa(rs.getString("MoTa"));
+                p.setDaoDien(rs.getString("DaoDien"));
+                p.setDuongDanPoster(rs.getString("DuongDanPoster"));
+                return p;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // READ all
     public List<Phim> getAll() {
         List<Phim> list = new ArrayList<>();
-        String sql = "SELECT * FROM phim";
-        try (Connection conn = DataBase.getConnection();
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql)) {
+        String sql = "SELECT * FROM Phim";
+        try (Connection c = DataBase.getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
             while (rs.next()) {
-                Phim phim = new Phim(
-                    rs.getString("TenPhim"),
-                    rs.getInt("MaPhim"),
-                    rs.getInt("ThoiLuong"),
-                    rs.getString("NgayKhoiChieu"),
-                    rs.getString("NuocSanXuat"),
-                    rs.getString("DinhDang"),
-                    rs.getString("MoTa"),
-                    rs.getString("DaoDien"),
-                    rs.getString("DuongDanPoster")
-                );
-                list.add(phim);
+                Phim p = new Phim();
+                p.setMaPhim(rs.getInt("MaPhim"));
+                p.setTenPhim(rs.getString("TenPhim"));
+                p.setThoiLuong(rs.getInt("ThoiLuong"));
+                p.setNgayKhoiChieu(rs.getString("NgayKhoiChieu"));
+                p.setNuocSanXuat(rs.getString("NuocSanXuat"));
+                p.setDinhDang(rs.getString("DinhDang"));
+                p.setMoTa(rs.getString("MoTa"));
+                p.setDaoDien(rs.getString("DaoDien"));
+                p.setDuongDanPoster(rs.getString("DuongDanPoster"));
+                list.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,37 +85,39 @@ public class PhimDao {
         return list;
     }
 
-    // Xóa phim theo mã
-    public boolean delete(int maPhim) {
-        String sql = "DELETE FROM phim WHERE MaPhim = ?";
-        try (Connection conn = DataBase.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maPhim);
-            return ps.executeUpdate() > 0;
+    // UPDATE
+    public void update(Phim p) {
+        String sql = "UPDATE Phim SET TenPhim=?, ThoiLuong=?, NgayKhoiChieu=?, NuocSanXuat=?, DinhDang=?, MoTa=?, DaoDien=?, DuongDanPoster=? WHERE MaPhim=?";
+        try (Connection c = DataBase.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, p.getTenPhim());
+            ps.setInt(2, p.getThoiLuong());
+            ps.setString(3, p.getNgayKhoiChieu());
+            ps.setString(4, p.getNuocSanXuat());
+            ps.setString(5, p.getDinhDang());
+            ps.setString(6, p.getMoTa());
+            ps.setString(7, p.getDaoDien());
+            ps.setString(8, p.getDuongDanPoster());
+            ps.setInt(9, p.getMaPhim());
+            ps.executeUpdate();
+            System.out.println("Đã cập nhật phim id=" + p.getMaPhim());
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
 
-    // Sửa phim
-    public boolean update(Phim phim) {
-        String sql = "UPDATE phim SET TenPhim=?, ThoiLuong=?, NgayKhoiChieu=?, NuocSanXuat=?, DinhDang=?, MoTa=?, DaoDien=?, DuongDanPoster=? WHERE MaPhim=?";
-        try (Connection conn = DataBase.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, phim.getTenPhim());
-            ps.setInt(2, phim.getThoiLuong());
-            ps.setString(3, phim.getNgayKhoiChieu());
-            ps.setString(4, phim.getNuocSanXuat());
-            ps.setString(5, phim.getDinhDang());
-            ps.setString(6, phim.getMoTa());
-            ps.setString(7, phim.getDaoDien());
-            ps.setString(8, phim.getDuongDanPoster());
-            ps.setInt(9, phim.getMaPhim());
-            return ps.executeUpdate() > 0;
+    // DELETE
+    public void delete(int id) {
+        String sql = "DELETE FROM Phim WHERE MaPhim=?";
+        try (Connection c = DataBase.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            System.out.println("Đã xoá phim id=" + id);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
 }
