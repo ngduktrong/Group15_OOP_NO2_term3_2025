@@ -44,6 +44,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 
 <h3>UML Class Diagram</h3>
 
+
 ![Sơ đồ class ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/class%20diagram.png?raw=true)
 <h3>UML Squence Diagram </h3>
 ![Sơ đồ squence](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/Screenshot%202025-05-20%20120942.png?raw=true)
@@ -53,6 +54,29 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 ![Sơ đồ view and create](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/Th%C3%AAm%20and%20Xem.png?raw=true)
 <h3>UML Chức năng quản lý phim : Xóa và Sửa </h3>
 ![Sơ  đồ set and delete ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/X%C3%B3a%20and%20s%E1%BB%ADa.png?raw=true)
+
+<h3>Chuc năng chính : Thông báo vé đến giờ chiều của khách hàng </h3>
+![SƠ dồ ]( ) 
+- Mô tả : Hệ thống kiểm tra các vé mà khách đã đặt , mếu có suất chiếu sắp diễn ra thì sẽ hiển thị thông báo 
+## 🔍 Phân rã chức năng:
+
+1. `Velist(String maKhachHang)` – Lấy các vé đã đặt từ cơ sở dữ liệu.</br> 
+2. `kiemTraVeSapChieu(List<Ve> danhSachVe)` – Kiểm tra các vé có suất chiếu trong vòng 30 phút.
+3. `thongBaoVeSapChieu(String maKhachHang)` – Tổng hợp và hiển thị danh sách vé gần đến giờ chiếu.
+
+---
+
+## 👨‍💻 Phân công thành viên:
+
+| Thành viên | Công việc |
+|------------|----------|
+| **Nguyễn Đức Trọng ** |  
+- Viết phương thức `Velist(String maKhachHang)`   
+
+| **Dương Hùng Mạnh ** |  
+- Viết hàm `kiemTraVeSapChieu(List<Ve>)` để lọc vé sắp chiếu  
+- Viết phương thức `thongBaoVeSapChieu(String maKhachHang)` 
+
 
 
 
