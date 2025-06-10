@@ -1,12 +1,10 @@
 package com.group15;
-import com.group15.dao.VeDao;
-import com.group15.dao.HoaDonDao;
 import com.group15.dao.ChiTietHoaDonDao;
-import com.group15.models.Ve;
-import com.group15.models.HoaDon;
+import com.group15.dao.HoaDonDao;
+import com.group15.dao.VeDao;
 import com.group15.models.ChiTietHoaDon;
-
-import java.util.List;
+import com.group15.models.HoaDon;
+import com.group15.models.Ve;
 
 public class TestCRUD {
     public static void main(String[] args) {
@@ -14,7 +12,7 @@ public class TestCRUD {
         HoaDonDao hdDao = new HoaDonDao();
         ChiTietHoaDonDao ctDao = new ChiTietHoaDonDao();
 
-      
+
         HoaDon hd = new HoaDon(1, 101, "2025-06-07", 500000.0);
         hdDao.insert(hd);
         System.out.println("Inserted HoaDon: " + hd);
@@ -27,7 +25,6 @@ public class TestCRUD {
         ctDao.insert(ct);
         System.out.println("Inserted ChiTietHoaDon: MaHD=1, MaVe=1");
 
-       
         System.out.println("Ve id=1 => " + veDao.getById(1));
         System.out.println("HoaDon id=1 => " + hdDao.getById(1));
         System.out.println("ChiTietHoaDon list => " + ctDao.getAll());

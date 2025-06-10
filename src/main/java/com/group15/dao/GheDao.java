@@ -1,18 +1,22 @@
 // src/com/group15/dao/GheDAO.java
 package com.group15.dao;
 
-import com.group15.DataBase.*;
-import com.group15.models.Ghe;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.group15.DataBase.DataBase;
+import com.group15.models.Ghe;
 
 public class GheDao {
     public void create(Ghe g) {
         String sql = "INSERT INTO Ghe(soGhe, maPhong) VALUES(?,?)";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, g.getSoGhe());
             ps.setString(2, g.getMaPhong());
@@ -26,7 +30,7 @@ public class GheDao {
     public Ghe getById(int soGhe, String maPhong) {
         String sql = "SELECT * FROM Ghe WHERE soGhe=? AND maPhong=?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, soGhe);
             ps.setString(2, maPhong);
@@ -47,8 +51,8 @@ public class GheDao {
         List<Ghe> list = new ArrayList<>();
         String sql = "SELECT * FROM Ghe";
         try (Connection c = DataBase.getConnection();
-             Statement st = c.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+            Statement st = c.createStatement();
+            ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 Ghe g = new Ghe();
@@ -65,7 +69,7 @@ public class GheDao {
     public void update(Ghe g) {
         String sql = "UPDATE Ghe SET maPhong=? WHERE soGhe=?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setString(1, g.getMaPhong());
             ps.setInt(2, g.getSoGhe());
@@ -79,7 +83,7 @@ public class GheDao {
     public void delete(int soGhe) {
         String sql = "DELETE FROM Ghe WHERE soGhe=?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, soGhe);
             ps.executeUpdate();

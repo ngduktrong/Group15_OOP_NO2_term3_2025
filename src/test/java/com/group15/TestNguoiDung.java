@@ -9,9 +9,9 @@ public class TestNguoiDung {
     NguoiDungReview ND = new NguoiDungReview();
 
     public void addNguoiDung(){
-        NguoiDung nd1 = new NguoiDung(1, "Nguyen Van An", "0123456789", "An@gmai.com","NhanVien");
-        NguoiDung nd2 = new NguoiDung(2, "Tran Thi Binh", "0987654321", "Binh@gmail.com", "KhachHang");
-        NguoiDung nd3 = new NguoiDung(3, "Le Van Cuong", "1234567890", "Cuong@gmail.com","NhanVien");
+        NguoiDung nd1 = new NguoiDung();
+        NguoiDung nd2 = new NguoiDung();
+        NguoiDung nd3 = new NguoiDung();
 
         ND.addNguoiDung(nd1);
         ND.addNguoiDung(nd2);

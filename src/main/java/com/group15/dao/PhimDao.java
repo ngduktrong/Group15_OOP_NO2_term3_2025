@@ -1,19 +1,23 @@
 // src/com/group15/dao/PhimDAO.java
 package com.group15.dao;
 
-import com.group15.DataBase.*;
-import com.group15.models.Phim;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.group15.DataBase.DataBase;
+import com.group15.models.Phim;
 
 public class PhimDao {
     // CREATE
     public void create(Phim p) {
         String sql = "INSERT INTO Phim(MaPhim, TenPhim, ThoiLuong, NgayKhoiChieu, NuocSanXuat, DinhDang, MoTa, DaoDien, DuongDanPoster) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, p.getMaPhim());
             ps.setString(2, p.getTenPhim());
@@ -35,7 +39,7 @@ public class PhimDao {
     public Phim getById(int id) {
         String sql = "SELECT * FROM Phim WHERE MaPhim = ?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -89,7 +93,7 @@ public class PhimDao {
     public void update(Phim p) {
         String sql = "UPDATE Phim SET TenPhim=?, ThoiLuong=?, NgayKhoiChieu=?, NuocSanXuat=?, DinhDang=?, MoTa=?, DaoDien=?, DuongDanPoster=? WHERE MaPhim=?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setString(1, p.getTenPhim());
             ps.setInt(2, p.getThoiLuong());
@@ -111,7 +115,7 @@ public class PhimDao {
     public void delete(int id) {
         String sql = "DELETE FROM Phim WHERE MaPhim=?";
         try (Connection c = DataBase.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+            PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();

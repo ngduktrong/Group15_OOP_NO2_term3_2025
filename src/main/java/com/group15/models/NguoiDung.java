@@ -1,110 +1,77 @@
 package com.group15.models ;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "NguoiDung")
 public class NguoiDung {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer maNguoiDung;
+    public enum LoaiNguoiDung {
+        KhachHang , NhanVien
+    }
+    private int MaNguoiDung;
+    private String HoTen;
+    private String SoDienThoai;
+    private String Email;
+    private String LoaiNguoiDung;
+    public NguoiDung() {
+    }
+    /**
+     * Constructor for NguoiDung class.
+     *
+     * @param MaNguoiDung   Unique identifier for the user.
+     * @param HoTen         Full name of the user.
+     * @param SoDienThoai   Phone number of the user.
+     * @param Email         Email address of the user.
+     * @param LoaiNguoiDung Type of user (e.g., KhachHang, NhanVien).
+     */
 
-    @Column(nullable = false, length = 100)
-    private String hoTen;
-
-    @Column(nullable = false, unique = true, length = 15)
-    private String soDienThoai;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
-
-    @Column(nullable = false, columnDefinition = "ENUM('KhachHang','NhanVien')")
-    private String loaiNguoiDung;
-
-    // Quan hệ 1-1 với TaiKhoan
-    @OneToOne(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TaiKhoan taiKhoan;
-
-    // Quan hệ 1-1 với KhachHang (nếu loaiNguoiDung = KhachHang)
-    @OneToOne(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private KhachHang khachHang;
-
-    // Quan hệ 1-1 với NhanVien (nếu loaiNguoiDung = NhanVien)
-    @OneToOne(mappedBy = "nguoiDung", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private NhanVien nhanVien;
-
-    public NguoiDung() { }
-
-    public NguoiDung(String hoTen, String soDienThoai, String email, String loaiNguoiDung) {
-        this.hoTen = hoTen;
-        this.soDienThoai = soDienThoai;
-        this.email = email;
-        this.loaiNguoiDung = loaiNguoiDung;
+    public NguoiDung( int MaNguoiDung , String HoTen, String SoDienThoai, String Email, String LoaiNguoiDung) {
+        this.MaNguoiDung = MaNguoiDung;
+        this.HoTen = HoTen;
+        this.SoDienThoai = SoDienThoai;
+        this.Email = Email;
+        this.LoaiNguoiDung = LoaiNguoiDung ;
     }
 
-   
-
-    public Integer getMaNguoiDung() {
-        return maNguoiDung;
-    }
-    public void setMaNguoiDung(Integer maNguoiDung) {
-        this.maNguoiDung = maNguoiDung;
+    public int getMaNguoiDung() {
+        return MaNguoiDung;
     }
 
     public String getHoTen() {
-        return hoTen;
-    }
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+        return HoTen;
     }
 
     public String getSoDienThoai() {
-        return soDienThoai;
-    }
-    public void setSoDienThoai(String soDienThoai) {
-        this.soDienThoai = soDienThoai;
+        return SoDienThoai;
     }
 
     public String getEmail() {
-        return email;
+        return Email;
     }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getLoaiNguoiDung() {
-        return loaiNguoiDung;
+        return LoaiNguoiDung;
     }
-    public void setLoaiNguoiDung(String loaiNguoiDung) {
-        this.loaiNguoiDung = loaiNguoiDung;
-    }
-
-    public TaiKhoan getTaiKhoan() {
-        return taiKhoan;
-    }
-    public void setTaiKhoan(TaiKhoan taiKhoan) {
-        this.taiKhoan = taiKhoan;
+    public void setLoaiNguoiDung(String LoaiNguoiDung) {
+        this.LoaiNguoiDung = LoaiNguoiDung;
     }
 
-    public KhachHang getKhachHang() {
-        return khachHang;
+    public void setMaNguoiDung(int MaNguoiDung) {
+        this.MaNguoiDung = MaNguoiDung;
     }
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
+    public void setHoTen(String HoTen) {
+        this.HoTen = HoTen;
     }
-
-    public NhanVien getNhanVien() {
-        return nhanVien;
+    public void setSoDienThoai(String SoDienThoai) {
+        this.SoDienThoai = SoDienThoai;
     }
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+    @Override
+    public String toString() {
+        return "NguoiDung{" +
+                "MaNguoiDung=" + MaNguoiDung +
+                ", Ten='" + HoTen + '\'' +
+                ", SoDienThoai='" + SoDienThoai + '\'' +
+                ", Email='" + Email + '\'' +
+                ", MatKhau='" + LoaiNguoiDung + '\'' +
+                '}';
     }
 }
+

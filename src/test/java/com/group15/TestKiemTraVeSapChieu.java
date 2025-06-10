@@ -1,20 +1,21 @@
 package com.group15;
 
-import com.group15.Review.KiemTraVeSapChieu;
-import com.group15.models.Ve;
 import java.util.List;
 import java.util.Scanner;
 
+import com.group15.Review.KiemTraVeSapChieu;
+import com.group15.models.Ve;
+
 public class TestKiemTraVeSapChieu {
     /*
-      nếu muốn test thì hãy nhập mã khách hàng bất kì trong velist
-      sau đó nhâp số lượng ngày muốn xem có vé nào sắp chiếu không
-      ví dụ nhâp 2 thì sẽ hiện số lượng vé sắp chiếu trong 2 ngày tới
-      nếu không có vé nào thì sẽ thông báo không có vé sắp chiếu trong khoảng thời gian đó
-      ví dụ nhâp mã khach hàng 101 và số ngày là 2 thì sẽ hiện ra các vé sắp chiếu trong 2 ngày tới
-      nếu không có vé nào thì sẽ thông báo không có vé nào sắp chiếu trong 2 ngày tới
-      nếu ghi số ngày là 10 thì sẽ hiện 2 vé sắp chiếu trong 10 ngày tới kể từ ngày 6/7 
-      
+    nếu muốn test thì hãy nhập mã khách hàng bất kì trong velist
+    sau đó nhâp số lượng ngày muốn xem có vé nào sắp chiếu không
+    ví dụ nhâp 2 thì sẽ hiện số lượng vé sắp chiếu trong 2 ngày tới
+    nếu không có vé nào thì sẽ thông báo không có vé sắp chiếu trong khoảng thời gian đó
+    ví dụ nhâp mã khach hàng 101 và số ngày là 2 thì sẽ hiện ra các vé sắp chiếu trong 2 ngày tới
+    nếu không có vé nào thì sẽ thông báo không có vé nào sắp chiếu trong 2 ngày tới
+    nếu ghi số ngày là 10 thì sẽ hiện 2 vé sắp chiếu trong 10 ngày tới kể từ ngày 6/7 
+
      */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

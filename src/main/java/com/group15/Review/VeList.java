@@ -9,7 +9,6 @@ import com.group15.models.Ve;
 public class VeList {
 
     public static List<Ve> layDanhSachVe(int maKhachHang) {
-       
         List<HoaDon> hoaDons = new ArrayList<>();
         hoaDons.add(new HoaDon(1, 101, "2025-06-12", 150000));
         hoaDons.add(new HoaDon(2, 102, "2025-06-02", 75000));
@@ -18,7 +17,7 @@ public class VeList {
         hoaDons.add(new HoaDon(4, 103, "2025-06-08", 90000));
 
         /*
-          nếu qua ngày trong vé thì chỉ cần sửa ngày tháng năm trong hóa đơn và test trong hàm test là đc
+        nếu qua ngày trong vé thì chỉ cần sửa ngày tháng năm trong hóa đơn và test trong hàm test là đc
          */
         List<Ve> allVes = new ArrayList<>();
         allVes.add(new Ve(1, 1001, 1, "A1", 1, 75000, "paid", "2025-06-11"));
@@ -28,7 +27,6 @@ public class VeList {
         
         allVes.add(new Ve(5, 1005, 3, "C1", 4, 90000, "booked", "2025-06-17"));
 
-       
         List<Integer> maHoaDons = new ArrayList<>();
         for (HoaDon hd : hoaDons) {
             if (hd.getMaKhachHang() == maKhachHang) {
@@ -36,7 +34,6 @@ public class VeList {
             }
         }
 
-       
         List<Ve> danhSachVe = new ArrayList<>();
         for (Ve ve : allVes) {
             if (maHoaDons.contains(ve.getMaHoaDon())) {
