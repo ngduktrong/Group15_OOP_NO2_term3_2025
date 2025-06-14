@@ -5,35 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8a60009d-263d-4f2f-bd44-4e79277552c5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/group15/DataBase/DataBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/group15/DataBase/DataBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/App.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/DataBase/DataBase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/DataBase/DataBase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/Review/GheReview.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/Review/GheReview.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/Review/KhachHangReview.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/Review/KhachHangReview.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/Review/NhanVienReview.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/Review/NhanVienReview.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/Review/PhongChieuReview.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/Review/PhongChieuReview.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/Review/RapPhimReview.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/Review/RapPhimReview.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/ChiTietHoaDon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/ChiTietHoaDon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/Customer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/Customer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/Datve.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/Datve.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/HoaDon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/HoaDon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/KhachHang.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/KhachHang.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/NguoiDung.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/NguoiDung.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/NhanVien.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/NhanVien.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/Phim.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/Phim.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/PhongChieu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/PhongChieu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/RapPhim.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/RapPhim.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/SuatChieu.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/SuatChieu.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/TaiKhoan.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/TaiKhoan.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/group15/models/Ve.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/group15/models/Ve.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/AppTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/AppTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/Customers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/Customers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/TestKhachHang.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/TestKhachHang.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/TestNhanVien.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/TestNhanVien.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/TestPhim.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/TestPhim.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/group15/TestNguoiDungDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/group15/TestNguoiDungDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/group15/TestNguoiDungDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/group15/TestNguoiDungDao.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

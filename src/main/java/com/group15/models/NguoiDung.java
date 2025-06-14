@@ -11,15 +11,6 @@ public class NguoiDung {
     private String LoaiNguoiDung;
     public NguoiDung() {
     }
-    /**
-     * Constructor for NguoiDung class.
-     *
-     * @param MaNguoiDung   Unique identifier for the user.
-     * @param HoTen         Full name of the user.
-     * @param SoDienThoai   Phone number of the user.
-     * @param Email         Email address of the user.
-     * @param LoaiNguoiDung Type of user (e.g., KhachHang, NhanVien).
-     */
 
     public NguoiDung( int MaNguoiDung , String HoTen, String SoDienThoai, String Email, String LoaiNguoiDung) {
         this.MaNguoiDung = MaNguoiDung;

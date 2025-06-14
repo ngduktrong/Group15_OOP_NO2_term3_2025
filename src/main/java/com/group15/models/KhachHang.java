@@ -1,49 +1,32 @@
 package com.group15.models;
+public class KhachHang extends NguoiDung {
+    private int MaNguoiDung;
+    private int DiemTichLuy;
 
-public class KhachHang {
-    private int MaKhachHang;
-    private String Ten;
-    private String SoDienThoai;
-    private String Email;
-
-
-    public KhachHang( int MaKhachHang,String Ten,String SoDienThoai, String Email ){
-        this.MaKhachHang =MaKhachHang;
-        this.Ten=Ten;
-        this.SoDienThoai=SoDienThoai;
-        this.Email=Email;
+    public KhachHang() {}
+    public KhachHang(int MaNguoiDung, int DiemTichLuy) {
+        this.MaNguoiDung = MaNguoiDung;
+        this.DiemTichLuy = DiemTichLuy;
     }
-    public int getMaKhachHang() {
-        return MaKhachHang;
+    @Override
+    public int getMaNguoiDung() {
+        return MaNguoiDung;
     }
-    public String getTen(){
-        return Ten;
+    @Override
+    public void setMaNguoiDung(int MaNguoiDung) {
+        this.MaNguoiDung = MaNguoiDung;
     }
-    public String getSoDienThoai() {
-        return SoDienThoai;
+    public int getDiemTichLuy() {
+        return DiemTichLuy;
     }
-    public String getEmail() {
-        return Email;
+    public void setDiemTichLuy(int DiemTichLuy) {
+        this.DiemTichLuy = DiemTichLuy;
     }
-    public void setMaKhachHang(int MaKhachHang) {
-        this.MaKhachHang = MaKhachHang;
-    }
-    public void setTen(String Ten) {
-        this.Ten = Ten;
-    }
-    public void setSoDienThoai(String SoDienThoai) {
-        this.SoDienThoai = SoDienThoai;
-    }
-    public void setEmail(String Email) {
-        this.Email = Email;
-    }
-@Override
+    @Override
     public String toString() {
         return "KhachHang{" +
-                "MaKhachHang=" + MaKhachHang +
-                ", Ten='" + Ten + '\'' +
-                ", SoDienThoai='" + SoDienThoai + '\'' +
-                ", Email='" + Email + '\'' +
+                "MaNguoiDung=" + MaNguoiDung +
+                ", DiemTichLuy=" + DiemTichLuy +
                 '}';
     }
 }
