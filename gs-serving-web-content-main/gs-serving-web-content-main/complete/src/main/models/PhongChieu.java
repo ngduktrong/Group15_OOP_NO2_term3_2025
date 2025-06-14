@@ -1,4 +1,4 @@
-package com.group15.models;
+package com.example.servingwebcontent.models;
 public class PhongChieu {
     private int MaPhong ;
     private String TenPhong;

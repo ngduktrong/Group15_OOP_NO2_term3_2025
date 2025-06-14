@@ -1,4 +1,4 @@
-package com.group15.models;
+package com.example.servingwebcontent.models;
 public class SuatChieu {
     private int MaSuatChieu;
     private int MaPhim;

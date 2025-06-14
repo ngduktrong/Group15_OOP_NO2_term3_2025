@@ -1,4 +1,4 @@
-package com.group15.models;
+package com.example.servingwebcontent.models;
 public class KhachHang extends NguoiDung {
     private int MaNguoiDung;
     private int DiemTichLuy;
