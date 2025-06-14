@@ -1,59 +1,62 @@
 package com.group15.models;
 
-public class NhanVien {
-    public enum ChucVu {
-        Admin , QuanLy, ThuNgan, BanVe
+public class NhanVien extends NguoiDung {
+    public enum VaiTro {
+        Admin, QuanLy, ThuNgan, BanVe
     }
-    private int MaNhanVien;
-    private String Ten;
-    private String ChucVu;
-    private String CaLam;
-    private String SoDienThoai;
-    private String Email;
+    public NhanVien() {}
 
-    public NhanVien(int MaNhanVien , String Ten , String ChucVu, String CaLam,String SoDienThoai,String Email){
-        this.MaNhanVien=MaNhanVien;
-        this.Ten=Ten;
-        this.ChucVu=ChucVu;
-        this.CaLam=CaLam;
-        this.SoDienThoai=SoDienThoai;
-        this.Email=Email;
+    private int MaNguoiDung;
+    private VaiTro VaiTro;
+    private String ChucVu;
+    private double Luong;
+
+    public NhanVien(int MaNguoiDung, VaiTro vaiTro, String ChucVu, double Luong) {
+        this.MaNguoiDung = MaNguoiDung;
+        this.VaiTro = vaiTro;
+        this.ChucVu = ChucVu;
+        this.Luong = Luong;
     }
-    public int getMaNhanVien() {
-        return MaNhanVien;
+
+    @Override
+    public int getMaNguoiDung() {
+        return MaNguoiDung;
     }
-    public String getTen(){
-        return Ten;
+
+    public VaiTro getVaiTro() {
+        return VaiTro;
     }
+
     public String getChucVu() {
         return ChucVu;
     }
-    public String getCaLam() {
-        return CaLam;
+
+    public double getLuong() {
+        return Luong;
     }
-    public String getSoDienThoai() {
-        return SoDienThoai;
+    @Override
+    public void setMaNguoiDung(int MaNguoiDung) {
+        this.MaNguoiDung = MaNguoiDung;
     }
-    public String getEmail() {
-        return Email;
+
+    public void setVaiTro(VaiTro VaiTro) {
+        this.VaiTro = VaiTro;
     }
-    public void setMaNhanVien(int MaNhanVien) {
-        this.MaNhanVien = MaNhanVien;
-    }
-    public void setTen(String Ten) {
-        this.Ten = Ten;
-    }
+
     public void setChucVu(String ChucVu) {
         this.ChucVu = ChucVu;
     }
-    public void setCaLam(String CaLam) {
-        this.CaLam = CaLam;
+
+    public void setLuong(double Luong) {
+        this.Luong = Luong;
     }
-    public void setSoDienThoai(String SoDienThoai) {
-        this.SoDienThoai = SoDienThoai;
+    @Override
+    public String toString() {
+        return "NhanVien{" +
+                "MaNguoiDung=" + MaNguoiDung +
+                ", vaiTro=" + VaiTro +
+                ", ChucVu='" + ChucVu + '\'' +
+                ", Luong=" + Luong +
+                '}';
     }
-    public void setEmail(String Email) {
-        this.Email = Email;
-    }
-    
 }
