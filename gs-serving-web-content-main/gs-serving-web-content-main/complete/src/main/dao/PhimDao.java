@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.Phim;
+import com.example.servingwebcontent.models.Phim;
 
 public class PhimDao {
     // CREATE

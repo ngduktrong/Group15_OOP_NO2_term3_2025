@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.Ve;
+import com.example.servingwebcontent.models.Ve;
 
 public class VeDao {
     

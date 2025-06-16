@@ -1,7 +1,8 @@
 package com.group15.dao;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.ChiTietHoaDon;
+
+import com.example.servingwebcontent.models.ChiTietHoaDon;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.HoaDon;
+import com.example.servingwebcontent.models.HoaDon;
 
 public class HoaDonDao {
     public void insert(HoaDon hd) {

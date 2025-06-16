@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.NguoiDung;
+import com.example.servingwebcontent.models.NguoiDung;
 public class NguoiDungDao{
     public void creat(NguoiDung nd){
         String sql = "INSERT INTO NguoiDung(MaNguoiDung, HoTen, SoDienThoai,Email,LoaiNguoiDung) VALUES(?,?,?,?,?)";

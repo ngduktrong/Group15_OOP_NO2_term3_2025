@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.NhanVien;
+import com.example.servingwebcontent.models.NhanVien;
 public class NhanVienDao {
     public void create(NhanVien nv){
         String sql = "INSERT INTO NhanVien(MaNguoiDung, ChucVu, Luong, VaiTro,) VALUES(?,?,?,?)";

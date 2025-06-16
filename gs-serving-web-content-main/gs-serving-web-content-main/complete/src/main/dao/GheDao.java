@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.group15.DataBase.DataBase;
-import com.group15.models.Ghe;
+import com.example.servingwebcontent.models.Ghe;
 
 public class GheDao {
     public void create(Ghe g) {

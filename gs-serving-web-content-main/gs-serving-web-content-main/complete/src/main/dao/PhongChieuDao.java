@@ -2,7 +2,7 @@
 package com.group15.dao;
 
 import com.group15.DataBase.*;
-import com.group15.models.PhongChieu;
+import com.example.servingwebcontent.models.PhongChieu;
 
 import java.sql.*;
 import java.util.ArrayList;

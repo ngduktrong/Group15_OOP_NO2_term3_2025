@@ -2,7 +2,7 @@
 package com.group15.dao;
 
 import com.group15.DataBase.*;
-import com.group15.models.SuatChieu;
+import com.example.servingwebcontent.models.SuatChieu;
 
 import java.sql.*;
 import java.util.ArrayList;

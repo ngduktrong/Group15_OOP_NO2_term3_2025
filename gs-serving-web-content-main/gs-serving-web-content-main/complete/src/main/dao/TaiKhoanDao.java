@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group15.models.TaiKhoan;
+import com.example.servingwebcontent.models.TaiKhoan;
 
 public class TaiKhoanDao {
     private Connection connection;
