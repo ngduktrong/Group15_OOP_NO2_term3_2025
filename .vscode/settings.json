@@ -1,5 +1,6 @@
 {
     "java.debug.settings.onBuildFailureProceed": true,
     "java.configuration.updateBuildConfiguration": "interactive",
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "java.compile.nullAnalysis.mode": "automatic"
 }
