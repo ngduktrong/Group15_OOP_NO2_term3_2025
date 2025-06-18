@@ -1,7 +1,6 @@
-package com.group15.Review;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-
-import com.group15.models.Phim;
+import com.example.servingwebcontent.models.Phim;
 
 public class PhimReview {
     private ArrayList<Phim> st = new ArrayList<>();

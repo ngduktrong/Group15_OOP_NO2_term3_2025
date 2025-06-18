@@ -1,7 +1,6 @@
-package com.group15.Review;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-import com.group15.models.NhanVien;
-
+import com.example.servingwebcontent.models.NhanVien;
 public class NhanVienReview {
     ArrayList<NhanVien> NV = new ArrayList<NhanVien>();
 

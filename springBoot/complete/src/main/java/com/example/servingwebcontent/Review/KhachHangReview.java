@@ -1,9 +1,7 @@
-package com.group15.Review;
-
-import java.lang.reflect.Array;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-
-import com.group15.models.KhachHang;
+import com.example.servingwebcontent.models.KhachHang;
+import java.lang.reflect.Array;
 
 public class KhachHangReview {
     ArrayList<KhachHang> KH = new ArrayList<KhachHang>();

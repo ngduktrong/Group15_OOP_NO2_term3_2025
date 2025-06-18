@@ -1,7 +1,6 @@
-package com.group15.Review;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-
-import com.group15.models.PhongChieu;
+import com.example.servingwebcontent.models.PhongChieu;
 public class PhongChieuReview {
     private ArrayList<PhongChieu> phongChieuList = new ArrayList<>();
 

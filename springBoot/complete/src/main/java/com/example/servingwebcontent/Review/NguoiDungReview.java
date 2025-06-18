@@ -1,7 +1,6 @@
-package com.group15.Review;
-import java.lang.reflect.Array;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-import com.group15.models.NguoiDung;
+import com.example.servingwebcontent.models.NguoiDung;
 public class NguoiDungReview {
     ArrayList<NguoiDung> ND = new ArrayList<NguoiDung>();
     public ArrayList<NguoiDung> addNguoiDung(NguoiDung NguoiDung){

@@ -1,5 +1,6 @@
-package com.group15.Review;
-import com.group15.models.Selector;
+package com.example.servingwebcontent.Review;
+import java.util.ArrayList;
+import com.example.servingwebcontent.models.Selector;
 
 
 public class Sequence {

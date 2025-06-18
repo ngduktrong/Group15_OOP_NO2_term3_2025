@@ -1,4 +1,6 @@
-package com.group15.Review;
+package com.example.servingwebcontent.Review;
+import java.util.ArrayList;
+import com.example.servingwebcontent.models.SuatChieu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group15.models.SuatChieu;
+
 
 public class SuatChieuReview {
 

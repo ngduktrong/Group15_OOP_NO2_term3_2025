@@ -1,10 +1,11 @@
-package com.group15.Review;
-
+package com.example.servingwebcontent.Review;
+import java.util.ArrayList;
+import com.example.servingwebcontent.models.HoaDon;
+import com.example.servingwebcontent.models.Ve;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group15.models.HoaDon;
-import com.group15.models.Ve;
+
 
 public class VeList {
 

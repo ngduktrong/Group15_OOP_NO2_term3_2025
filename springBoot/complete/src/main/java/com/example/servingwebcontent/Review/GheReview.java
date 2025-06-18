@@ -1,6 +1,6 @@
-package com.group15.Review;
+package com.example.servingwebcontent.Review;
 import java.util.ArrayList;
-import com.group15.models.Ghe;
+import com.example.servingwebcontent.models.Ghe;
 
 public class GheReview {
     private ArrayList<Ghe> gheList = new ArrayList<>();
