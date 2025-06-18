@@ -1,4 +1,5 @@
 package com.example.servingwebcontent;
+import org.springframework.boot.SpringApplication;
 
 public class ServingWebContentVe {
 
