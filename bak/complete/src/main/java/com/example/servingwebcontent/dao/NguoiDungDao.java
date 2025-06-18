@@ -1,4 +1,4 @@
-// src/com/group15/dao/NguoiDungDaoNguoiDungDao.java
+
 package com.group15.dao;
 
 import java.sql.Connection;

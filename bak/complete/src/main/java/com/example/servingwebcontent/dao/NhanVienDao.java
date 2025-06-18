@@ -18,7 +18,7 @@ public class NhanVienDao {
             ps.setInt(1, nv.getMaNguoiDung());
             ps.setString(2, nv.getChucVu());
             ps.setDouble(3, nv.getLuong());
-            ps.setString(4, nv.getVaiTro().name());// Trả về chuỗi tương ứng ứng với enum vai trò 
+            ps.setString(4, nv.getVaiTro().name());
             ps.executeUpdate();
             System.out.println("Them nhan vien " + nv.getMaNguoiDung());
         } catch (SQLException e) {

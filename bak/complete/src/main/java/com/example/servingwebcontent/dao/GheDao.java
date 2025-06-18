@@ -1,4 +1,4 @@
-// src/com/group15/dao/GheDAO.java
+
 package com.example.servingwebcontent.dao;
 
 import java.sql.Connection;
@@ -21,7 +21,7 @@ public class GheDao {
             ps.setInt(1, g.getSoGhe());
             ps.setString(2, g.getMaPhong());
             ps.executeUpdate();
-            System.out.println("Thêm ghế số " + g.getSoGhe());
+            System.out.println("Them ghe so " + g.getSoGhe());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -74,7 +74,7 @@ public class GheDao {
             ps.setString(1, g.getMaPhong());
             ps.setInt(2, g.getSoGhe());
             ps.executeUpdate();
-            System.out.println("Cập nhật ghế " + g.getSoGhe());
+            System.out.println("Cap nhat ghe " + g.getSoGhe());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,7 +87,7 @@ public class GheDao {
 
             ps.setInt(1, soGhe);
             ps.executeUpdate();
-            System.out.println("Xoá ghế " + soGhe);
+            System.out.println("Xoa ghe " + soGhe);
         } catch (SQLException e) {
             e.printStackTrace();
         }

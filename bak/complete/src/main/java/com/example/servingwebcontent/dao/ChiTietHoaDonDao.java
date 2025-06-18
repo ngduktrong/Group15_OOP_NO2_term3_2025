@@ -1,7 +1,6 @@
 package com.group15.dao;
 
 import com.group15.DataBase.DataBase;
-
 import com.example.servingwebcontent.models.ChiTietHoaDon;
 
 import java.sql.*;
