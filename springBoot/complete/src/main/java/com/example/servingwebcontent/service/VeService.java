@@ -1,6 +1,4 @@
 package com.example.servingwebcontent.service;
-
-
 import com.example.servingwebcontent.Review.VeList;
 import com.example.servingwebcontent.Review.SuatChieuList;
 import com.example.servingwebcontent.models.Ve;
@@ -39,7 +37,6 @@ public class VeService {
             if (sc == null || sc.getNgayGioChieu() == null) continue;
             LocalDateTime ngayGio = sc.getNgayGioChieu();
             if (!ngayGio.isBefore(now) && !ngayGio.isAfter(limit)) {
-                // Gán ngayGioChieu nếu cần (đã gán ở trên)
                 result.add(ve);
             }
         }
