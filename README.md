@@ -1,6 +1,6 @@
 <h1>Hệ thống quản lý rạp chiếu phim </h1> 
 <h2>Giới Thiệu Dự Án </h2>
-Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phim, giúp tối ưu hóa quy trình vận hành và đặt vé thông qua việc sử dụng ngôn ngữ Java và thư viện JavaFX. Ứng dụng cung cấp các chức năng thiết yếu như quản lý phim, lịch chiếu, phòng chiếu, đặt vé và khách hàng, hóa đơn , ghế ngồi  từ đó tạo ra một hệ thống trực quan, hiệu quả và dễ sử dụng cho cả nhân viên và người dùng.
+Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phim, giúp tối ưu hóa quy trình vận hành và đặt vé thông qua việc sử dụng ngôn ngữ Java và thư viện Java Spring Bot. Ứng dụng cung cấp các chức năng thiết yếu như quản lý phim, lịch chiếu, phòng chiếu, đặt vé và khách hàng, hóa đơn , ghế ngồi  từ đó tạo ra một hệ thống trực quan, hiệu quả và dễ sử dụng cho cả nhân viên và người dùng.
 <h2>Mục Tiêu </h2>
 1. Giao diện
 
