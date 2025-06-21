@@ -11,9 +11,7 @@ import java.util.List;
 @Repository
 public class GheDao {
 
-    /**
-     * Lấy toàn bộ danh sách ghế từ bảng Ghe
-     */
+   
     public List<Ghe> getAll() {
         List<Ghe> list = new ArrayList<>();
         String sql = "SELECT * FROM Ghe";
@@ -29,15 +27,13 @@ public class GheDao {
                 ));
             }
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi truy vấn danh sách ghế:");
+            System.err.println(" Lỗi khi truy vấn danh sách ghế:");
             e.printStackTrace();
         }
         return list;
     }
 
-    /**
-     * Tìm ghế theo số ghế và mã phòng
-     */
+    
     public Ghe getById(int soGhe, String maPhong) {
         String sql = "SELECT * FROM Ghe WHERE soGhe = ? AND maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -54,7 +50,7 @@ public class GheDao {
                 );
             }
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi tìm ghế theo ID:");
+            System.err.println(" Lỗi khi tìm ghế theo ID:");
             e.printStackTrace();
         }
         return null;

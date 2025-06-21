@@ -13,13 +13,13 @@ public class GheController {
     @Autowired
     private GheService gheService;
 
-    // Lấy danh sách tất cả ghế
+   
     @GetMapping
     public List<Ghe> getAllGhes() {
         return gheService.getAllGhes();
     }
 
-    // Lấy ghế theo soGhe và maPhong
+    
     @GetMapping("/{soGhe}/{maPhong}")
     public Ghe getGheById(@PathVariable int soGhe, @PathVariable String maPhong) {
         return gheService.getGheById(soGhe, maPhong);

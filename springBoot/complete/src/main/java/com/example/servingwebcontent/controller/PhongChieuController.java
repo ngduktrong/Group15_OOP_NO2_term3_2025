@@ -16,13 +16,13 @@ public class PhongChieuController {
     @Autowired
     private PhongChieuService phongChieuService;
 
-    // Lấy tất cả phòng chiếu
+    
     @GetMapping
     public List<PhongChieu> getAll() {
         return phongChieuService.getAllPhongChieu();
     }
 
-    // Lấy phòng chiếu theo ID
+    
     @GetMapping("/{id}")
     public PhongChieu getById(@PathVariable int id) {
         PhongChieu p = phongChieuService.getPhongChieuById(id);
@@ -32,14 +32,14 @@ public class PhongChieuController {
         return p;
     }
 
-    // Tạo mới phòng chiếu
+   
     @PostMapping
     public PhongChieu create(@RequestBody PhongChieu p) {
         phongChieuService.createPhongChieu(p);
         return p;
     }
 
-    // Cập nhật phòng chiếu
+  
     @PutMapping("/{id}")
     public PhongChieu update(@PathVariable int id, @RequestBody PhongChieu p) {
         PhongChieu existing = phongChieuService.getPhongChieuById(id);
@@ -51,7 +51,7 @@ public class PhongChieuController {
         return p;
     }
 
-    // Xóa phòng chiếu
+   
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
         PhongChieu existing = phongChieuService.getPhongChieuById(id);

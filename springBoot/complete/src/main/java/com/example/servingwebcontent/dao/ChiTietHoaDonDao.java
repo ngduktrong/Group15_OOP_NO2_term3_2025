@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public class ChiTietHoaDonDao {
-    // Tạo mới chi tiết hóa đơn
+    
     public void create(ChiTietHoaDon ct) {
         String sql = "INSERT INTO ChiTietHoaDon (MaHoaDon, MaVe) VALUES (?, ?)";
         try (Connection conn = AivenConnection.getConnection();
@@ -23,7 +23,7 @@ public class ChiTietHoaDonDao {
         }
     }
 
-    // Lấy chi tiết hóa đơn theo composite key
+    
     public ChiTietHoaDon getById(int maHoaDon, int maVe) {
         String sql = "SELECT * FROM ChiTietHoaDon WHERE MaHoaDon = ? AND MaVe = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -41,7 +41,6 @@ public class ChiTietHoaDonDao {
         return null;
     }
 
-    // Lấy tất cả chi tiết hóa đơn
     public List<ChiTietHoaDon> getAll() {
         List<ChiTietHoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM ChiTietHoaDon";
@@ -57,15 +56,15 @@ public class ChiTietHoaDonDao {
         return list;
     }
 
-    // Cập nhật chi tiết hóa đơn (thay đổi keys)
+   
     public void update(int oldMaHoaDon, int oldMaVe, ChiTietHoaDon ctNew) {
         String sql = "UPDATE ChiTietHoaDon SET MaHoaDon = ?, MaVe = ? WHERE MaHoaDon = ? AND MaVe = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            // Giá trị mới
+            
             pst.setInt(1, ctNew.getMaHoaDon());
             pst.setInt(2, ctNew.getMaVe());
-            // Khóa cũ
+         
             pst.setInt(3, oldMaHoaDon);
             pst.setInt(4, oldMaVe);
             pst.executeUpdate();
@@ -74,7 +73,7 @@ public class ChiTietHoaDonDao {
         }
     }
 
-    // Xóa chi tiết hóa đơn
+  
     public void delete(int maHoaDon, int maVe) {
         String sql = "DELETE FROM ChiTietHoaDon WHERE MaHoaDon = ? AND MaVe = ?";
         try (Connection conn = AivenConnection.getConnection();

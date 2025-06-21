@@ -10,12 +10,12 @@ import java.util.List;
 
 @Repository
 public class SuatChieuDao {
-    // Tạo mới suất chiếu
+  
     public void create(SuatChieu s) {
         String sql = "INSERT INTO SuatChieu (MaPhim, MaPhong, NgayGioChieu) VALUES (?, ?, ?)";
         try (Connection c = AivenConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // Nếu MaSuatChieu auto-increment trong DB
+           
             ps.setInt(1, s.getMaPhim());
             ps.setInt(2, s.getMaPhong());
             ps.setString(3, s.getNgayGioChieu());
@@ -30,7 +30,6 @@ public class SuatChieuDao {
         }
     }
 
-    // Lấy suất chiếu theo ID
     public SuatChieu getById(int id) {
         String sql = "SELECT * FROM SuatChieu WHERE MaSuatChieu = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -47,7 +46,7 @@ public class SuatChieuDao {
         return null;
     }
 
-    // Lấy tất cả suất chiếu
+   
     public List<SuatChieu> getAll() {
         List<SuatChieu> list = new ArrayList<>();
         String sql = "SELECT * FROM SuatChieu";
@@ -63,7 +62,7 @@ public class SuatChieuDao {
         return list;
     }
 
-    // Cập nhật suất chiếu
+   
     public void update(SuatChieu s) {
         String sql = "UPDATE SuatChieu SET MaPhim = ?, MaPhong = ?, NgayGioChieu = ? WHERE MaSuatChieu = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -78,7 +77,7 @@ public class SuatChieuDao {
         }
     }
 
-    // Xóa suất chiếu
+   
     public void delete(int id) {
         String sql = "DELETE FROM SuatChieu WHERE MaSuatChieu = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -90,7 +89,7 @@ public class SuatChieuDao {
         }
     }
 
-    // Mapping ResultSet sang model
+    
     private SuatChieu mapResultSetToSuatChieu(ResultSet rs) throws SQLException {
         SuatChieu s = new SuatChieu();
         s.setMaSuatChieu(rs.getInt("MaSuatChieu"));

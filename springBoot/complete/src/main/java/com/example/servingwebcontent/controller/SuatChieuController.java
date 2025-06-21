@@ -16,13 +16,13 @@ public class SuatChieuController {
     @Autowired
     private SuatChieuService suatChieuService;
 
-    // Lấy tất cả suất chiếu
+    
     @GetMapping
     public List<SuatChieu> getAll() {
         return suatChieuService.getAllSuatChieu();
     }
 
-    // Lấy suất chiếu theo ID
+    
     @GetMapping("/{id}")
     public SuatChieu getById(@PathVariable int id) {
         SuatChieu s = suatChieuService.getSuatChieuById(id);
@@ -32,14 +32,14 @@ public class SuatChieuController {
         return s;
     }
 
-    // Tạo mới suất chiếu
+
     @PostMapping
     public SuatChieu create(@RequestBody SuatChieu s) {
         suatChieuService.createSuatChieu(s);
         return s;
     }
 
-    // Cập nhật suất chiếu
+   
     @PutMapping("/{id}")
     public SuatChieu update(@PathVariable int id, @RequestBody SuatChieu s) {
         SuatChieu existing = suatChieuService.getSuatChieuById(id);
@@ -51,7 +51,7 @@ public class SuatChieuController {
         return s;
     }
 
-    // Xóa suất chiếu
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
         SuatChieu existing = suatChieuService.getSuatChieuById(id);

@@ -13,27 +13,27 @@ public class HoaDonService {
     @Autowired
     private HoaDonDao hoaDonDao;
 
-    // Lấy tất cả hóa đơn
+   
     public List<HoaDon> getAllHoaDon() {
         return hoaDonDao.getAll();
     }
 
-    // Lấy hóa đơn theo ID
+    
     public HoaDon getHoaDonById(int id) {
         return hoaDonDao.getById(id);
     }
 
-    // Tạo mới hóa đơn
+    
     public void createHoaDon(HoaDon hd) {
         hoaDonDao.create(hd);
     }
 
-    // Cập nhật hóa đơn
+    
     public void updateHoaDon(HoaDon hd) {
         hoaDonDao.update(hd);
     }
 
-    // Xóa hóa đơn
+   
     public void deleteHoaDon(int id) {
         hoaDonDao.delete(id);
     }

@@ -1,4 +1,4 @@
-// ChiTietHoaDonController.java
+
 package com.example.servingwebcontent.controller;
 
 import com.example.servingwebcontent.models.ChiTietHoaDon;
@@ -17,13 +17,13 @@ public class ChiTietHoaDonController {
     @Autowired
     private ChiTietHoaDonService chiTietHoaDonService;
 
-    // Lấy tất cả chi tiết hóa đơn
+    
     @GetMapping
     public List<ChiTietHoaDon> getAll() {
         return chiTietHoaDonService.getAllChiTietHoaDon();
     }
 
-    // Lấy chi tiết hóa đơn theo composite key
+    
     @GetMapping("/{maHoaDon}/{maVe}")
     public ChiTietHoaDon getById(@PathVariable int maHoaDon, @PathVariable int maVe) {
         ChiTietHoaDon ct = chiTietHoaDonService.getChiTietHoaDon(maHoaDon, maVe);
@@ -33,15 +33,15 @@ public class ChiTietHoaDonController {
         return ct;
     }
 
-    // Tạo mới chi tiết hóa đơn
+   
     @PostMapping
     public ChiTietHoaDon create(@RequestBody ChiTietHoaDon ct) {
-        // Có thể validate: nếu đã tồn tại khóa này, có thể báo lỗi
+       
         chiTietHoaDonService.createChiTietHoaDon(ct);
         return ct;
     }
 
-    // Cập nhật chi tiết hóa đơn (thay khóa cũ)
+
     @PutMapping("/{oldMaHoaDon}/{oldMaVe}")
     public ChiTietHoaDon update(@PathVariable int oldMaHoaDon,
                                 @PathVariable int oldMaVe,
@@ -54,7 +54,7 @@ public class ChiTietHoaDonController {
         return ctNew;
     }
 
-    // Xóa chi tiết hóa đơn
+    
     @DeleteMapping("/{maHoaDon}/{maVe}")
     public String delete(@PathVariable int maHoaDon, @PathVariable int maVe) {
         ChiTietHoaDon existing = chiTietHoaDonService.getChiTietHoaDon(maHoaDon, maVe);

@@ -10,12 +10,12 @@ import java.util.List;
 
 @Repository
 public class PhongChieuDao {
-    // Tạo mới phòng chiếu
+    
     public void create(PhongChieu p) {
         String sql = "INSERT INTO PhongChieu (TenPhong, SoLuongGhe, LoaiPhong) VALUES (?, ?, ?)";
         try (Connection c = AivenConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // Nếu MaPhong auto-increment, không set từ client
+           
             ps.setString(1, p.getTenPhong());
             ps.setInt(2, p.getSoLuongGhe());
             ps.setString(3, p.getLoaiPhong());
@@ -30,7 +30,7 @@ public class PhongChieuDao {
         }
     }
 
-    // Lấy phòng chiếu theo ID
+   
     public PhongChieu getById(int id) {
         String sql = "SELECT * FROM PhongChieu WHERE MaPhong = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -47,7 +47,7 @@ public class PhongChieuDao {
         return null;
     }
 
-    // Lấy tất cả phòng chiếu
+   
     public List<PhongChieu> getAll() {
         List<PhongChieu> list = new ArrayList<>();
         String sql = "SELECT * FROM PhongChieu";
@@ -63,7 +63,7 @@ public class PhongChieuDao {
         return list;
     }
 
-    // Cập nhật phòng chiếu
+    
     public void update(PhongChieu p) {
         String sql = "UPDATE PhongChieu SET TenPhong = ?, SoLuongGhe = ?, LoaiPhong = ? WHERE MaPhong = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -78,7 +78,6 @@ public class PhongChieuDao {
         }
     }
 
-    // Xóa phòng chiếu
     public void delete(int id) {
         String sql = "DELETE FROM PhongChieu WHERE MaPhong = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -90,7 +89,7 @@ public class PhongChieuDao {
         }
     }
 
-    // Mapping ResultSet sang model
+   
     private PhongChieu mapResultSetToPhongChieu(ResultSet rs) throws SQLException {
         PhongChieu p = new PhongChieu();
         p.setMaPhong(rs.getInt("MaPhong"));

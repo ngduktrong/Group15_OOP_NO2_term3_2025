@@ -16,13 +16,13 @@ public class PhimController {
     @Autowired
     private PhimDao phimDao;
 
-    // Lấy danh sách tất cả phim
+    
     @GetMapping
     public List<Phim> getAllPhim() {
         return phimDao.getAll();
     }
 
-    // Lấy phim theo id
+   
     @GetMapping("/{id}")
     public Phim getPhimById(@PathVariable int id) {
         Phim p = phimDao.getById(id);
@@ -32,15 +32,15 @@ public class PhimController {
         return p;
     }
 
-    // Tạo phim mới
+    
     @PostMapping
     public Phim createPhim(@RequestBody Phim phim) {
-        // Nếu MaPhim là auto-increment, bỏ set MaPhim từ client
+       
         phimDao.create(phim);
         return phim;
     }
 
-    // Cập nhật phim
+    
     @PutMapping("/{id}")
     public Phim updatePhim(@PathVariable int id, @RequestBody Phim phim) {
         Phim existing = phimDao.getById(id);
@@ -52,7 +52,7 @@ public class PhimController {
         return phim;
     }
 
-    // Xóa phim
+    
     @DeleteMapping("/{id}")
     public String deletePhim(@PathVariable int id) {
         Phim existing = phimDao.getById(id);
