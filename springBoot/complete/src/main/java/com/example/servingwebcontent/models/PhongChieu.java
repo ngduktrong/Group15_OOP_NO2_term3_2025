@@ -35,6 +35,9 @@ public class PhongChieu {
     public void setLoaiPhong(String LoaiPhong) {
         this.LoaiPhong = LoaiPhong ;
     }
+    public PhongChieu(){
+        
+    }
     @Override
     public String toString() {
         return "   PhongChieu{" +

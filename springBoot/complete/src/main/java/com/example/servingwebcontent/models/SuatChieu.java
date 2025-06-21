@@ -47,5 +47,6 @@ public class SuatChieu {
     public void setNgayGioChieu(String NgayGioChieu) {
         this.NgayGioChieu = NgayGioChieu;
     }
+    
 
 }
