@@ -11,7 +11,10 @@ public class AivenConnection {
     private static final String USER = "avnadmin";
     private static final String PASSWORD = "AVNS_sZ26Imppg25oMKu9vG1";
     // ...existing code...
-
+    public static Connection getConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
     public void testConnection() {
         Connection conn = null;
 

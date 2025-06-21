@@ -1,31 +1,41 @@
 package com.example.servingwebcontent.service;
+
 import com.example.servingwebcontent.dao.VeDao;
 import com.example.servingwebcontent.models.Ve;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+
 @Service
 public class VeService {
+
     @Autowired
     private VeDao veDao;
 
-    public List<Ve> getAll() {
+    // Lấy tất cả vé
+    public List<Ve> getAllVes() {
         return veDao.getAll();
     }
 
-    public Ve getById(int id) {
+    // Lấy vé theo ID
+    public Ve getVeById(int id) {
         return veDao.getById(id);
     }
 
-    public void create(Ve ve) {
+    // Tạo mới vé
+    public void createVe(Ve ve) {
         veDao.create(ve);
     }
 
-    public void update(Ve ve) {
+    // Cập nhật vé
+    public void updateVe(Ve ve) {
         veDao.update(ve);
     }
 
-    public void delete(int id) {
+    // Xoá vé
+    public void deleteVe(int id) {
         veDao.delete(id);
     }
 }
+// VeService.java
