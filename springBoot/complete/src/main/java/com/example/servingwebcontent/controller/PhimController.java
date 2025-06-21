@@ -1,31 +1,65 @@
 package com.example.servingwebcontent.controller;
 
+import com.example.servingwebcontent.dao.PhimDao;
 import com.example.servingwebcontent.models.Phim;
-import com.example.servingwebcontent.service.PhimService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/phim")
 public class PhimController {
 
     @Autowired
-    private PhimService phimService;
+    private PhimDao phimDao;
 
-    
-    @GetMapping("/list")
-    public List<Phim> listPhim() {
-        return phimService.getAllPhim();
+    // Lấy danh sách tất cả phim
+    @GetMapping
+    public List<Phim> getAllPhim() {
+        return phimDao.getAll();
     }
 
-    @GetMapping("/phim/{id}")
+    // Lấy phim theo id
+    @GetMapping("/{id}")
     public Phim getPhimById(@PathVariable int id) {
-        Phim p = phimService.getPhimById(id);
+        Phim p = phimDao.getById(id);
         if (p == null) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                    org.springframework.http.HttpStatus.NOT_FOUND, "Phim khong tim thay");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
         }
         return p;
+    }
+
+    // Tạo phim mới
+    @PostMapping
+    public Phim createPhim(@RequestBody Phim phim) {
+        // Nếu MaPhim là auto-increment, bỏ set MaPhim từ client
+        phimDao.create(phim);
+        return phim;
+    }
+
+    // Cập nhật phim
+    @PutMapping("/{id}")
+    public Phim updatePhim(@PathVariable int id, @RequestBody Phim phim) {
+        Phim existing = phimDao.getById(id);
+        if (existing == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
+        }
+        phim.setMaPhim(id);
+        phimDao.update(phim);
+        return phim;
+    }
+
+    // Xóa phim
+    @DeleteMapping("/{id}")
+    public String deletePhim(@PathVariable int id) {
+        Phim existing = phimDao.getById(id);
+        if (existing == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
+        }
+        phimDao.delete(id);
+        return "Đã xóa phim!";
     }
 }
