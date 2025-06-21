@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách ghế</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <h2>🎫 Danh sách ghế trong hệ thống</h2>
+
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Số Ghế</th>
+                <th>Mã Phòng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ghe : ${dsGhe}">
+                <td th:text="${ghe.soGhe}"></td>
+                <td th:text="${ghe.maPhong}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(dsGhe)}">Không có dữ liệu ghế để hiển thị.</p>
+</body>
+</html>

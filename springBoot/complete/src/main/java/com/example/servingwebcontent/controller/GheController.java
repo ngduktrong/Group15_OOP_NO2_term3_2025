@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/ghe")
 public class GheController {
@@ -19,7 +20,7 @@ public class GheController {
         return gheService.getAllGhes();
     }
 
-    // Lấy ghế theo soGhe và maPhong
+    // Lấy thông tin 1 ghế theo soGhe và maPhong
     @GetMapping("/{soGhe}/{maPhong}")
     public Ghe getGheById(@PathVariable int soGhe, @PathVariable String maPhong) {
         return gheService.getGheById(soGhe, maPhong);

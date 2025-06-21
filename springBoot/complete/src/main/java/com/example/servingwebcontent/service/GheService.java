@@ -18,7 +18,7 @@ public class GheService {
         return gheDao.getAll();
     }
 
-    // Lấy ghế theo ID
+    // Lấy ghế theo ID (soGhe + maPhong)
     public Ghe getGheById(int soGhe, String maPhong) {
         return gheDao.getById(soGhe, maPhong);
     }
