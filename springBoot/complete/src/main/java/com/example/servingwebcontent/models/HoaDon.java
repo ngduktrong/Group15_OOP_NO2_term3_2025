@@ -37,6 +37,8 @@ public double getTongTien() {
 public void setTongTien(double TongTien) {
         this.TongTien = TongTien;
     }
+    public HoaDon() {
+    }
 @Override
 public String toString() {
         return "HoaDon{" +
