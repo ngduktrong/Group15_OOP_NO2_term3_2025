@@ -12,8 +12,7 @@ public class GheService {
 
     @Autowired
     private GheDao gheDao;
-
-    
+    // Lấy tất cả ghế
     public List<Ghe> getAllGhes() {
         return gheDao.getAll();
     }

@@ -13,8 +13,7 @@ public class GheController {
 
     @Autowired
     private GheService gheService;
-
-   
+    // Lấy tất cả ghế
     @GetMapping
     public List<Ghe> getAllGhes() {
         return gheService.getAllGhes();
