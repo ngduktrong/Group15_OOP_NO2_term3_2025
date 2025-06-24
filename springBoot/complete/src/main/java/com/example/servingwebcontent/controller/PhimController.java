@@ -1,65 +1,65 @@
 package com.example.servingwebcontent.controller;
 
-import com.example.servingwebcontent.dao.PhimDao;
 import com.example.servingwebcontent.models.Phim;
+import com.example.servingwebcontent.service.PhimService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/phim")
+@Controller
+@RequestMapping("/phim")
 public class PhimController {
 
     @Autowired
-    private PhimDao phimDao;
+    private PhimService phimService;
 
-    
-    @GetMapping
+    // Trang web: hiển thị danh sách phim qua Thymeleaf
+    @GetMapping("/view")
+    public String showPhimList(Model model) {
+        List<Phim> danhSachPhim = phimService.getAllPhim();
+        model.addAttribute("phims", danhSachPhim);
+        return "phim/list"; // => templates/phim/list.html
+    }
+
+    // REST API: Lấy tất cả phim
+    @ResponseBody
+    @GetMapping("/api")
     public List<Phim> getAllPhim() {
-        return phimDao.getAll();
+        return phimService.getAllPhim();
     }
 
-   
-    @GetMapping("/{id}")
+    // REST API: Lấy phim theo ID
+    @ResponseBody
+    @GetMapping("/api/{id}")
     public Phim getPhimById(@PathVariable int id) {
-        Phim p = phimDao.getById(id);
-        if (p == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
-        }
-        return p;
+        return phimService.getPhimById(id);
     }
 
-    
-    @PostMapping
-    public Phim createPhim(@RequestBody Phim phim) {
-       
-        phimDao.create(phim);
-        return phim;
+    // REST API: Thêm phim
+    @ResponseBody
+    @PostMapping("/api")
+    public String createPhim(@RequestBody Phim phim) {
+        phimService.createPhim(phim);
+        return "✅ Đã thêm phim!";
     }
 
-    
-    @PutMapping("/{id}")
-    public Phim updatePhim(@PathVariable int id, @RequestBody Phim phim) {
-        Phim existing = phimDao.getById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
-        }
+    // REST API: Cập nhật phim
+    @ResponseBody
+    @PutMapping("/api/{id}")
+    public String updatePhim(@PathVariable int id, @RequestBody Phim phim) {
         phim.setMaPhim(id);
-        phimDao.update(phim);
-        return phim;
+        phimService.updatePhim(phim);
+        return "✅ Đã cập nhật phim!";
     }
 
-    
-    @DeleteMapping("/{id}")
+    // REST API: Xóa phim
+    @ResponseBody
+    @DeleteMapping("/api/{id}")
     public String deletePhim(@PathVariable int id) {
-        Phim existing = phimDao.getById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phim không tìm thấy");
-        }
-        phimDao.delete(id);
-        return "Đã xóa phim!";
+        phimService.deletePhim(id);
+        return "✅ Đã xoá phim!";
     }
 }
