@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cập nhật người dùng</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h2>✏️ Cập nhật người dùng</h2>
+
+<form th:action="@{/nguoidung/update}" th:object="${nguoiDung}" method="post">
+    <input type="hidden" th:field="*{maNguoiDung}" />
+
+    <label>Họ tên:</label>
+    <input type="text" th:field="*{hoTen}" required/><br/><br/>
+
+    <label>SĐT:</label>
+    <input type="text" th:field="*{soDienThoai}" required/><br/><br/>
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" required/><br/><br/>
+
+    <label>Loại người dùng:</label>
+    <select th:field="*{loaiNguoiDung}">
+        <option value="KhachHang">Khách Hàng</option>
+        <option value="NhanVien">Nhân Viên</option>
+    </select><br/><br/>
+
+    <button type="submit">💾 Cập nhật</button>
+</form>
+
+<p><a th:href="@{/nguoidung/view}">🔙 Quay lại danh sách</a></p>
+</body>
+</html>

@@ -6,19 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class GheService {
 
     @Autowired
     private GheDao gheDao;
-    // Lấy tất cả ghế
+
     public List<Ghe> getAllGhes() {
         return gheDao.getAll();
     }
 
-    // Lấy ghế theo ID
-    public Ghe getGheById(int soGhe, String maPhong) {
-        return gheDao.getById(soGhe, maPhong);
+    public Ghe getGheById(int maPhong, String soGhe) {
+        return gheDao.getById(String.valueOf(maPhong), soGhe);
     }
 }
+// GheService.java

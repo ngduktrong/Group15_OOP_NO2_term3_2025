@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Danh sách người dùng</title>
-    <link rel="stylesheet" th:href="@{list.css}">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div class="container">
-    <h2>📋 Danh sách người dùng</h2>
+<h2>📋 Danh sách người dùng</h2>
 
-    <p><a class="add-link" th:href="@{/nguoidung/add}">➕ Thêm mới</a></p>
+<p><a th:href="@{/nguoidung/add}">➕ Thêm mới</a></p>
 
-    <table>
-        <thead>
+<table border="1" cellpadding="10" cellspacing="0">
+    <thead>
         <tr>
             <th>ID</th>
             <th>Họ tên</th>
@@ -21,8 +20,8 @@
             <th>Loại</th>
             <th>Hành động</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         <tr th:each="nd : ${dsNguoiDung}">
             <td th:text="${nd.maNguoiDung}">1</td>
             <td th:text="${nd.hoTen}">Tên</td>
@@ -36,8 +35,7 @@
                 </form>
             </td>
         </tr>
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
 </body>
 </html>

@@ -22,7 +22,7 @@ public class GheDao {
 
             while (rs.next()) {
                 list.add(new Ghe(
-                        rs.getInt("soGhe"),
+                        rs.getString("soGhe"),
                         rs.getString("maPhong")
                 ));
             }
@@ -34,18 +34,18 @@ public class GheDao {
     }
 
     
-    public Ghe getById(int soGhe, String maPhong) {
+    public Ghe getById(String soGhe, String maPhong) {
         String sql = "SELECT * FROM Ghe WHERE soGhe = ? AND maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, soGhe);
+            ps.setString(1, soGhe);
             ps.setString(2, maPhong);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return new Ghe(
-                        rs.getInt("soGhe"),
+                        rs.getString("soGhe"),
                         rs.getString("maPhong")
                 );
             }

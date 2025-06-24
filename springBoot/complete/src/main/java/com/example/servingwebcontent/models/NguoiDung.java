@@ -61,7 +61,7 @@ public class NguoiDung {
                 ", Ten='" + HoTen + '\'' +
                 ", SoDienThoai='" + SoDienThoai + '\'' +
                 ", Email='" + Email + '\'' +
-                ", MatKhau='" + LoaiNguoiDung + '\'' +
+                ", LoaiNguoiDung='" + LoaiNguoiDung + '\'' +
                 '}';
     }
 }

@@ -2,27 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách ghế</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <title>Danh sách người dùng</title>
+    <link rel="stylesheet" th:href="@{list.css}">
 </head>
 <body>
-    <h2>🎫 Danh sách ghế trong hệ thống</h2>
+<div class="container">
+    <h2>📋 Danh sách người dùng</h2>
 
-    <table border="1" cellpadding="10" cellspacing="0">
+    <p><a class="add-link" th:href="@{/nguoidung/add}">➕ Thêm mới</a></p>
+
+    <table>
         <thead>
-            <tr>
-                <th>Số Ghế</th>
-                <th>Mã Phòng</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>SĐT</th>
+            <th>Email</th>
+            <th>Loại</th>
+            <th>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="ghe : ${dsGhe}">
-                <td th:text="${ghe.soGhe}"></td>
-                <td th:text="${ghe.maPhong}"></td>
-            </tr>
+        <tr th:each="nd : ${dsNguoiDung}">
+            <td th:text="${nd.maNguoiDung}">1</td>
+            <td th:text="${nd.hoTen}">Tên</td>
+            <td th:text="${nd.soDienThoai}">SĐT</td>
+            <td th:text="${nd.email}">Email</td>
+            <td th:text="${nd.loaiNguoiDung}">Loại</td>
+            <td>
+                <a th:href="@{'/nguoidung/edit/' + ${nd.maNguoiDung}}">✏️ Sửa</a> |
+                <form th:action="@{/nguoidung/delete/{id}(id=${nd.maNguoiDung})}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Bạn có chắc muốn xoá?')">🗑️ Xoá</button>
+                </form>
+            </td>
+        </tr>
         </tbody>
     </table>
-
-    <p th:if="${#lists.isEmpty(dsGhe)}">Không có dữ liệu ghế để hiển thị.</p>
+</div>
 </body>
 </html>
