@@ -25,7 +25,12 @@ public class Phim {
         this.DaoDien = DaoDien;
         this.DuongDanPoster = DuongDanPoster;
     }
-
+    public int getMaPhim() {
+        return MaPhim;
+    }
+    public void setMaPhim(int MaPhim) {
+        this.MaPhim = MaPhim;
+    }
     public String getTenPhim() {
         return TenPhim;
     }
@@ -75,12 +80,7 @@ public class Phim {
     public void setDuongDanPoster(String DuongDanPoster) {
         this.DuongDanPoster = DuongDanPoster;
     }
-    public int getMaPhim() {
-        return MaPhim;
-    }
-public void setMaPhim(int MaPhim) {
-        this.MaPhim = MaPhim;
-    }
+    
     
 
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -17,12 +18,15 @@ public class PhimController {
     private PhimService phimService;
 
     // Trang web: hiển thị danh sách phim qua Thymeleaf
-    @GetMapping("/view")
-    public String showPhimList(Model model) {
-        List<Phim> danhSachPhim = phimService.getAllPhim();
-        model.addAttribute("phims", danhSachPhim);
-        return "phim/list"; // => templates/phim/list.html
+   @GetMapping("/view")
+public String viewPhimList(Model model) {
+    List<Phim> phims = phimService.getAllPhim();
+    if (phims == null) {
+        phims = new ArrayList<>();
     }
+    model.addAttribute("phims", phims);
+    return "phim/list";
+}
 
     // REST API: Lấy tất cả phim
     @ResponseBody

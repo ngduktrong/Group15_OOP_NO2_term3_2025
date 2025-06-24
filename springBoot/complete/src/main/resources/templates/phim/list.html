@@ -4,32 +4,82 @@
 <head>
     <meta charset="UTF-8">
     <title>🎬 Danh sách Phim</title>
-    <!-- Link CSS custom -->
+    <!-- Nếu có CSS custom, đặt file ở src/main/resources/static/css/style.css -->
     <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        /* Một số style cơ bản để bảng gọn gàng */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        img.poster {
+            max-width: 100px;
+            max-height: 150px;
+        }
+        .truncate {
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 <body>
     <h2>🎬 Danh sách Phim trong hệ thống</h2>
-
-    <table border="1" cellpadding="10" cellspacing="0">
+    <a th:href="@{/phim/add}">Thêm phim mới</a>
+    <br/><br/>
+    <table>
         <thead>
             <tr>
                 <th>Mã Phim</th>
                 <th>Tiêu đề</th>
-                <th>Thể loại</th>
+                <th>Thời lượng (phút)</th>
+                <th>Ngày khởi chiếu</th>
+                <th>Nước sản xuất</th>
+                <th>Định dạng</th>
                 <th>Đạo diễn</th>
-                <th>Quốc gia</th>
-                <th>Thời lượng</th>
+                <th>Mô tả</th>
+                <th>Poster</th>
                 <th>Hành động</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="phim : ${phims}">
+                <!-- Mã Phim -->
                 <td th:text="${phim.maPhim}">1</td>
+                <!-- Tiêu đề -->
                 <td th:text="${phim.tenPhim}">Tên phim</td>
-                <td th:text="${phim.theLoai}">Thể loại</td>
-                <td th:text="${phim.daoDien}">Đạo diễn</td>
-                <td th:text="${phim.quocGia}">Quốc gia</td>
-                <td th:text="${phim.thoiLuong} + ' phút'">120 phút</td>
+                <!-- Thời lượng -->
+                <td th:text="${phim.thoiLuong}">120</td>
+                <!-- Ngày khởi chiếu -->
+                <td th:text="${phim.ngayKhoiChieu}">2025-01-01</td>
+                <!-- Nước sản xuất -->
+                <td th:text="${phim.nuocSanXuat}">Việt Nam</td>
+                <!-- Định dạng -->
+                <td th:text="${phim.dinhDang}">2D/3D/etc</td>
+                <!-- Đạo diễn -->
+                <td th:text="${phim.daoDien}">Tên đạo diễn</td>
+                <!-- Mô tả (có thể truncate nếu quá dài) -->
+                <td>
+                    <span class="truncate" th:title="${phim.moTa}" th:text="${phim.moTa}">Mô tả ngắn...</span>
+                </td>
+                <!-- Poster (hình ảnh) nếu có URL hợp lệ -->
+                <td>
+                    <img class="poster"
+                         th:if="${phim.duongDanPoster != null and phim.duongDanPoster != ''}"
+                         th:src="@{${phim.duongDanPoster}}"
+                         alt="Poster phim"/>
+                    <span th:if="${phim.duongDanPoster == null or phim.duongDanPoster == ''}">Chưa có</span>
+                </td>
+                <!-- Hành động: Sửa / Xóa -->
                 <td>
                     <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a> |
                     <a th:href="@{|/phim/delete/${phim.maPhim}|}"
@@ -41,6 +91,7 @@
         </tbody>
     </table>
 
+    <!-- Nếu danh sách rỗng: -->
     <p th:if="${#lists.isEmpty(phims)}">Không có dữ liệu phim để hiển thị.</p>
 </body>
 </html>
