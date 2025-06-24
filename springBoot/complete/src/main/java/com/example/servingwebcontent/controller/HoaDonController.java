@@ -16,13 +16,13 @@ public class HoaDonController {
     @Autowired
     private HoaDonService hoaDonService;
 
-    // Lấy danh sách tất cả hóa đơn
+    
     @GetMapping
     public List<HoaDon> getAllHoaDon() {
         return hoaDonService.getAllHoaDon();
     }
 
-    // Lấy hóa đơn theo ID
+    
     @GetMapping("/{id}")
     public HoaDon getHoaDonById(@PathVariable int id) {
         HoaDon hd = hoaDonService.getHoaDonById(id);
@@ -32,15 +32,14 @@ public class HoaDonController {
         return hd;
     }
 
-    // Tạo mới hóa đơn
     @PostMapping
     public HoaDon createHoaDon(@RequestBody HoaDon hd) {
-        // Nếu MaHoaDon auto-increment, client không cần set id
+        
         hoaDonService.createHoaDon(hd);
         return hd;
     }
 
-    // Cập nhật hóa đơn
+    
     @PutMapping("/{id}")
     public HoaDon updateHoaDon(@PathVariable int id, @RequestBody HoaDon hd) {
         HoaDon existing = hoaDonService.getHoaDonById(id);
@@ -52,7 +51,7 @@ public class HoaDonController {
         return hd;
     }
 
-    // Xóa hóa đơn
+   
     @DeleteMapping("/{id}")
     public String deleteHoaDon(@PathVariable int id) {
         HoaDon existing = hoaDonService.getHoaDonById(id);

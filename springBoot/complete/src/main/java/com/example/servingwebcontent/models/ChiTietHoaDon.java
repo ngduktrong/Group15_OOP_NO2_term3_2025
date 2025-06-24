@@ -20,4 +20,7 @@ public class ChiTietHoaDon {
     public void setMaVe(int MaVe) {
         this.MaVe = MaVe;
     }
+    public ChiTietHoaDon(){
+        
+    }
 }

@@ -13,12 +13,12 @@ public class GheService {
     @Autowired
     private GheDao gheDao;
 
-    // Lấy tất cả ghế
+    
     public List<Ghe> getAllGhes() {
         return gheDao.getAll();
     }
 
-    // Lấy ghế theo ID (soGhe + maPhong)
+    // Lấy ghế theo ID
     public Ghe getGheById(int soGhe, String maPhong) {
         return gheDao.getById(soGhe, maPhong);
     }

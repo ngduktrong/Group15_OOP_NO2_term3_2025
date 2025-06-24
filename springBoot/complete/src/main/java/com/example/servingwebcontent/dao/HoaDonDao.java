@@ -10,17 +10,17 @@ import java.util.List;
 
 @Repository
 public class HoaDonDao {
-    // Tạo mới hóa đơn
+    
     public void create(HoaDon hd) {
         String sql = "INSERT INTO HoaDon (MaKhachHang, NgayLap, TongTien) VALUES (?, ?, ?)";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            // Nếu MaHoaDon auto-increment, không set MaHoaDon từ client
+           
             pst.setInt(1, hd.getMaKhachHang());
             pst.setString(2, hd.getNgayLap());
             pst.setDouble(3, hd.getTongTien());
             pst.executeUpdate();
-            // Lấy khóa tự sinh nếu cần
+            
             try (ResultSet keys = pst.getGeneratedKeys()) {
                 if (keys.next()) {
                     hd.setMaHoaDon(keys.getInt(1));
@@ -28,7 +28,7 @@ public class HoaDonDao {
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            // Có thể throw custom exception hoặc logging
+            
         }
     }
 
@@ -49,7 +49,7 @@ public class HoaDonDao {
         return null;
     }
 
-    // Lấy tất cả hóa đơn
+    
     public List<HoaDon> getAll() {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon";
@@ -65,7 +65,7 @@ public class HoaDonDao {
         return list;
     }
 
-    // Cập nhật hóa đơn
+   
     public void update(HoaDon hd) {
         String sql = "UPDATE HoaDon SET MaKhachHang = ?, NgayLap = ?, TongTien = ? WHERE MaHoaDon = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -80,7 +80,6 @@ public class HoaDonDao {
         }
     }
 
-    // Xóa hóa đơn
     public void delete(int id) {
         String sql = "DELETE FROM HoaDon WHERE MaHoaDon = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -92,7 +91,7 @@ public class HoaDonDao {
         }
     }
 
-    // Hàm mapping ResultSet sang đối tượng HoaDon
+   
     private HoaDon mapResultSetToHoaDon(ResultSet rs) throws SQLException {
         HoaDon hd = new HoaDon();
         hd.setMaHoaDon(rs.getInt("MaHoaDon"));

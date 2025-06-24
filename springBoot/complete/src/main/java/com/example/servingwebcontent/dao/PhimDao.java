@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Repository
 public class PhimDao {
-    // Lấy tất cả phim
+  
     public List<Phim> getAll() {
         List<Phim> list = new ArrayList<>();
         String sql = "SELECT * FROM Phim";
@@ -36,7 +36,7 @@ public class PhimDao {
         return list;
     }
 
-    // Lấy phim theo id
+    
     public Phim getById(int id) {
         String sql = "SELECT * FROM Phim WHERE MaPhim = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -63,7 +63,7 @@ public class PhimDao {
         return null;
     }
 
-    // Tạo mới phim
+    
     public void create(Phim p) {
         String sql = "INSERT INTO Phim(MaPhim, TenPhim, ThoiLuong, NgayKhoiChieu, NuocSanXuat, DinhDang, MoTa, DaoDien, DuongDanPoster) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = AivenConnection.getConnection();
@@ -83,7 +83,7 @@ public class PhimDao {
         }
     }
 
-    // Cập nhật phim
+  
     public void update(Phim p) {
         String sql = "UPDATE Phim SET TenPhim = ?, ThoiLuong = ?, NgayKhoiChieu = ?, NuocSanXuat = ?, DinhDang = ?, MoTa = ?, DaoDien = ?, DuongDanPoster = ? WHERE MaPhim = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -103,7 +103,7 @@ public class PhimDao {
         }
     }
 
-    // Xóa phim theo id
+  
     public void delete(int id) {
         String sql = "DELETE FROM Phim WHERE MaPhim = ?";
         try (Connection conn = AivenConnection.getConnection();
