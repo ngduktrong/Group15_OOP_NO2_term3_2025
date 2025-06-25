@@ -1,10 +1,11 @@
 package com.example.servingwebcontent.models;
+import java.time.LocalDate;
 
 public class Phim {
     private int MaPhim;
     private String TenPhim;
     private int ThoiLuong;
-    private String NgayKhoiChieu;
+    private LocalDate NgayKhoiChieu;
     private String NuocSanXuat;
     private String DinhDang;
     private String MoTa;
@@ -14,7 +15,7 @@ public class Phim {
         
     }
 
-    public Phim(int MaPhim,String TenPhim, int ThoiLuong, String NgayKhoiChieu, String NuocSanXuat, String DinhDang, String MoTa, String DaoDien, String DuongDanPoster) {
+    public Phim(int MaPhim,String TenPhim, int ThoiLuong, LocalDate NgayKhoiChieu, String NuocSanXuat, String DinhDang, String MoTa, String DaoDien, String DuongDanPoster) {
         this.MaPhim = MaPhim;
         this.TenPhim = TenPhim;
         this.ThoiLuong = ThoiLuong;
@@ -37,7 +38,7 @@ public class Phim {
     public int getThoiLuong() {
         return ThoiLuong;
     }
-    public String getNgayKhoiChieu() {
+    public LocalDate getNgayKhoiChieu() {
         return NgayKhoiChieu;
     }
     public String getNuocSanXuat() {
@@ -62,7 +63,7 @@ public class Phim {
     public void setThoiLuong(int ThoiLuong) {
         this.ThoiLuong = ThoiLuong;
     }
-    public void setNgayKhoiChieu(String NgayKhoiChieu) {
+    public void setNgayKhoiChieu(LocalDate NgayKhoiChieu) {
         this.NgayKhoiChieu = NgayKhoiChieu;
     }
     public void setNuocSanXuat(String NuocSanXuat) {

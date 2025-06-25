@@ -4,38 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>🎬 Danh sách Phim</title>
-    <!-- Nếu có CSS custom, đặt file ở src/main/resources/static/css/style.css -->
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
-    <style>
-        /* Một số style cơ bản để bảng gọn gàng */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #eee;
-        }
-        img.poster {
-            max-width: 100px;
-            max-height: 150px;
-        }
-        .truncate {
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/phim.css}" />
+
+   
 </head>
 <body>
-    <h2>🎬 Danh sách Phim trong hệ thống</h2>
-    <a th:href="@{/phim/add}">Thêm phim mới</a>
-    <br/><br/>
+    <h2 class="tieude">🎬 Danh sách Phim trong hệ thống</h2>
+    <a class="ThemPhim" th:href="@{/phim/add}">Thêm phim mới</a>
+    
     <table>
         <thead>
             <tr>

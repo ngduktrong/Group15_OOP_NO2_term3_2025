@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa Phim</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <!-- Nếu dùng Bootstrap, thêm link tương tự -->
+</head>
+<body>
+<div class="container">
+    <h2>Sửa Thông Tin Phim</h2>
+    <form th:action="@{/phim/edit/{id}(id=${phim.maPhim})}" th:object="${phim}" method="post">
+        <!-- maPhim thường không hiển thị cho edit, nhưng có thể show readonly -->
+        <div class="mb-3">
+            <label class="form-label">Mã Phim:</label>
+            <input type="text" th:value="${phim.maPhim}" class="form-control" readonly/>
+        </div>
+        <div class="mb-3">
+            <label for="tenPhim" class="form-label">Tên phim:</label>
+            <input type="text" id="tenPhim" th:field="*{tenPhim}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="thoiLuong" class="form-label">Thời lượng (phút):</label>
+            <input type="number" id="thoiLuong" th:field="*{thoiLuong}" class="form-control" min="1" required/>
+        </div>
+        <div class="mb-3">
+            <label for="ngayKhoiChieu" class="form-label">Ngày khởi chiếu:</label>
+            <input type="date" id="ngayKhoiChieu" th:field="*{ngayKhoiChieu}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="nuocSanXuat" class="form-label">Nước sản xuất:</label>
+            <input type="text" id="nuocSanXuat" th:field="*{nuocSanXuat}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="dinhDang" class="form-label">Định dạng:</label>
+            <input type="text" id="dinhDang" th:field="*{dinhDang}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="daoDien" class="form-label">Đạo diễn:</label>
+            <input type="text" id="daoDien" th:field="*{daoDien}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="moTa" class="form-label">Mô tả:</label>
+            <textarea id="moTa" th:field="*{moTa}" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="duongDanPoster" class="form-label">URL Poster:</label>
+            <input type="text" id="duongDanPoster" th:field="*{duongDanPoster}" class="form-control"/>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Cập nhật</button>
+            <a th:href="@{/phim/list}" class="btn btn-secondary">Hủy</a>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/js/phim.js}"></script>
+</body>
+</html>

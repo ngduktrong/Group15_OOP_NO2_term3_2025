@@ -13,57 +13,47 @@ import java.util.List;
 @Controller
 @RequestMapping("/phim")
 public class PhimController {
-
     @Autowired
     private PhimService phimService;
 
-    // Trang web: hiển thị danh sách phim qua Thymeleaf
-   @GetMapping("/view")
-public String viewPhimList(Model model) {
-    List<Phim> phims = phimService.getAllPhim();
-    if (phims == null) {
-        phims = new ArrayList<>();
-    }
-    model.addAttribute("phims", phims);
-    return "phim/list";
-}
-
-    // REST API: Lấy tất cả phim
-    @ResponseBody
-    @GetMapping("/api")
-    public List<Phim> getAllPhim() {
-        return phimService.getAllPhim();
+    @GetMapping({"", "/list"})
+    public String listPhim(Model model) {
+        model.addAttribute("phims", phimService.getAllPhim());
+        return "phim/list"; // tương ứng templates/phim/list.html
     }
 
-    // REST API: Lấy phim theo ID
-    @ResponseBody
-    @GetMapping("/api/{id}")
-    public Phim getPhimById(@PathVariable int id) {
-        return phimService.getPhimById(id);
+    @GetMapping("/add")
+    public String showAddForm(Model model) {
+        model.addAttribute("phim", new Phim());
+        return "phim/add";
     }
 
-    // REST API: Thêm phim
-    @ResponseBody
-    @PostMapping("/api")
-    public String createPhim(@RequestBody Phim phim) {
+    @PostMapping("/add")
+    public String addPhim(@ModelAttribute("phim") Phim phim) {
         phimService.createPhim(phim);
-        return "✅ Đã thêm phim!";
+        return "redirect:/phim/list";
     }
 
-    // REST API: Cập nhật phim
-    @ResponseBody
-    @PutMapping("/api/{id}")
-    public String updatePhim(@PathVariable int id, @RequestBody Phim phim) {
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") int id, Model model) {
+        Phim phim = phimService.getPhimById(id);
+        if (phim == null) {
+            return "redirect:/phim/list";
+        }
+        model.addAttribute("phim", phim);
+        return "phim/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editPhim(@PathVariable("id") int id, @ModelAttribute("phim") Phim phim) {
         phim.setMaPhim(id);
         phimService.updatePhim(phim);
-        return "✅ Đã cập nhật phim!";
+        return "redirect:/phim/list";
     }
 
-    // REST API: Xóa phim
-    @ResponseBody
-    @DeleteMapping("/api/{id}")
-    public String deletePhim(@PathVariable int id) {
+    @GetMapping("/delete/{id}")
+    public String deletePhim(@PathVariable("id") int id) {
         phimService.deletePhim(id);
-        return "✅ Đã xoá phim!";
+        return "redirect:/phim/list";
     }
 }
