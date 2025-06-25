@@ -1,73 +1,66 @@
-<!-- src/main/resources/templates/phim/list.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>🎬 Danh sách Phim</title>
     <link rel="stylesheet" th:href="@{/css/phim.css}" />
-
-   
 </head>
 <body>
-    <h2 class="tieude">🎬 Danh sách Phim trong hệ thống</h2>
-    <a class="ThemPhim" th:href="@{/phim/add}">Thêm phim mới</a>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Mã Phim</th>
-                <th>Tiêu đề</th>
-                <th>Thời lượng (phút)</th>
-                <th>Ngày khởi chiếu</th>
-                <th>Nước sản xuất</th>
-                <th>Định dạng</th>
-                <th>Đạo diễn</th>
-                <th>Mô tả</th>
-                <th>Poster</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="phim : ${phims}">
-                <!-- Mã Phim -->
-                <td th:text="${phim.maPhim}">1</td>
-                <!-- Tiêu đề -->
-                <td th:text="${phim.tenPhim}">Tên phim</td>
-                <!-- Thời lượng -->
-                <td th:text="${phim.thoiLuong}">120</td>
-                <!-- Ngày khởi chiếu -->
-                <td th:text="${phim.ngayKhoiChieu}">2025-01-01</td>
-                <!-- Nước sản xuất -->
-                <td th:text="${phim.nuocSanXuat}">Việt Nam</td>
-                <!-- Định dạng -->
-                <td th:text="${phim.dinhDang}">2D/3D/etc</td>
-                <!-- Đạo diễn -->
-                <td th:text="${phim.daoDien}">Tên đạo diễn</td>
-                <!-- Mô tả (có thể truncate nếu quá dài) -->
-                <td>
-                    <span class="truncate" th:title="${phim.moTa}" th:text="${phim.moTa}">Mô tả ngắn...</span>
-                </td>
-                <!-- Poster (hình ảnh) nếu có URL hợp lệ -->
-                <td>
-                    <img class="poster"
-                         th:if="${phim.duongDanPoster != null and phim.duongDanPoster != ''}"
-                         th:src="@{${phim.duongDanPoster}}"
-                         alt="Poster phim"/>
-                    <span th:if="${phim.duongDanPoster == null or phim.duongDanPoster == ''}">Chưa có</span>
-                </td>
-                <!-- Hành động: Sửa / Xóa -->
-                <td>
-                    <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a> |
-                    <a th:href="@{|/phim/delete/${phim.maPhim}|}"
-                       onclick="return confirm('Bạn có chắc muốn xóa phim này?');">
-                       Xóa
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Nếu danh sách rỗng: -->
-    <p th:if="${#lists.isEmpty(phims)}">Không có dữ liệu phim để hiển thị.</p>
+    <!-- Thêm class container để style nền trắng mờ -->
+    <div class="container">
+        <!-- Tiêu đề căn giữa -->
+        <h2 class="tieude">🎬 Danh sách Phim trong hệ thống</h2>
+        <!-- Link Thêm phim -->
+        <div class="center">
+            <a class="ThemPhim" th:href="@{/phim/add}">Thêm phim mới</a>
+        </div>
+        <!-- Bảng danh sách, thêm class DanhSachPhim -->
+        <table class="DanhSachPhim">
+            <thead>
+                <tr>
+                    <th>Mã Phim</th>
+                    <th>Tiêu đề</th>
+                    <th>Thời lượng (phút)</th>
+                    <th>Ngày khởi chiếu</th>
+                    <th>Nước sản xuất</th>
+                    <th>Định dạng</th>
+                    <th>Đạo diễn</th>
+                    <th>Mô tả</th>
+                    <th>Poster</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="phim : ${phims}">
+                    <td th:text="${phim.maPhim}">1</td>
+                    <td th:text="${phim.tenPhim}">Tên phim</td>
+                    <td th:text="${phim.thoiLuong}">120</td>
+                    <td th:text="${phim.ngayKhoiChieu}">2025-01-01</td>
+                    <td th:text="${phim.nuocSanXuat}">Việt Nam</td>
+                    <td th:text="${phim.dinhDang}">2D/3D/etc</td>
+                    <td th:text="${phim.daoDien}">Tên đạo diễn</td>
+                    <td>
+                        <span class="truncate" th:title="${phim.moTa}" th:text="${phim.moTa}">Mô tả ngắn...</span>
+                    </td>
+                    <td>
+                        <img class="poster"
+                             th:if="${phim.duongDanPoster != null and phim.duongDanPoster != ''}"
+                             th:src="@{${phim.duongDanPoster}}"
+                             alt="Poster phim"/>
+                        <span th:if="${phim.duongDanPoster == null or phim.duongDanPoster == ''}">Chưa có</span>
+                    </td>
+                    <td>
+                        <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a> |
+                        <a th:href="@{|/phim/delete/${phim.maPhim}|}"
+                           onclick="return confirm('Bạn có chắc muốn xóa phim này?');">
+                           Xóa
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(phims)}" class="empty-message">Không có dữ liệu phim để hiển thị.</p>
+    </div>
+    <script th:src="@{/js/phim.js}"></script>
 </body>
 </html>
