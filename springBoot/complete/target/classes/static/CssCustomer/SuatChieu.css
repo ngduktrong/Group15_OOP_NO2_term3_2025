@@ -1,0 +1,22 @@
+/* customer.css */
+body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+h1 { color: #333; }
+#sc-list {
+  list-style: none;
+  padding: 0;
+}
+#sc-list li {
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#sc-list button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
