@@ -3,25 +3,23 @@ package com.example.servingwebcontent.models;
 public class TaiKhoan {
 
     public enum LoaiTaiKhoan {
-        admin  , user ;
+        admin, user;
 
         public String toDatabaseValue() {
             return this.name().toLowerCase();
         }
 
         public static LoaiTaiKhoan fromDatabaseValue(String value) {
-            return value != null ? LoaiTaiKhoan.valueOf(value.toUpperCase()) : user ; // default fallback
+            return value != null ? LoaiTaiKhoan.valueOf(value.toLowerCase()) : user;
         }
     }
 
-    private String tenDangNhap;  // PRIMARY KEY
+    private String tenDangNhap;
     private String matKhau;
     private LoaiTaiKhoan loaiTaiKhoan;
     private int maNguoiDung;
 
-    // Constructors
-    public TaiKhoan() {
-    }
+    public TaiKhoan() {}
 
     public TaiKhoan(String tenDangNhap, String matKhau, String loaiTaiKhoanStr, int maNguoiDung) {
         this.tenDangNhap = tenDangNhap;
@@ -30,7 +28,6 @@ public class TaiKhoan {
         this.maNguoiDung = maNguoiDung;
     }
 
-    // Getters and setters
     public String getTenDangNhap() {
         return tenDangNhap;
     }
@@ -67,7 +64,6 @@ public class TaiKhoan {
         this.maNguoiDung = maNguoiDung;
     }
 
-    // Helper để lưu xuống DB
     public String getLoaiTaiKhoanAsString() {
         return loaiTaiKhoan != null ? loaiTaiKhoan.toDatabaseValue() : null;
     }

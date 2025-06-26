@@ -1,6 +1,5 @@
-package com.example.servingwebcontent.service;
+package com.example.servingwebcontent.database;
 
-import com.example.servingwebcontent.database.AivenConnection;
 import com.example.servingwebcontent.models.TaiKhoan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

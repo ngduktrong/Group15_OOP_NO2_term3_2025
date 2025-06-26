@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/taikhoan")
 public class TaiKhoanController {
@@ -21,25 +19,20 @@ public class TaiKhoanController {
     }
 
     @GetMapping
-    public String showTaiKhoanPage(Model model,
-                                   @RequestParam(value = "edit", required = false) String tenDangNhap,
-                                   @RequestParam(value = "message", required = false) String message) {
-        List<TaiKhoan> list = taiKhoanService.getAllTaiKhoan();
-        model.addAttribute("taiKhoans", list);
+    public String index(Model model,
+                        @RequestParam(value = "edit", required = false) String username,
+                        @RequestParam(value = "message", required = false) String message) {
 
-        if (tenDangNhap != null) {
-            TaiKhoan taiKhoan = taiKhoanService.getTaiKhoanByUsername(tenDangNhap);
-            if (taiKhoan != null) {
-                model.addAttribute("taiKhoan", taiKhoan);
-                model.addAttribute("editMode", true);
-            } else {
-                model.addAttribute("taiKhoan", new TaiKhoan());
-                model.addAttribute("editMode", false);
-                model.addAttribute("message", "Không tìm thấy tài khoản để chỉnh sửa!");
-            }
-        } else {
-            model.addAttribute("taiKhoan", new TaiKhoan());
-            model.addAttribute("editMode", false);
+        model.addAttribute("taiKhoans", taiKhoanService.getAllTaiKhoan());
+        model.addAttribute("taiKhoan", new TaiKhoan());
+        model.addAttribute("editMode", false);
+
+        if (username != null) {
+            model.addAttribute("taiKhoan", taiKhoanService.getAllTaiKhoan().stream()
+                    .filter(t -> t.getTenDangNhap().equals(username))
+                    .findFirst()
+                    .orElse(new TaiKhoan()));
+            model.addAttribute("editMode", true);
         }
 
         if (message != null) {
@@ -50,25 +43,27 @@ public class TaiKhoanController {
     }
 
     @PostMapping("/add")
-    public String addTaiKhoan(@ModelAttribute TaiKhoan tk) {
-        boolean success = taiKhoanService.createTaiKhoan(tk);
-        if (!success) {
-            return "redirect:/taikhoan?message=Tên đăng nhập đã tồn tại hoặc lỗi cơ sở dữ liệu!";
+    public String add(@ModelAttribute TaiKhoan taiKhoan) {
+        if (!taiKhoanService.createTaiKhoan(taiKhoan)) {
+            return "redirect:/taikhoan?message=Không thể thêm tài khoản!";
         }
         return "redirect:/taikhoan";
     }
 
     @PostMapping("/edit/{username}")
-    public String editTaiKhoan(@PathVariable("username") String username,
-                               @ModelAttribute TaiKhoan tk) {
-        tk.setTenDangNhap(username); // đảm bảo không thay đổi username
-        taiKhoanService.updateTaiKhoan(tk);
+    public String edit(@PathVariable("username") String username, @ModelAttribute TaiKhoan taiKhoan) {
+        taiKhoan.setTenDangNhap(username);
+        if (!taiKhoanService.updateTaiKhoan(taiKhoan)) {
+            return "redirect:/taikhoan?message=Không thể cập nhật tài khoản!";
+        }
         return "redirect:/taikhoan";
     }
 
     @PostMapping("/delete/{username}")
-    public String deleteTaiKhoan(@PathVariable("username") String username) {
-        taiKhoanService.deleteTaiKhoan(username);
+    public String delete(@PathVariable("username") String username) {
+        if (!taiKhoanService.deleteTaiKhoan(username)) {
+            return "redirect:/taikhoan?message=Không thể xóa tài khoản!";
+        }
         return "redirect:/taikhoan";
     }
 }

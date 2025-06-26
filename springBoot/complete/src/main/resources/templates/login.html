@@ -26,13 +26,21 @@
         label {
             font-weight: bold;
         }
-        input {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
+        }
+        .role-selection {
+            margin-bottom: 15px;
+        }
+        .role-selection label {
+            font-weight: normal;
+            margin-right: 15px;
         }
         button {
             width: 100%;
@@ -51,6 +59,11 @@
             margin-bottom: 15px;
             text-align: center;
         }
+        .success {
+            color: green;
+            margin-bottom: 15px;
+            text-align: center;
+        }
         .register-link {
             margin-top: 10px;
             text-align: center;
@@ -64,13 +77,29 @@
     <div th:if="${error}" class="error">
         <p th:text="${error}"></p>
     </div>
+    <div th:if="${success}" class="success">
+        <p th:text="${success}"></p>
+    </div>
 
     <form th:action="@{/login}" method="post">
+        
         <label for="username">Tên đăng nhập:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username"
+               th:value="${usernameInput}" required>
 
         <label for="password">Mật khẩu:</label>
         <input type="password" id="password" name="password" required>
+
+        <div class="role-selection">
+            <label>
+                <input type="radio" name="role" value="user"
+                       th:checked="${roleInput == null or roleInput == 'user'}"> Người dùng
+            </label>
+            <label>
+                <input type="radio" name="role" value="admin"
+                       th:checked="${roleInput == 'admin'}"> Quản trị viên
+            </label>
+        </div>
 
         <button type="submit">Đăng nhập</button>
     </form>

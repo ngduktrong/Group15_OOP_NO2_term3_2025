@@ -1,14 +1,13 @@
 package com.example.servingwebcontent.controller;
 
+import com.example.servingwebcontent.models.TaiKhoan;
+import com.example.servingwebcontent.service.TaiKhoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.example.servingwebcontent.service.UserAiven;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
@@ -16,46 +15,59 @@ public class LoginController {
     @Value("${server.port}")
     private String serverPort;
 
-    private final UserAiven userService;
+    private final TaiKhoanService taiKhoanService;
 
-    // Sử dụng dependency injection thay vì khởi tạo trực tiếp
     @Autowired
-    public LoginController(UserAiven userService) {
-        this.userService = userService;
+    public LoginController(TaiKhoanService taiKhoanService) {
+        this.taiKhoanService = taiKhoanService;
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model) {
+    public String loginForm(Model model,
+                            @ModelAttribute("success") String successMessage,
+                            @ModelAttribute("error") String errorMessage,
+                            @ModelAttribute("usernameInput") String usernameInput,
+                            @ModelAttribute("roleInput") String roleInput) {
         model.addAttribute("port", serverPort);
-        return "login"; // Đổi thành login.html để rõ ràng hơn
+        model.addAttribute("success", successMessage);
+        model.addAttribute("error", errorMessage);
+        model.addAttribute("usernameInput", usernameInput);
+        model.addAttribute("roleInput", roleInput);
+        return "login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        Model model) {
+                    @RequestParam String password,
+                    @RequestParam String role,
+                    Model model) {
 
-        // Thêm kiểm tra input rỗng
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-            model.addAttribute("error", "Vui lòng nhập tên đăng nhập và mật khẩu");
-            model.addAttribute("port", serverPort);
-            return "login";
-        }
-
-        // Kiểm tra tài khoản admin
-        if ("admin".equals(username) && "123456".equals(password)) {
-            return "redirect:/admin/dashboard"; // Sử dụng redirect thay vì trả về template trực tiếp
-        }
-
-        // Kiểm tra người dùng thông thường
-        if (userService.authenticateUser(username, password)) {
-            return "redirect:/user/dashboard"; // Sử dụng redirect
-        }
-
-        model.addAttribute("error", "Sai tài khoản hoặc mật khẩu");
-        model.addAttribute("port", serverPort);
+    if (username.isEmpty() || password.isEmpty()) {
+        model.addAttribute("error", "Vui lòng nhập đầy đủ thông tin");
+        model.addAttribute("usernameInput", username);
+        model.addAttribute("roleInput", role);
         return "login";
     }
+
+    TaiKhoan tk = taiKhoanService.getByUsername(username);
+
+    if (tk != null && tk.getMatKhau().equals(password)) {
+        if ("admin".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "admin".equals(role)) {
+            return "redirect:/admin/dashboard";
+        } else if ("user".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "user".equals(role)) {
+            return "redirect:/user/dashboard";
+        } else {
+            model.addAttribute("error", "Vai trò không đúng.");
+        }
+    } else {
+        model.addAttribute("error", "Sai tài khoản hoặc mật khẩu.");
+    }
+
+    model.addAttribute("usernameInput", username);
+    model.addAttribute("roleInput", role);
+    return "login";
+    }
+
 
     @GetMapping("/register")
     public String registerForm(Model model) {
@@ -67,13 +79,10 @@ public class LoginController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String confirmPassword,
+                           RedirectAttributes redirectAttributes,
                            Model model) {
 
-        // Kiểm tra input rỗng
-        if (username == null || username.isEmpty() || 
-            password == null || password.isEmpty() || 
-            confirmPassword == null || confirmPassword.isEmpty()) {
-            
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             model.addAttribute("error", "Vui lòng điền đầy đủ thông tin");
             return "register";
         }
@@ -93,16 +102,26 @@ public class LoginController {
             return "register";
         }
 
-        if (userService.registerUser(username, password)) {
-            model.addAttribute("success", "Đăng ký thành công! Vui lòng đăng nhập.");
-            return "login"; // Trả về trang login thay vì index
-        } else {
+        if (taiKhoanService.getByUsername(username) != null) {
             model.addAttribute("error", "Tên đăng nhập đã tồn tại");
+            return "register";
+        }
+
+        TaiKhoan newUser = new TaiKhoan();
+        newUser.setTenDangNhap(username);
+        newUser.setMatKhau(password);
+        newUser.setLoaiTaiKhoan("user");
+        newUser.setMaNguoiDung(0);
+
+        if (taiKhoanService.createTaiKhoan(newUser)) {
+            redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
+            return "redirect:/login";
+        } else {
+            model.addAttribute("error", "Không thể đăng ký. Vui lòng thử lại.");
             return "register";
         }
     }
 
-    // Thêm các endpoint cho dashboard
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model model) {
         model.addAttribute("username", "admin");
@@ -112,7 +131,6 @@ public class LoginController {
 
     @GetMapping("/user/dashboard")
     public String userDashboard(Model model) {
-        // Lấy thông tin người dùng từ session hoặc security context
         model.addAttribute("username", "user");
         model.addAttribute("role", "user");
         return "user-dashboard";

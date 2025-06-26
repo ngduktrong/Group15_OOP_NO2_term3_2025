@@ -2,10 +2,11 @@ package com.example.servingwebcontent.service;
 
 import com.example.servingwebcontent.dao.TaiKhoanDao;
 import com.example.servingwebcontent.models.TaiKhoan;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class TaiKhoanService {
 
@@ -20,23 +21,20 @@ public class TaiKhoanService {
         return taiKhoanDao.getAll();
     }
 
-    public TaiKhoan getTaiKhoanByUsername(String tenDangNhap) {
+    public boolean createTaiKhoan(TaiKhoan tk) {
+        return taiKhoanDao.insert(tk);
+    }
+
+    public boolean updateTaiKhoan(TaiKhoan tk) {
+        return taiKhoanDao.update(tk);
+    }
+
+    public boolean deleteTaiKhoan(String tenDangNhap) {
+        return taiKhoanDao.delete(tenDangNhap);
+    }
+    public TaiKhoan getByUsername(String tenDangNhap) {
         return taiKhoanDao.getByUsername(tenDangNhap);
     }
 
-    public boolean createTaiKhoan(TaiKhoan taiKhoan) {
-        return taiKhoanDao.create(taiKhoan);
-    }
-
-    public void updateTaiKhoan(TaiKhoan taiKhoan) {
-        taiKhoanDao.update(taiKhoan);
-    }
-
-    public void deleteTaiKhoan(String tenDangNhap) {
-        taiKhoanDao.delete(tenDangNhap);
-    }
-
-    public boolean isUsernameExists(String tenDangNhap) {
-        return taiKhoanDao.existsByUsername(tenDangNhap);
-    }
+    
 }
