@@ -2,6 +2,7 @@ package com.example.servingwebcontent.controller;
 
 import com.example.servingwebcontent.models.TaiKhoan;
 import com.example.servingwebcontent.service.TaiKhoanService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ public class TaiKhoanController {
 
     private final TaiKhoanService taiKhoanService;
 
+    @Autowired
     public TaiKhoanController(TaiKhoanService taiKhoanService) {
         this.taiKhoanService = taiKhoanService;
     }
@@ -26,8 +28,15 @@ public class TaiKhoanController {
         model.addAttribute("taiKhoans", list);
 
         if (tenDangNhap != null) {
-            model.addAttribute("taiKhoan", taiKhoanService.getTaiKhoanByUsername(tenDangNhap));
-            model.addAttribute("editMode", true);
+            TaiKhoan taiKhoan = taiKhoanService.getTaiKhoanByUsername(tenDangNhap);
+            if (taiKhoan != null) {
+                model.addAttribute("taiKhoan", taiKhoan);
+                model.addAttribute("editMode", true);
+            } else {
+                model.addAttribute("taiKhoan", new TaiKhoan());
+                model.addAttribute("editMode", false);
+                model.addAttribute("message", "Không tìm thấy tài khoản để chỉnh sửa!");
+            }
         } else {
             model.addAttribute("taiKhoan", new TaiKhoan());
             model.addAttribute("editMode", false);
@@ -52,7 +61,7 @@ public class TaiKhoanController {
     @PostMapping("/edit/{username}")
     public String editTaiKhoan(@PathVariable("username") String username,
                                @ModelAttribute TaiKhoan tk) {
-        tk.setTenDangNhap(username); // khóa chính không thay đổi
+        tk.setTenDangNhap(username); // đảm bảo không thay đổi username
         taiKhoanService.updateTaiKhoan(tk);
         return "redirect:/taikhoan";
     }

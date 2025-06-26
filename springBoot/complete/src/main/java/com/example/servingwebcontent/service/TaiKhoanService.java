@@ -3,14 +3,15 @@ package com.example.servingwebcontent.service;
 import com.example.servingwebcontent.dao.TaiKhoanDao;
 import com.example.servingwebcontent.models.TaiKhoan;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
 @Service
 public class TaiKhoanService {
 
     private final TaiKhoanDao taiKhoanDao;
 
+    @Autowired
     public TaiKhoanService(TaiKhoanDao taiKhoanDao) {
         this.taiKhoanDao = taiKhoanDao;
     }

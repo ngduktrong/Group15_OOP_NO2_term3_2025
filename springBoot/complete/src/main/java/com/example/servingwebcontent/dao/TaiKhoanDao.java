@@ -29,7 +29,7 @@ public class TaiKhoanDao {
                 list.add(tk);
             }
         } catch (Exception e) {
-            System.out.println("Lỗi khi lấy danh sách tài khoản:");
+            System.err.println("Lỗi khi lấy danh sách tài khoản:");
             e.printStackTrace();
         }
 
@@ -54,7 +54,7 @@ public class TaiKhoanDao {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Lỗi khi lấy tài khoản theo tên đăng nhập:");
+            System.err.println("Lỗi khi lấy tài khoản theo tên đăng nhập:");
             e.printStackTrace();
         }
 
@@ -72,6 +72,7 @@ public class TaiKhoanDao {
                 return rs.next();
             }
         } catch (Exception e) {
+            System.err.println("Lỗi khi kiểm tra username tồn tại:");
             e.printStackTrace();
         }
 
@@ -90,14 +91,14 @@ public class TaiKhoanDao {
 
             pst.setString(1, tk.getTenDangNhap());
             pst.setString(2, tk.getMatKhau());
-            pst.setString(3, tk.getLoaiTaiKhoan().toString());
+            pst.setString(3, tk.getLoaiTaiKhoanAsString()); // lowercase string
             pst.setInt(4, tk.getMaNguoiDung());
 
             pst.executeUpdate();
             return true;
 
         } catch (Exception e) {
-            System.out.println("Lỗi khi thêm tài khoản:");
+            System.err.println("Lỗi khi thêm tài khoản:");
             e.printStackTrace();
         }
 
@@ -111,14 +112,14 @@ public class TaiKhoanDao {
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, tk.getMatKhau());
-            pst.setString(2, tk.getLoaiTaiKhoan().toString());
+            pst.setString(2, tk.getLoaiTaiKhoanAsString());
             pst.setInt(3, tk.getMaNguoiDung());
             pst.setString(4, tk.getTenDangNhap());
 
             pst.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Lỗi khi cập nhật tài khoản:");
+            System.err.println("Lỗi khi cập nhật tài khoản:");
             e.printStackTrace();
         }
     }
@@ -133,7 +134,7 @@ public class TaiKhoanDao {
             pst.executeUpdate();
 
         } catch (Exception e) {
-            System.out.println("Lỗi khi xóa tài khoản:");
+            System.err.println("Lỗi khi xóa tài khoản:");
             e.printStackTrace();
         }
     }

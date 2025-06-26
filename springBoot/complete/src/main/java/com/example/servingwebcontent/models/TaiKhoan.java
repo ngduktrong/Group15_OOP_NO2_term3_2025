@@ -3,22 +3,21 @@ package com.example.servingwebcontent.models;
 public class TaiKhoan {
 
     public enum LoaiTaiKhoan {
-        ADMIN, USER;
+        admin  , user ;
 
-        // Trả về tên lowercase để tương thích với DB (nếu DB lưu "admin", "user")
         public String toDatabaseValue() {
             return this.name().toLowerCase();
         }
 
         public static LoaiTaiKhoan fromDatabaseValue(String value) {
-            return value != null ? LoaiTaiKhoan.valueOf(value.toUpperCase()) : null;
+            return value != null ? LoaiTaiKhoan.valueOf(value.toUpperCase()) : user ; // default fallback
         }
     }
 
     private String tenDangNhap;  // PRIMARY KEY
     private String matKhau;
-    private LoaiTaiKhoan loaiTaiKhoan; // enum thay vì String
-    private int maNguoiDung;     // FOREIGN KEY
+    private LoaiTaiKhoan loaiTaiKhoan;
+    private int maNguoiDung;
 
     // Constructors
     public TaiKhoan() {
@@ -27,7 +26,7 @@ public class TaiKhoan {
     public TaiKhoan(String tenDangNhap, String matKhau, String loaiTaiKhoanStr, int maNguoiDung) {
         this.tenDangNhap = tenDangNhap;
         this.matKhau = matKhau;
-        this.loaiTaiKhoan = LoaiTaiKhoan.fromDatabaseValue(loaiTaiKhoanStr); // Convert String to Enum
+        this.loaiTaiKhoan = LoaiTaiKhoan.fromDatabaseValue(loaiTaiKhoanStr);
         this.maNguoiDung = maNguoiDung;
     }
 
@@ -68,7 +67,7 @@ public class TaiKhoan {
         this.maNguoiDung = maNguoiDung;
     }
 
-    // Trả lại tên dạng lowercase để lưu vào DB nếu cần
+    // Helper để lưu xuống DB
     public String getLoaiTaiKhoanAsString() {
         return loaiTaiKhoan != null ? loaiTaiKhoan.toDatabaseValue() : null;
     }
