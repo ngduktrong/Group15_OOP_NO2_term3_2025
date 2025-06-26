@@ -1,34 +1,55 @@
-<!-- add.html -->
+<!-- src/main/resources/templates/phim/add.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Thêm Phim</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <meta charset="UTF-8">
+  <title>🎬 Thêm Phim Mới</title>
+  <link rel="stylesheet" th:href="@{/css/phim.css}" />
 </head>
 <body>
-<div class="container">
-    <h2>Thêm Phim Mới</h2>
-    <form id="addForm" th:action="@{/phim/add}" th:object="${phim}" method="post">
-        <!-- ... các input như cũ ... -->
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-            <a th:href="@{/phim/list}" class="btn btn-secondary">Hủy</a>
-        </div>
+  <div class="container">
+    <h2 class="tieude">🎬 Thêm Phim Mới</h2>
+    <!-- Form gửi POST bình thường -->
+    <form th:action="@{/phim/add}" th:object="${phim}" method="post">
+      <div class="mb-3">
+        <label for="tenPhim" class="form-label">Tên phim:</label>
+        <input type="text" id="tenPhim" th:field="*{tenPhim}" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="thoiLuong" class="form-label">Thời lượng (phút):</label>
+        <input type="number" id="thoiLuong" th:field="*{thoiLuong}" class="form-control" min="1" required />
+      </div>
+      <div class="mb-3">
+        <label for="ngayKhoiChieu" class="form-label">Ngày khởi chiếu:</label>
+        <input type="date" id="ngayKhoiChieu" th:field="*{ngayKhoiChieu}" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="nuocSanXuat" class="form-label">Nước sản xuất:</label>
+        <input type="text" id="nuocSanXuat" th:field="*{nuocSanXuat}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="dinhDang" class="form-label">Định dạng:</label>
+        <input type="text" id="dinhDang" th:field="*{dinhDang}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="daoDien" class="form-label">Đạo diễn:</label>
+        <input type="text" id="daoDien" th:field="*{daoDien}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="moTa" class="form-label">Mô tả:</label>
+        <textarea id="moTa" th:field="*{moTa}" class="form-control" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="duongDanPoster" class="form-label">URL Poster:</label>
+        <input type="text" id="duongDanPoster" th:field="*{duongDanPoster}" class="form-control" />
+      </div>
+      <div class="form-actions">
+        <!-- Nút submit -->
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <!-- Nút hủy quay về list -->
+        <a th:href="@{/phim/list}" class="btn btn-secondary">Hủy</a>
+      </div>
     </form>
-</div>
-
-<script th:inline="javascript">
-  /* Sau khi gửi form thành công, tự động điều hướng về /phim/list */
-  document.getElementById('addForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    fetch(this.action, {
-      method: this.method,
-      body: new FormData(this)
-    }).then(() => {
-      window.location.href = /*[[ @{/phim/list} ]]*/ '/phim/list';
-    });
-  });
-</script>
+  </div>
 </body>
 </html>

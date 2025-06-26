@@ -19,7 +19,7 @@ public class PhimController {
     @GetMapping({"", "/list"})
     public String listPhim(Model model) {
         model.addAttribute("phims", phimService.getAllPhim());
-        return "phim/list"; // tương ứng templates/phim/list.html
+        return "phim/list";
     }
 
     @GetMapping("/add")
@@ -31,14 +31,15 @@ public class PhimController {
     @PostMapping("/add")
     public String addPhim(@ModelAttribute("phim") Phim phim) {
         phimService.createPhim(phim);
-        return "redirect:/phim/list";
+        // Chuyển về /phim (sẽ gọi lại listPhim)
+        return "redirect:/phim";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") int id, Model model) {
         Phim phim = phimService.getPhimById(id);
         if (phim == null) {
-            return "redirect:/phim/list";
+            return "redirect:/phim";
         }
         model.addAttribute("phim", phim);
         return "phim/edit";
@@ -48,12 +49,13 @@ public class PhimController {
     public String editPhim(@PathVariable("id") int id, @ModelAttribute("phim") Phim phim) {
         phim.setMaPhim(id);
         phimService.updatePhim(phim);
-        return "redirect:/phim/list";
+        return "redirect:/phim";
     }
 
     @GetMapping("/delete/{id}")
     public String deletePhim(@PathVariable("id") int id) {
         phimService.deletePhim(id);
-        return "redirect:/phim/list";
+        return "redirect:/phim";
     }
 }
+
