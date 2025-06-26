@@ -29,11 +29,13 @@ public class PhimController {
     }
 
     @PostMapping("/add")
-    public String addPhim(@ModelAttribute("phim") Phim phim) {
-        phimService.createPhim(phim);
-        // Chuyển về /phim (sẽ gọi lại listPhim)
-        return "redirect:/phim/list";
+    public String addPhim(@ModelAttribute("phim") Phim phim, Model model) {
+    phimService.createPhim(phim); // thêm phim vào DB
+    List<Phim> phims = phimService.getAllPhim(); // lấy lại danh sách phim
+    model.addAttribute("phims", phims); // gán vào model
+    return "phim/list"; // hiển thị lại trang list
     }
+
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") int id, Model model) {
