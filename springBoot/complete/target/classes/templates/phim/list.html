@@ -1,4 +1,4 @@
-<!-- list.html -->
+<!-- src/main/resources/templates/phim/list.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -12,38 +12,75 @@
     <div class="center">
         <a class="ThemPhim" th:href="@{/phim/add}">Thêm phim mới</a>
     </div>
+
     <table class="DanhSachPhim">
         <thead>
-            <!-- ... tiêu đề bảng ... -->
+            <tr>
+                <th>Mã Phim</th>
+                <th>Tiêu đề</th>
+                <th>Thời lượng</th>
+                <th>Ngày khởi chiếu</th>
+                <th>Nước SX</th>
+                <th>Định dạng</th>
+                <th>Đạo diễn</th>
+                <th>Mô tả</th>
+                <th>Poster</th>
+                <th>Hành động</th>
+            </tr>
         </thead>
         <tbody>
+            <!-- Duyệt qua danh sách phims -->
             <tr th:each="phim : ${phims}">
-                <!-- ... các cột dữ liệu ... -->
+                <td th:text="${phim.maPhim}">1</td>
+                <td th:text="${phim.tenPhim}">Tên phim</td>
+                <td th:text="${phim.thoiLuong} + ' phút'">120 phút</td>
+                <td th:text="${phim.ngayKhoiChieu}">2025-01-01</td>
+                <td th:text="${phim.nuocSanXuat}">Việt Nam</td>
+                <td th:text="${phim.dinhDang}">2D</td>
+                <td th:text="${phim.daoDien}">Đạo diễn</td>
                 <td>
-                    <a href="#" class="delete-link" th:attr="data-delete-url=@{|/phim/delete/${phim.maPhim}|}">
+                    <span class="truncate"
+                          th:title="${phim.moTa}"
+                          th:text="${#strings.abbreviate(phim.moTa, 30)}">
+                        Mô tả...
+                    </span>
+                </td>
+                <td>
+                    <img class="poster"
+                         th:if="${phim.duongDanPoster != null and phim.duongDanPoster != ''}"
+                         th:src="@{${phim.duongDanPoster}}"
+                         alt="Poster" />
+                    <span th:if="${phim.duongDanPoster == null or phim.duongDanPoster == ''}">
+                        Chưa có
+                    </span>
+                </td>
+                <td>
+                    <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a> |
+                    <a href="#"
+                       class="delete-link"
+                       th:attr="data-delete-url=@{|/phim/delete/${phim.maPhim}|}">
                         Xóa
                     </a>
-                    |
-                    <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a>
                 </td>
             </tr>
         </tbody>
     </table>
-    <p th:if="${#lists.isEmpty(phims)}" class="empty-message">Không có dữ liệu phim để hiển thị.</p>
+
+    <!-- Khi danh sách rỗng -->
+    <p th:if="${#lists.isEmpty(phims)}" class="empty-message">
+        Không có dữ liệu phim để hiển thị.
+    </p>
 </div>
 
+<!-- Inline JS cho Xóa và Redirect về list -->
 <script th:inline="javascript">
-  /* Xử lý xóa qua Fetch và sau đó quay về /phim/list */
   document.querySelectorAll('.delete-link').forEach(function(a) {
     a.addEventListener('click', function(e) {
       e.preventDefault();
-      if(confirm('Bạn có chắc muốn xóa phim này?')) {
-        fetch(this.getAttribute('data-delete-url'), {
-          method: 'GET'  /* nếu controller dùng GET */
-          // method: 'DELETE' /* hoặc DELETE nếu backend hỗ trợ */
-        }).then(() => {
-          window.location.href = /*[[ @{/phim/list} ]]*/ '/phim/list';
-        });
+      if (confirm('Bạn có chắc muốn xóa phim này?')) {
+        // Gọi GET /phim/delete/{id}
+        fetch(a.getAttribute('data-delete-url'), { method: 'GET' })
+          .then(() => window.location.href = /*[[ @{/phim/list} ]]*/ '/phim/list');
       }
     });
   });
