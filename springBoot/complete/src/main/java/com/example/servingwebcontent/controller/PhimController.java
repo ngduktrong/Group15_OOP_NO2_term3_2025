@@ -32,7 +32,7 @@ public class PhimController {
     public String addPhim(@ModelAttribute("phim") Phim phim) {
         phimService.createPhim(phim);
         // Chuyển về /phim (sẽ gọi lại listPhim)
-        return "redirect:/phim";
+        return "redirect:/phim/list";
     }
 
     @GetMapping("/edit/{id}")
@@ -49,7 +49,7 @@ public class PhimController {
     public String editPhim(@PathVariable("id") int id, @ModelAttribute("phim") Phim phim) {
         phim.setMaPhim(id);
         phimService.updatePhim(phim);
-        return "redirect:/phim";
+        return "redirect:/phim/list";
     }
 
     @GetMapping("/delete/{id}")
