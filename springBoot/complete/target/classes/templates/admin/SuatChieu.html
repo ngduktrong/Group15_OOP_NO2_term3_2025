@@ -1,51 +1,40 @@
-<!-- admin.html -->
 <!DOCTYPE html>
-<html lang="vi">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Quản lý Suất Chiếu (Nhân viên)</title>
- <link rel="stylesheet" th:href="@{/CssAdmin-SuatChieu.css}" />
-
+  <title>Quản lý Suất Chiếu</title>
+  <link rel="stylesheet" th:href="@{/CssAdmin/suatchieu.css}" />
 </head>
-<body id="admin-page">
+<body id="admin-list-page">
+  <h1>Danh sách Suất Chiếu</h1>
+  <a th:href="@{/suatchieu/admin/add}">Thêm Mới</a>
+  <table id="sc-table" border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Mã Phim</th>
+        <th>Ngày Giờ Chiếu</th>
+        <th>Phòng</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="sc : ${scs}">
+        <td th:text="${sc.maSuatChieu}">1</td>
+        <td th:text="${sc.maPhim}">P01</td>
+        <td th:text="${#dates.format(sc.ngayGioChieu, 'dd-MM-yyyy HH:mm')}">01-01-2025 10:00</td>
+        <td th:text="${sc.maPhong}">R01</td>
+        <td>
+          <a th:href="@{|/suatchieu/admin/edit/${sc.maSuatChieu}|}">Sửa</a> |
+          <a href="#" class="delete-link"
+             th:attr="data-delete-url=@{|/suatchieu/admin/delete/${sc.maSuatChieu}|}">
+            Xóa
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <h1>Quản lý Suất Chiếu</h1>
-
-  <section id="form-section">
-    <h2 id="form-title">Thêm Suất Chiếu</h2>
-    <form id="sc-form">
-      <input type="hidden" id="sc-id" value="">
-      <div>
-        <label for="movie">Phim:</label>
-        <input type="text" id="movie" required>
-      </div>
-      <div>
-        <label for="time">Thời gian:</label>
-        <input type="datetime-local" id="time" required>
-      </div>
-      <div>
-        <label for="room">Phòng chiếu:</label>
-        <input type="text" id="room" required>
-      </div>
-      <button type="submit" id="submit-btn">Lưu</button>
-      <button type="button" id="cancel-btn">Hủy</button>
-    </form>
-  </section>
-
-  <section id="list-section">
-    <h2>Danh sách Suất Chiếu</h2>
-    <table id="sc-table">
-      <thead>
-        <tr>
-          <th>ID</th><th>Phim</th><th>Thời gian</th><th>Phòng</th><th>Hành động</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- rows sẽ được JS chèn vào -->
-      </tbody>
-    </table>
-  </section>
-
-  <script src="suatchieu.js"></script>
+  <script th:src="@{/js/suatchieu.js}"></script>
 </body>
 </html>

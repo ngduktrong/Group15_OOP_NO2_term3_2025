@@ -1,52 +1,47 @@
 package com.example.servingwebcontent.models;
+
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class SuatChieu {
-    private int MaSuatChieu;
-    private int MaPhim;
-    private int MaPhong;
-    private String NgayGioChieu;
+    private int maSuatChieu;
+    private int maPhim;
+    private int maPhong;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime ngayGioChieu;  // đổi từ LocalDate thành LocalDateTime
 
-    public SuatChieu(int MaSuatChieu, int MaPhim, int MaPhong, String NgayGioChieu) {
-        this.MaSuatChieu = MaSuatChieu;
-        this.MaPhim = MaPhim;
-        this.MaPhong = MaPhong;
-        this.NgayGioChieu = NgayGioChieu;
-    }
-
-    public SuatChieu() {
-        super(); 
-    }
+    // getter, setter
 
     public int getMaSuatChieu() {
-        return MaSuatChieu;
+        return maSuatChieu;
     }
 
-    public void setMaSuatChieu(int MaSuatChieu) {
-        this.MaSuatChieu = MaSuatChieu;
+    public void setMaSuatChieu(int maSuatChieu) {
+        this.maSuatChieu = maSuatChieu;
     }
 
     public int getMaPhim() {
-        return MaPhim;
+        return maPhim;
     }
 
-    public void setMaPhim(int MaPhim) {
-        this.MaPhim = MaPhim;
+    public void setMaPhim(int maPhim) {
+        this.maPhim = maPhim;
     }
 
     public int getMaPhong() {
-        return MaPhong;
+        return maPhong;
     }
 
-    public void setMaPhong(int MaPhong) {
-        this.MaPhong = MaPhong;
+    public void setMaPhong(int maPhong) {
+        this.maPhong = maPhong;
     }
 
-    public String getNgayGioChieu() {
-        return NgayGioChieu;
+    public LocalDateTime getNgayGioChieu() {
+        return ngayGioChieu;
     }
 
-    public void setNgayGioChieu(String NgayGioChieu) {
-        this.NgayGioChieu = NgayGioChieu;
+    public void setNgayGioChieu(LocalDateTime ngayGioChieu) {
+        this.ngayGioChieu = ngayGioChieu;
     }
-    
-
 }

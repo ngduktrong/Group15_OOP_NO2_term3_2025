@@ -9,7 +9,8 @@
 <body>
   <div class="container">
     <h2 class="tieude">🎬 Sửa Thông Tin Phim</h2>
-    <form th:action="@{/phim/edit/{id}(id=${phim.maPhim})}" th:object="${phim}" method="post">
+    <!-- Form với id để JS bắt sự kiện -->
+    <form id="editForm" th:action="@{/phim/edit/{id}(id=${phim.maPhim})}" th:object="${phim}" method="post">
       <div class="mb-3">
         <label class="form-label">Mã Phim:</label>
         <input type="text" th:value="${phim.maPhim}" class="form-control" readonly />
@@ -48,9 +49,29 @@
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Cập nhật</button>
-        <a th:href="@{/phim/list}" class="btn btn-secondary">Hủy</a>
+        <a href="list" class="btn btn-secondary">Hủy</a>
       </div>
     </form>
   </div>
+
+  <script th:inline="javascript">
+    /* Intercept form submit, dùng fetch gửi dữ liệu, sau đó chuyển về list tương đối */
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      fetch(form.action, {
+        method: form.method.toUpperCase(),
+        body: new FormData(form)
+      })
+      .then(function() {
+        window.location.href = '../list';
+
+      })
+      .catch(function(err) {
+        console.error('Error khi cập nhật phim:', err);
+        alert('Đã có lỗi xảy ra khi cập nhật phim.');
+      });
+    });
+  </script>
 </body>
 </html>

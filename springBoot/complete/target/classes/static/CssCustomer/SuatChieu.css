@@ -1,22 +1,39 @@
-/* customer.css */
+/* File: src/main/resources/static/CssCustomer/suatchieu.css */
+/* Dùng cho trang khách hàng */
+
 body {
-  font-family: sans-serif;
-  margin: 20px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #fff;
+  margin: 20px auto;
+  max-width: 600px;
+  color: #333;
 }
-h1 { color: #333; }
+
+h1 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
 #sc-list {
   list-style: none;
   padding: 0;
 }
+
 #sc-list li {
-  padding: 10px;
-  margin-bottom: 8px;
-  border: 1px solid #ccc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: #f8f9fa;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+  transition: background 0.2s;
 }
-#sc-list button {
-  padding: 6px 12px;
-  cursor: pointer;
+
+#sc-list li:hover {
+  background: #e9ecef;
+}
+
+#sc-list li::before {
+  content: '🎬';
+  margin-right: 8px;
 }

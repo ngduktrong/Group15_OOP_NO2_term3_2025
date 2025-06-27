@@ -9,8 +9,8 @@
 <body>
   <div class="container">
     <h2 class="tieude">🎬 Thêm Phim Mới</h2>
-    <!-- Form gửi POST bình thường -->
-    <form th:action="@{/phim/add}" th:object="${phim}" method="post">
+    <!-- Form với id để JS bắt sự kiện -->
+    <form id="addForm" th:action="@{/phim/add}" th:object="${phim}" method="post">
       <div class="mb-3">
         <label for="tenPhim" class="form-label">Tên phim:</label>
         <input type="text" id="tenPhim" th:field="*{tenPhim}" class="form-control" required />
@@ -44,12 +44,30 @@
         <input type="text" id="duongDanPoster" th:field="*{duongDanPoster}" class="form-control" />
       </div>
       <div class="form-actions">
-        <!-- Nút submit -->
         <button type="submit" class="btn btn-primary">Lưu</button>
-        <!-- Nút hủy quay về list -->
         <a th:href="@{/phim/list}" class="btn btn-secondary">Hủy</a>
       </div>
     </form>
   </div>
+
+  <script th:inline="javascript">
+    /* Intercept form submit, dùng fetch gửi dữ liệu, sau đó chuyển về list tương đối */
+    document.getElementById('addForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      fetch(form.action, {
+        method: form.method.toUpperCase(),
+        body: new FormData(form)
+      })
+      .then(function() {
+        // Dùng đường dẫn tương đối để chuyển về list
+        window.location.href = 'list';
+      })
+      .catch(function(err) {
+        console.error('Error khi thêm phim:', err);
+        alert('Đã có lỗi xảy ra khi thêm phim.');
+      });
+    });
+  </script>
 </body>
 </html>

@@ -1,37 +1,78 @@
-/* admin.css */
+/* File: src/main/resources/static/css/style.css */
+/* Dùng cho các trang admin */
+
 body {
-  font-family: sans-serif;
+  font-family: Arial, sans-serif;
   margin: 20px;
+  background: #f9f9f9;
 }
-h1, h2 { color: #333; }
-#form-section, #list-section {
-  margin-bottom: 30px;
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
 }
-form div {
-  margin: 10px 0;
+
+a {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 8px;
 }
-label {
-  display: inline-block;
-  width: 100px;
+a:hover {
+  text-decoration: underline;
 }
-input {
-  padding: 5px;
-  width: 200px;
-}
-button {
-  padding: 6px 12px;
-  margin-right: 5px;
-  cursor: pointer;
-}
+
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 12px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-th, td {
-  padding: 8px;
-  border: 1px solid #ccc;
+
+table th, table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
   text-align: left;
 }
-.action-btn {
-  margin-right: 5px;
+
+table th {
+  background: #f1f1f1;
+}
+
+button, input[type="submit"] {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+button:hover, input[type="submit"]:hover {
+  background: #218838;
+}
+
+button#cancel-btn {
+  background: #6c757d;
+}
+button#cancel-btn:hover {
+  background: #5a6268;
+}
+
+form div {
+  margin-bottom: 12px;
+}
+
+form label {
+  display: inline-block;
+  width: 120px;
+}
+
+form input, form select {
+  padding: 6px 10px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

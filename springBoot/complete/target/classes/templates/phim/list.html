@@ -1,16 +1,15 @@
-<!-- src/main/resources/templates/phim/list.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>🎬 Danh sách Phim</title>
-    <link rel="stylesheet" th:href="@{/css/phim.css}" />
+    <link rel="stylesheet" href="/css/phim.css" />
 </head>
 <body>
 <div class="container">
     <h2 class="tieude">🎬 Danh sách Phim trong hệ thống</h2>
     <div class="center">
-        <a class="ThemPhim" th:href="@{/phim/add}">Thêm phim mới</a>
+        <a class="ThemPhim" href="add">Thêm phim mới</a>
     </div>
 
     <table class="DanhSachPhim">
@@ -29,7 +28,6 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Duyệt qua danh sách phims -->
             <tr th:each="phim : ${phims}">
                 <td th:text="${phim.maPhim}">1</td>
                 <td th:text="${phim.tenPhim}">Tên phim</td>
@@ -55,10 +53,10 @@
                     </span>
                 </td>
                 <td>
-                    <a th:href="@{|/phim/edit/${phim.maPhim}|}">Sửa</a> |
+                    <a th:href="@{|edit/${phim.maPhim}|}">Sửa</a> |
                     <a href="#"
                        class="delete-link"
-                       th:attr="data-delete-url=@{|/phim/delete/${phim.maPhim}|}">
+                       th:attr="data-delete-url=@{|delete/${phim.maPhim}|}">
                         Xóa
                     </a>
                 </td>
@@ -66,21 +64,18 @@
         </tbody>
     </table>
 
-    <!-- Khi danh sách rỗng -->
     <p th:if="${#lists.isEmpty(phims)}" class="empty-message">
         Không có dữ liệu phim để hiển thị.
     </p>
 </div>
 
-<!-- Inline JS cho Xóa và Redirect về list -->
 <script th:inline="javascript">
   document.querySelectorAll('.delete-link').forEach(function(a) {
     a.addEventListener('click', function(e) {
       e.preventDefault();
       if (confirm('Bạn có chắc muốn xóa phim này?')) {
-        // Gọi GET /phim/delete/{id}
         fetch(a.getAttribute('data-delete-url'), { method: 'GET' })
-          .then(() => window.location.href = /*[[ @{/phim/list} ]]*/ '/phim/list');
+          .then(() => window.location.href = 'list');
       }
     });
   });

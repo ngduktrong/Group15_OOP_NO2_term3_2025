@@ -30,34 +30,30 @@ public class PhimController {
 
     @PostMapping("/add")
     public String addPhim(@ModelAttribute("phim") Phim phim, Model model) {
-    phimService.createPhim(phim); // thêm phim vào DB
-    List<Phim> phims = phimService.getAllPhim(); // lấy lại danh sách phim
-    model.addAttribute("phims", phims); // gán vào model
-    return "phim/list"; // hiển thị lại trang list
+        phimService.createPhim(phim);
+        model.addAttribute("phims", phimService.getAllPhim());
+        return "phim/list";
     }
 
-
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") int id, Model model) {
-        Phim phim = phimService.getPhimById(id);
-        if (phim == null) {
-            return "redirect:/phim";
-        }
-        model.addAttribute("phim", phim);
+    public String showEditForm(@PathVariable int id, Model model) {
+        // Luôn load đối tượng (không if)
+        model.addAttribute("phim", phimService.getPhimById(id));
         return "phim/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String editPhim(@PathVariable("id") int id, @ModelAttribute("phim") Phim phim) {
+    public String editPhim(@PathVariable int id,@ModelAttribute("phim") Phim phim,Model model) {
         phim.setMaPhim(id);
         phimService.updatePhim(phim);
-        return "redirect:/phim/list";
+        model.addAttribute("phims", phimService.getAllPhim());
+        return "phim/list";
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePhim(@PathVariable("id") int id) {
+    public String deletePhim(@PathVariable int id, Model model) {
         phimService.deletePhim(id);
-        return "redirect:/phim";
+        model.addAttribute("phims", phimService.getAllPhim());
+        return "phim/list";
     }
 }
-
