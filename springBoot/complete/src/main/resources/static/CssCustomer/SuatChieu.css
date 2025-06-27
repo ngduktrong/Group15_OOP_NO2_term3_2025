@@ -1,39 +1,92 @@
-/* File: src/main/resources/static/CssCustomer/suatchieu.css */
-/* Dùng cho trang khách hàng */
-
-body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
-  background: #fff;
-  margin: 20px auto;
-  max-width: 600px;
-  color: #333;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
+/* Page background */
+body {
+  background: url('/image/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #f4f4f4;
+  padding: 30px;
+}
+
+/* Title */
 h1 {
   text-align: center;
-  font-size: 26px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
 }
 
-#sc-list {
-  list-style: none;
-  padding: 0;
+/* Form container */nform {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-#sc-list li {
-  background: #f8f9fa;
-  margin-bottom: 10px;
-  padding: 12px 16px;
-  border-left: 4px solid #007bff;
-  border-radius: 4px;
-  transition: background 0.2s;
+/* Each showtime option */
+label {
+  display: block;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-#sc-list li:hover {
-  background: #e9ecef;
+label:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-#sc-list li::before {
-  content: '🎬';
-  margin-right: 8px;
+/* Radio input */
+input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #ffd200;
+}
+
+/* Option text */nlabel span {
+  font-size: 1rem;
+}
+
+/* Submit button */
+button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffd200;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e6c200;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+  form {
+    padding: 15px;
+  }
+  label {
+    padding: 12px;
+  }
+  button {
+    padding: 10px;
+    font-size: 1rem;
+  }
 }

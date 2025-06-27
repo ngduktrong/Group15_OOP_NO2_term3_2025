@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/suatchieu")
 public class SuatChieuPageController {
@@ -16,65 +14,58 @@ public class SuatChieuPageController {
     @Autowired
     private SuatChieuService suatChieuService;
 
-    // Hiển thị danh sách (admin)
-    @GetMapping("/admin")
-    public String adminList(Model model) {
+    // Trang quản lý (Nhân viên)
+    @GetMapping("/nhanvien")
+    public String staffPage(Model model) {
         model.addAttribute("scs", suatChieuService.getAllSuatChieu());
-        return "admin/suatchieu";
+        return "nhanvien/suatchieu";
     }
 
-    // Hiển thị form thêm
-    @GetMapping("/admin/add")
+    @GetMapping("/nhanvien/add")
     public String showAddForm(Model model) {
-        model.addAttribute("suatchieu", new SuatChieu());
-        return "admin/addsuatchieu";
+        model.addAttribute("suatChieu", new SuatChieu());
+        return "nhanvien/addsuatchieu";
     }
 
-    // Xử lý form thêm (form-data)
-    @PostMapping("/admin/add")
-    public String createSuatChieu(@ModelAttribute SuatChieu suatchieu, Model model) {
-        suatChieuService.createSuatChieu(suatchieu);
-        model.addAttribute("scs", suatChieuService.getAllSuatChieu());
-        return "admin/suatchieu";
+    @PostMapping("/nhanvien/add")
+    public String addSuatChieu(@ModelAttribute SuatChieu suatChieu) {
+        suatChieuService.createSuatChieu(suatChieu);
+        return "redirect:/suatchieu/nhanvien";
     }
 
-    // Hiển thị form sửa
-    @GetMapping("/admin/edit/{id}")
+    @GetMapping("/nhanvien/edit/{id}")
     public String showEditForm(@PathVariable("id") int id, Model model) {
         SuatChieu sc = suatChieuService.getSuatChieuById(id);
-        model.addAttribute("suatchieu", sc);
-        return "admin/editsuatchieu";
+        model.addAttribute("suatChieu", sc);
+        return "nhanvien/editsuatchieu";
     }
 
-    // Xử lý form sửa (form-data)
-    @PostMapping("/admin/edit/{id}")
-    public String updateSuatChieu(@PathVariable("id") int id,
-                                  @ModelAttribute SuatChieu suatchieu,
-                                  Model model) {
-        suatchieu.setMaSuatChieu(id);
-        suatChieuService.updateSuatChieu(suatchieu);
-        model.addAttribute("scs", suatChieuService.getAllSuatChieu());
-        return "admin/suatchieu";
+    @PostMapping("/nhanvien/edit/{id}")
+    public String editSuatChieu(@PathVariable("id") int id,
+                                @ModelAttribute SuatChieu suatChieu) {
+        suatChieu.setMaSuatChieu(id);
+        suatChieuService.updateSuatChieu(suatChieu);
+        return "redirect:/suatchieu/nhanvien";
     }
 
-    // Xử lý xóa
-    @GetMapping("/admin/delete/{id}")
-    public String deleteSuatChieu(@PathVariable("id") int id, Model model) {
+    @GetMapping("/nhanvien/delete/{id}")
+    public String deleteSuatChieu(@PathVariable("id") int id) {
         suatChieuService.deleteSuatChieu(id);
-        model.addAttribute("scs", suatChieuService.getAllSuatChieu());
-        return "admin/suatchieu";
-    }
-
-    // JSON endpoint cho JS khách hàng
-    @GetMapping("/api/all")
-    @ResponseBody
-    public List<SuatChieu> getAllJson() {
-        return suatChieuService.getAllSuatChieu();
+        return "redirect:/suatchieu/nhanvien";
     }
 
     // Trang khách hàng
     @GetMapping("/customer")
-    public String customerPage() {
+    public String customerPage(Model model) {
+        model.addAttribute("scs", suatChieuService.getAllSuatChieu());
+        return "customer/suatchieu";
+    }
+
+    @PostMapping("/customer/select")
+    public String selectSuatChieu(@RequestParam("maSuatChieu") int maSuatChieu,
+                                  Model model) {
+        model.addAttribute("scs", suatChieuService.getAllSuatChieu());
+        model.addAttribute("selectedId", maSuatChieu);
         return "customer/suatchieu";
     }
 }
