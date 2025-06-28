@@ -1,0 +1,139 @@
+/* admin-phong.css */
+
+/* === General setup === */
+body {
+    /* Đường dẫn tuyệt đối tới static: /images/background.jpg */
+    background: url('/image/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    /* Nếu muốn màu overlay mờ: có thể dùng pseudo-element, hoặc wrapper phía sau */
+}
+
+/* 2. Thêm overlay mờ (nếu muốn nội dung dễ đọc) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Màu đen mờ 40%: điều chỉnh alpha nếu cần */
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1; /* để nằm dưới nội dung */
+}
+
+.container {
+  max-width: 900px;
+  background-color: #fff;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* === Heading === */
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+/* === Buttons === */
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+  font-weight: 500;
+}
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-danger:hover {
+  background-color: #bb2d3b;
+  border-color: #b02a37;
+}
+
+.btn {
+  border-radius: 0.3rem;
+  transition: all .2s ease-in-out;
+}
+
+/* === Table styling === */
+.table {
+  margin-top: 1rem;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.table thead {
+  background-color: #343a40;
+}
+
+.table thead th {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: .05rem;
+  border: none;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0.75rem 1rem;
+}
+
+.table tbody tr {
+  transition: background .2s;
+}
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  text-align: center;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+/* === Empty state === */
+.alert-info {
+  background-color: #e9f7fa;
+  color: #055160;
+  border: 1px solid #bcdff1;
+  border-radius: 0.3rem;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+}
+
+/* === Responsive tweaks === */
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,0 +1,92 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Page background */
+body {
+  background: url('/image/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #f4f4f4;
+  padding: 30px;
+}
+
+/* Title */
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+/* Form container */nform {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* Each showtime option */
+label {
+  display: block;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+label:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Radio input */
+input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #ffd200;
+}
+
+/* Option text */nlabel span {
+  font-size: 1rem;
+}
+
+/* Submit button */
+button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #ffd200;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e6c200;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  body {
+    padding: 15px;
+  }
+  form {
+    padding: 15px;
+  }
+  label {
+    padding: 12px;
+  }
+  button {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}

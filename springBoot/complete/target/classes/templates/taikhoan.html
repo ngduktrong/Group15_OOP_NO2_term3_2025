@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Tài Khoản</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .form-container { margin-bottom: 20px; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+<h2>Quản lý tài khoản</h2>
+
+<div th:if="${message}" class="error">
+    <p th:text="${message}"></p>
+</div>
+
+<h3 th:text="${editMode} ? 'Chỉnh sửa' : 'Thêm mới'"></h3>
+
+<form th:action="${editMode} ? @{'/taikhoan/edit/' + ${taiKhoan.tenDangNhap}} : @{/taikhoan/add}"
+      method="post" th:object="${taiKhoan}" class="form-container">
+    <div>
+        <label>Tên đăng nhập:</label>
+        <input type="text" th:field="*{tenDangNhap}" th:readonly="${editMode}" required/>
+    </div>
+    <div>
+        <label>Mật khẩu:</label>
+        <input type="password" th:field="*{matKhau}" required/>
+    </div>
+    <div>
+        <label>Loại tài khoản:</label>
+        <select th:field="*{loaiTaiKhoan}">
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+        </select>
+    </div>
+    <div>
+        <label>Mã người dùng:</label>
+        <input type="number" th:field="*{maNguoiDung}" required/>
+    </div>
+    <div>
+        <button type="submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm'"></button>
+        <a th:if="${editMode}" th:href="@{/taikhoan}" style="margin-left: 10px;">Hủy</a>
+    </div>
+</form>
+
+<h3>Danh sách tài khoản</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Tên đăng nhập</th>
+        <th>Mật khẩu</th>
+        <th>Loại</th>
+        <th>Mã người dùng</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tk : ${taiKhoans}">
+        <td th:text="${tk.tenDangNhap}"></td>
+        <td th:text="${tk.matKhau}"></td>
+        <td th:text="${tk.loaiTaiKhoanAsString}"></td>
+        <td th:text="${tk.maNguoiDung}"></td>
+        <td>
+            <a th:href="@{|/taikhoan?edit=${tk.tenDangNhap}|}">Sửa</a>
+            <form th:action="@{|/taikhoan/delete/${tk.tenDangNhap}|}" method="post"
+                  style="display:inline;" onsubmit="return confirm('Xác nhận xóa?');">
+                <button type="submit">Xóa</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

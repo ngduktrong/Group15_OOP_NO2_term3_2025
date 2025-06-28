@@ -1,0 +1,77 @@
+<!-- src/main/resources/templates/phim/edit.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>🎬 Sửa Phim</title>
+  <link rel="stylesheet" th:href="@{/css/phim.css}" />
+</head>
+<body>
+  <div class="container">
+    <h2 class="tieude">🎬 Sửa Thông Tin Phim</h2>
+    <!-- Form với id để JS bắt sự kiện -->
+    <form id="editForm" th:action="@{/phim/edit/{id}(id=${phim.maPhim})}" th:object="${phim}" method="post">
+      <div class="mb-3">
+        <label class="form-label">Mã Phim:</label>
+        <input type="text" th:value="${phim.maPhim}" class="form-control" readonly />
+      </div>
+      <div class="mb-3">
+        <label for="tenPhim" class="form-label">Tên phim:</label>
+        <input type="text" id="tenPhim" th:field="*{tenPhim}" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="thoiLuong" class="form-label">Thời lượng (phút):</label>
+        <input type="number" id="thoiLuong" th:field="*{thoiLuong}" class="form-control" min="1" required />
+      </div>
+      <div class="mb-3">
+        <label for="ngayKhoiChieu" class="form-label">Ngày khởi chiếu:</label>
+        <input type="date" id="ngayKhoiChieu" th:field="*{ngayKhoiChieu}" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="nuocSanXuat" class="form-label">Nước sản xuất:</label>
+        <input type="text" id="nuocSanXuat" th:field="*{nuocSanXuat}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="dinhDang" class="form-label">Định dạng:</label>
+        <input type="text" id="dinhDang" th:field="*{dinhDang}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="daoDien" class="form-label">Đạo diễn:</label>
+        <input type="text" id="daoDien" th:field="*{daoDien}" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label for="moTa" class="form-label">Mô tả:</label>
+        <textarea id="moTa" th:field="*{moTa}" class="form-control" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="duongDanPoster" class="form-label">URL Poster:</label>
+        <input type="text" id="duongDanPoster" th:field="*{duongDanPoster}" class="form-control" />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a href="list" class="btn btn-secondary">Hủy</a>
+      </div>
+    </form>
+  </div>
+
+  <script th:inline="javascript">
+    /* Intercept form submit, dùng fetch gửi dữ liệu, sau đó chuyển về list tương đối */
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      fetch(form.action, {
+        method: form.method.toUpperCase(),
+        body: new FormData(form)
+      })
+      .then(function() {
+        window.location.href = '../list';
+
+      })
+      .catch(function(err) {
+        console.error('Error khi cập nhật phim:', err);
+        alert('Đã có lỗi xảy ra khi cập nhật phim.');
+      });
+    });
+  </script>
+</body>
+</html>
