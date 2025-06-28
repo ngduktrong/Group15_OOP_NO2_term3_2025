@@ -6,18 +6,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class GheService {
 
     @Autowired
     private GheDao gheDao;
 
-    public List<Ghe> getAllGhes() {
+    public List<Ghe> getAll() {
         return gheDao.getAll();
     }
 
-    public Ghe getGheById(int maPhong, String soGhe) {
-        return gheDao.getById(String.valueOf(maPhong), soGhe);
+    public Ghe getBySoGhe(String soGhe) {
+        return gheDao.getBySoGhe(soGhe);
+    }
+
+    public void create(Ghe ghe) {
+        gheDao.create(ghe);
+    }
+
+    public void update(Ghe ghe) {
+        gheDao.update(ghe);
+    }
+
+    public void delete(String soGhe) {
+        gheDao.delete(soGhe);
+    }
+
+    public List<Ghe> getByMaPhong(String maPhong) {
+        return gheDao.getByMaPhong(maPhong);
     }
 }
-// GheService.java
