@@ -19,9 +19,29 @@ public class GheApiController {
         return gheService.getAll();
     }
 
-    @GetMapping("/{maPhong}/{soGhe}")
-    public Ghe getGheById(@PathVariable String maPhong,
-                          @PathVariable String soGhe) {
-        return gheService.getById(soGhe, maPhong); // ✅ sửa đúng thứ tự
+    @GetMapping("/{soGhe}")
+    public Ghe getGheBySoGhe(@PathVariable String soGhe) {
+        return gheService.getBySoGhe(soGhe);
+    }
+
+    @GetMapping("/phong/{maPhong}")
+    public List<Ghe> getGheByMaPhong(@PathVariable String maPhong) {
+        return gheService.getByMaPhong(maPhong);
+    }
+
+    @PostMapping
+    public void createGhe(@RequestBody Ghe ghe) {
+        gheService.create(ghe);
+    }
+
+    @PutMapping("/{soGhe}")
+    public void updateGhe(@PathVariable String soGhe, @RequestBody Ghe ghe) {
+        ghe.setSoGhe(soGhe); // Đảm bảo số ghế được set đúng
+        gheService.update(ghe);
+    }
+
+    @DeleteMapping("/{soGhe}")
+    public void deleteGhe(@PathVariable String soGhe) {
+        gheService.delete(soGhe);
     }
 }

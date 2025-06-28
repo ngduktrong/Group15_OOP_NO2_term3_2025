@@ -10,17 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/nhanvien/ghe") // quản lý ghế cho admin
+@RequestMapping("/nhanvien/ghe")
 public class GheController {
 
     @Autowired
     private GheService gheService;
 
     @GetMapping
-    public String showGheList(Model model) {
-        List<Ghe> danhSachGhe = gheService.getAll();
-        model.addAttribute("dsGhe", danhSachGhe);
-        return "list-ghe"; // file: templates/list-ghe.html
+    public String showList(Model model) {
+        model.addAttribute("dsGhe", gheService.getAll());
+        return "list-ghe";
     }
 
     @GetMapping("/add")
@@ -32,25 +31,27 @@ public class GheController {
     @PostMapping("/add")
     public String doAdd(@ModelAttribute Ghe ghe, Model model) {
         gheService.create(ghe);
-        return "redirect:/nhanvien/ghe";
+        model.addAttribute("dsGhe", gheService.getAll());
+        return "list-ghe";
     }
 
-    @GetMapping("/edit/{soGhe}")
-    public String showEdit(@PathVariable String soGhe, Model model) {
-        Ghe ghe = gheService.getBySoGhe(soGhe);
-        model.addAttribute("ghe", ghe);
+    @GetMapping("/edit/{SoGhe}")
+    public String showEdit(@PathVariable String SoGhe, Model model) {
+        model.addAttribute("ghe", gheService.getBySoGhe(SoGhe));
         return "edit-ghe";
     }
 
     @PostMapping("/edit")
-    public String doEdit(@ModelAttribute Ghe ghe) {
+    public String doEdit(@ModelAttribute Ghe ghe, Model model) {
         gheService.update(ghe);
-        return "redirect:/nhanvien/ghe";
+        model.addAttribute("dsGhe", gheService.getAll());
+        return "list-ghe";
     }
 
-    @GetMapping("/delete/{soGhe}")
-    public String delete(@PathVariable String soGhe) {
-        gheService.delete(soGhe);
-        return "redirect:/nhanvien/ghe";
+    @GetMapping("/delete/{SoGhe}")
+    public String delete(@PathVariable String SoGhe, Model model) {
+        gheService.delete(SoGhe);
+        model.addAttribute("dsGhe", gheService.getAll());
+        return "list-ghe";
     }
 }
