@@ -33,7 +33,7 @@ public class GheService {
         gheDao.delete(soGhe);
     }
 
-    public List<Ghe> getByMaPhong(String maPhong) {
+    public List<Ghe> getByMaPhong(int maPhong) {
         return gheDao.getByMaPhong(maPhong);
     }
 }

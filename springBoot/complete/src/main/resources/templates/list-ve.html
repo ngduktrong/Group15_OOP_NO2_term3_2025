@@ -1,0 +1,45 @@
+<!-- File: list-ve.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Vé</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+<body>
+  <div class="container">
+    <h2>Danh sách Vé</h2>
+    <a th:href="@{/admin/ve/create}" class="btn btn-primary">Thêm Vé mới</a>
+    <p th:if="${success}" th:text="${success}" class="alert alert-success"></p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Mã Vé</th>
+          <th>Mã Suất Chiếu</th>
+          <th>Mã Phòng</th>
+          <th>Số Ghế</th>
+          <th>Giá Vé</th>
+          <th>Trạng Thái</th>
+          <th>Ngày Đặt</th>
+          <th>Hành Động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="ve : ${ves}">
+          <td th:text="${ve.maVe}">1</td>
+          <td th:text="${ve.maSuatChieu}">10</td>
+          <td th:text="${ve.maPhong}">2</td>
+          <td th:text="${ve.soGhe}">A1</td>
+          <td th:text="${#numbers.formatDecimal(ve.giaVe, 0, 'COMMA', '.', 'đ')}">50.000đ</td>
+          <td th:text="${ve.trangThai}">pending</td>
+          <td th:text="${ve.ngayDat}">2025-06-28T12:00</td>
+          <td>
+            <a th:href="@{|/admin/ve/edit/${ve.maVe}|}" class="btn btn-sm btn-warning">Sửa</a>
+            <a th:href="@{|/admin/ve/delete/${ve.maVe}|}" class="btn btn-sm btn-danger" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

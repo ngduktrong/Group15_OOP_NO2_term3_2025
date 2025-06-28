@@ -74,12 +74,12 @@ public class GheDao {
     }
 
     // ✅ Lấy danh sách ghế theo mã phòng (cho khách hàng)
-    public List<Ghe> getByMaPhong(String maPhong) {
+    public List<Ghe> getByMaPhong(int maPhong) {
         List<Ghe> list = new ArrayList<>();
         String sql = "SELECT * FROM Ghe WHERE maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, maPhong);
+            ps.setInt(1, maPhong);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Ghe(rs.getString("soGhe"), rs.getString("maPhong")));

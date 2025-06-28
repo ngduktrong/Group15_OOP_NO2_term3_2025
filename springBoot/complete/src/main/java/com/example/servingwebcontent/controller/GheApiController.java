@@ -25,7 +25,7 @@ public class GheApiController {
     }
 
     @GetMapping("/phong/{maPhong}")
-    public List<Ghe> getGheByMaPhong(@PathVariable String maPhong) {
+    public List<Ghe> getGheByMaPhong(@PathVariable int maPhong) {
         return gheService.getByMaPhong(maPhong);
     }
 

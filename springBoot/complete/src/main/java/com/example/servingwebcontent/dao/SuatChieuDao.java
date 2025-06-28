@@ -96,6 +96,43 @@ public class SuatChieuDao {
         return list;
     }
 
+    /**
+     * Lấy suất chiếu theo mã phim
+     */
+    public List<SuatChieu> getByMaPhim(int maPhim) {
+        List<SuatChieu> list = new ArrayList<>();
+        String sql = "SELECT * FROM SuatChieu WHERE MaPhim = ?";
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, maPhim);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapResultSetToSuatChieu(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Lấy suất chiếu theo cả mã phòng và mã phim
+     */
+    public List<SuatChieu> getByMaPhongAndPhim(int maPhong, int maPhim) {
+        List<SuatChieu> list = new ArrayList<>();
+        String sql = "SELECT * FROM SuatChieu WHERE MaPhong = ? AND MaPhim = ?";
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, maPhong);
+            ps.setInt(2, maPhim);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapResultSetToSuatChieu(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     private SuatChieu mapResultSetToSuatChieu(ResultSet rs) throws SQLException {
         SuatChieu s = new SuatChieu();
         s.setMaSuatChieu(rs.getInt("MaSuatChieu"));

@@ -20,21 +20,19 @@
       <p>Suất: <strong th:text="${#temporals.format(selectedSuatChieu.ngayGioChieu, 'dd-MM-yyyy HH:mm')}">Ngày Giờ</strong></p>
     </section>
 
-    <!-- CHÚ Ý: action phải trùng mapping @PostMapping("/book") trong CustomerVeController -->
     <form th:action="@{/customer/ve/book}" method="post">
-      <!-- Gửi đủ các param bắt buộc -->
       <input type="hidden" name="maSuatChieu" th:value="${selectedSuatChieu.maSuatChieu}" />
-      <input type="hidden" name="maPhim"     th:value="${selectedPhim.maPhim}" />
-      <input type="hidden" name="maPhong"    th:value="${maPhong}" />
+      <input type="hidden" name="maPhim" th:value="${selectedPhim.maPhim}" />
+      <input type="hidden" name="maPhong" th:value="${maPhong}" />
 
       <div class="seat-grid">
         <div class="seat-item" th:each="g : ${listGhe}">
-          <input type="checkbox" class="btn-check"
-                 th:id="${'seat-' + g.soGhe}"
-                 name="soGhe"
+          <input type="checkbox" class="btn-check" 
+                 th:id="${'seat-' + g.soGhe}" 
+                 name="soGhe" 
                  th:value="${g.soGhe}" />
-          <label class="btn btn-outline-primary"
-                 th:for="${'seat-' + g.soGhe}"
+          <label class="btn btn-outline-primary" 
+                 th:for="${'seat-' + g.soGhe}" 
                  th:text="${g.soGhe}">A1</label>
         </div>
       </div>

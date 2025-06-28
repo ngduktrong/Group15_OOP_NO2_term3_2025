@@ -22,8 +22,9 @@
         <h3 th:text="${phim.tenPhim}">Tên phim</h3>
         <p><strong>Thời lượng:</strong> <span th:text="${phim.thoiLuong}">120</span> phút</p>
         <p><strong>Khởi chiếu:</strong> <span th:text="${phim.ngayKhoiChieu}">2025-01-01</span></p>
-        <a href="#" class="btn book-ticket"
-           th:attr="data-id=${phim.maPhim}">
+        <a th:href="@{|/customer/movies/select/${phim.maPhim}|}"
+           th:attr="data-id=${phim.maPhim}"
+           class="btn book-ticket">
           Đặt vé
         </a>
       </div>

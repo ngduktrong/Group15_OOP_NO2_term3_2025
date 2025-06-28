@@ -33,7 +33,18 @@ public class SuatChieuService {
         suatChieuDao.delete(id);
     }
 
+    /** Lấy danh sách suất chiếu theo mã phòng */
     public List<SuatChieu> getByMaPhong(int maPhong) {
         return suatChieuDao.getByMaPhong(maPhong);
+    }
+
+    /** Lấy danh sách suất chiếu theo mã phim */
+    public List<SuatChieu> getByMaPhim(int maPhim) {
+        return suatChieuDao.getByMaPhim(maPhim);
+    }
+
+    /** Lấy danh sách suất chiếu theo cả mã phòng và mã phim */
+    public List<SuatChieu> getByMaPhongAndPhim(int maPhong, int maPhim) {
+        return suatChieuDao.getByMaPhongAndPhim(maPhong, maPhim);
     }
 }
