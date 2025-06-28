@@ -75,7 +75,10 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 
 | **Dương Hùng Mạnh ** |  
 - Viết hàm `kiemTraVeSapChieu(List<Ve>)` để lọc vé sắp chiếu  
-- Viết phương thức `thongBaoVeSapChieu(String maKhachHang)` 
+- Viết phương thức `thongBaoVeSapChieu(String maKhachHang)`
+
+  <h3>Thông báo vé có suất chiếu trong vòng 30 phút</h3>
+  ![Sơ đồ vé sắp chiếu ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/image.png?raw=true)
 
 
 
