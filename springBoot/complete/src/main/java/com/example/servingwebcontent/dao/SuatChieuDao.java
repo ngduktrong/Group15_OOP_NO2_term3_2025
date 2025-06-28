@@ -5,7 +5,6 @@ import com.example.servingwebcontent.models.SuatChieu;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +15,9 @@ public class SuatChieuDao {
         String sql = "INSERT INTO SuatChieu (MaPhim, MaPhong, NgayGioChieu) VALUES (?, ?, ?)";
         try (Connection c = AivenConnection.getConnection();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
             ps.setInt(1, s.getMaPhim());
             ps.setInt(2, s.getMaPhong());
-            // chuyển LocalDateTime sang Timestamp
             ps.setTimestamp(3, Timestamp.valueOf(s.getNgayGioChieu()));
-
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) {
@@ -39,9 +35,7 @@ public class SuatChieuDao {
              PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToSuatChieu(rs);
-                }
+                if (rs.next()) return mapResultSetToSuatChieu(rs);
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -55,9 +49,7 @@ public class SuatChieuDao {
         try (Connection c = AivenConnection.getConnection();
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                list.add(mapResultSetToSuatChieu(rs));
-            }
+            while (rs.next()) list.add(mapResultSetToSuatChieu(rs));
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -70,7 +62,6 @@ public class SuatChieuDao {
              PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, s.getMaPhim());
             ps.setInt(2, s.getMaPhong());
-            // đổi sang Timestamp
             ps.setTimestamp(3, Timestamp.valueOf(s.getNgayGioChieu()));
             ps.setInt(4, s.getMaSuatChieu());
             ps.executeUpdate();
@@ -90,18 +81,28 @@ public class SuatChieuDao {
         }
     }
 
+    public List<SuatChieu> getByMaPhong(int maPhong) {
+        List<SuatChieu> list = new ArrayList<>();
+        String sql = "SELECT * FROM SuatChieu WHERE MaPhong = ?";
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, maPhong);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) list.add(mapResultSetToSuatChieu(rs));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     private SuatChieu mapResultSetToSuatChieu(ResultSet rs) throws SQLException {
         SuatChieu s = new SuatChieu();
         s.setMaSuatChieu(rs.getInt("MaSuatChieu"));
         s.setMaPhim(rs.getInt("MaPhim"));
         s.setMaPhong(rs.getInt("MaPhong"));
-
-        // Lấy Timestamp rồi chuyển sang LocalDateTime
         Timestamp ts = rs.getTimestamp("NgayGioChieu");
-        if (ts != null) {
-            s.setNgayGioChieu(ts.toLocalDateTime());
-        }
-
+        if (ts != null) s.setNgayGioChieu(ts.toLocalDateTime());
         return s;
     }
 }

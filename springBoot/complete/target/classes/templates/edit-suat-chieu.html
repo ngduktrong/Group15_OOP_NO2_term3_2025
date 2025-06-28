@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sửa Suất Chiếu</title>
+</head>
+<body class="container mt-4">
+  <h1>Sửa Suất Chiếu</h1>
+  <form th:action="@{/nhanvien/suatchieu/edit}"
+        th:object="${suatChieu}" method="post">
+    <input type="hidden" th:field="*{maSuatChieu}" />
+    <div class="mb-3">
+      <label class="form-label">Mã Phim</label>
+      <input type="number" class="form-control" th:field="*{maPhim}" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Mã Phòng</label>
+      <input type="number" class="form-control" th:field="*{maPhong}" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Ngày Giờ Chiếu</label>
+      <input type="datetime-local" class="form-control"
+             th:field="*{ngayGioChieu}" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a th:href="@{/nhanvien/suatchieu}" class="btn btn-secondary">Hủy</a>
+  </form>
+</body>
+</html>
