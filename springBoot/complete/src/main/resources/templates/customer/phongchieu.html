@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Phòng Chiếu</title>
+    <link rel="stylesheet" th:href="@{/CssCustomer/phongchieu.css}" />
+</head>
+<body class="container mt-4">
+    <h1>Thông tin Phòng Chiếu</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Phòng</th>
+                <th>Số lượng Ghế</th>
+                <th>Loại Phòng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${listPhong}">
+                <td th:text="${p.id}">1</td>
+                <td th:text="${p.tenPhong}">Phòng 1</td>
+                <td th:text="${p.soLuongGhe}">50</td>
+                <td th:text="${p.loaiPhong}">2D</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,64 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #eef2f5;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 800px;
+  margin: 25px auto;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+/* Title */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+table th {
+  background: transparent;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  padding-bottom: 8px;
+}
+
+table td {
+  background: #fdfdfd;
+  padding: 10px 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  table tr {
+    margin-bottom: 15px;
+  }
+  table td {
+    position: relative;
+    padding-left: 50%;
+  }
+  table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    font-weight: 600;
+  }
+}

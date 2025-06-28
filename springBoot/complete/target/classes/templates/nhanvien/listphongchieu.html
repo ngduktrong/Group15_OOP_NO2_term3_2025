@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Danh sách Phòng Chiếu</title>
+    <link rel="stylesheet" th:href="@{/CssAdmin/phongchieu.css}" />
+</head>
+<body class="container mt-4">
+    <h1>Danh sách Phòng Chiếu</h1>
+    <a class="btn btn-success mb-3" th:href="@{/nhanvien/phongchieu/add}">Thêm Phòng Chiếu</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Phòng</th>
+                <th>Số lượng Ghế</th>
+                <th>Loại Phòng</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${listPhong}">
+                <td th:text="${p.id}">1</td>
+                <td th:text="${p.tenPhong}">Phòng 1</td>
+                <td th:text="${p.soLuongGhe}">50</td>
+                <td th:text="${p.loaiPhong}">2D</td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       th:href="@{|/nhanvien/phongchieu/edit/${p.id}|}">Sửa</a>
+                    <a class="btn btn-danger btn-sm"
+                       th:href="@{|/nhanvien/phongchieu/delete/${p.id}|}"
+                       onclick="return confirm('Xác nhận xóa?');">Xóa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
