@@ -111,4 +111,45 @@ public class VeDao {
             e.printStackTrace();
         }
     }
+    public List<Ve> getVeByMaKhachHang(int maKhachHang) {
+    List<Ve> list = new ArrayList<>();
+    String sql = """
+        SELECT v.*, sc.NgayGioChieu
+        FROM Ve v
+        JOIN HoaDon hd ON v.MaHoaDon = hd.MaHoaDon
+        JOIN SuatChieu sc ON v.MaSuatChieu = sc.MaSuatChieu
+        WHERE hd.MaKhachHang = ?
+    """;
+
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, maKhachHang);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Ve ve = new Ve(
+                rs.getInt("MaVe"),
+                rs.getInt("MaSuatChieu"),
+                rs.getInt("MaPhong"),
+                rs.getString("SoGhe"),
+                rs.getInt("MaHoaDon"),
+                rs.getDouble("GiaVe"),
+                rs.getString("TrangThai"),
+                rs.getString("NgayDat")
+            );
+            Timestamp tg = rs.getTimestamp("NgayGioChieu");
+            if (tg != null) {
+                ve.setNgayGioChieu(tg.toLocalDateTime());
+            }
+            list.add(ve);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+    
 }

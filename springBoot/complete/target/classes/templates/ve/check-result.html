@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Kết quả kiểm tra vé</title>
+</head>
+<body>
+    <h1>🎟 Kết quả kiểm tra vé sắp chiếu</h1>
+    <p>Mã KH: <b th:text="${maKhachHang}"></b></p>
+    <p>Thời gian hiện tại: <b th:text="${#temporals.format(now, 'dd-MM-yyyy HH:mm')}"></b></p>
+
+    <h2>Danh sách vé đã đặt</h2>
+    <ul>
+        <li th:each="ve : ${danhSachVe}">
+            Vé <b th:text="${ve.maVe}"></b> – Ghế: <span th:text="${ve.soGhe}"></span>,
+            Chiếu lúc: <span th:text="${#temporals.format(ve.ngayGioChieu, 'dd-MM-yyyy HH:mm')}"></span>
+        </li>
+    </ul>
+
+    <h2 style="color:red">⚠ Vé sắp chiếu trong 30 phút</h2>
+    <ul th:if="${sapChieuList.size() > 0}">
+        <li th:each="ve : ${sapChieuList}">
+            🎬 <b>Vé</b>: <span th:text="${ve.maVe}"></span>,
+            Ghế: <span th:text="${ve.soGhe}"></span>,
+            Bắt đầu lúc: <span th:text="${#temporals.format(ve.ngayGioChieu, 'dd-MM-yyyy HH:mm')}"></span>
+        </li>
+    </ul>
+    <p th:if="${sapChieuList.size() == 0}">Không có vé nào sắp chiếu.</p>
+
+    <br>
+    <a href="/ve/check">← Kiểm tra lại</a>
+</body>
+</html>

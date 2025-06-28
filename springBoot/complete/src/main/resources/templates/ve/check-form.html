@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thông báo vé sắp chiếu</title>
+</head>
+<body>
+    <h1>🔍 Kiểm tra vé sắp chiếu</h1>
+    <form th:action="@{/ve/check}" method="post">
+        <label>Nhập mã khách hàng:</label>
+        <input type="text" name="maKhachHang" required>
+        <button type="submit">Kiểm tra</button>
+    </form>
+    <p th:if="${error}" th:text="${error}" style="color:red;"></p>
+</body>
+</html>

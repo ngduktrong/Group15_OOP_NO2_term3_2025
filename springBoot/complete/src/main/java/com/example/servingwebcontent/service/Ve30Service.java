@@ -1,45 +1,44 @@
 package com.example.servingwebcontent.service;
-import com.example.servingwebcontent.Review.VeList;
-import com.example.servingwebcontent.Review.SuatChieuList;
+
+import com.example.servingwebcontent.dao.VeDao;
 import com.example.servingwebcontent.models.Ve;
-import com.example.servingwebcontent.models.SuatChieu;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class Ve30Service {
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    @Autowired
+    private VeDao veDAO;
 
+    /**
+     * Lấy danh sách vé của một khách hàng dựa vào mã khách hàng
+     */
     public List<Ve> getVeListByKhachHang(int maKhachHang) {
-        List<Ve> danhSach = VeList.layDanhSachVe(maKhachHang);
-        for (Ve ve : danhSach) {
-            SuatChieu sc = SuatChieuList.getById(ve.getMaSuatChieu());
-            if (sc != null && sc.getNgayGioChieu() != null) {
-                ve.setNgayGioChieu(sc.getNgayGioChieu().format(formatter));
-            } else {
-                ve.setNgayGioChieu("N/A");
-            }
-        }
-        return danhSach;
+        return veDAO.getVeByMaKhachHang(maKhachHang);
     }
 
+    /**
+     * Lọc ra các vé có suất chiếu bắt đầu trong vòng 30 phút tới
+     */
     public List<Ve> kiemTraVeSapChieu(List<Ve> danhSachVe) {
-        List<Ve> result = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime limit = now.plusMinutes(30);
-        for (Ve ve : danhSachVe) {
-            SuatChieu sc = SuatChieuList.getById(ve.getMaSuatChieu());
-            if (sc == null || sc.getNgayGioChieu() == null) continue;
-            LocalDateTime ngayGio = sc.getNgayGioChieu();
-            if (!ngayGio.isBefore(now) && !ngayGio.isAfter(limit)) {
-                result.add(ve);
-            }
-        }
-        return result;
+        LocalDateTime in30Min = now.plusMinutes(30);
+
+        // Lọc các vé có ngày giờ chiếu nằm trong khoảng [now, now + 30 phút]
+        return danhSachVe.stream()
+                .filter(ve -> {
+                    LocalDateTime gioChieu = ve.getNgayGioChieu();
+                    return gioChieu != null &&
+                           gioChieu.isAfter(now) &&
+                           gioChieu.isBefore(in30Min);
+                })
+                .collect(Collectors.toList());
     }
+
 }
