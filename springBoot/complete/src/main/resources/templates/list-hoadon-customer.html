@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hóa đơn của tôi</title>
+</head>
+<body>
+    <h1>Hóa đơn của tôi</h1>
+    <table border="1">
+        <tr>
+            <th>Mã hóa đơn</th>
+            <th>Tổng tiền</th>
+            <th>Chi tiết vé</th>
+        </tr>
+        <tr th:each="hoadon : ${listHoaDon}">
+            <td th:text="${hoadon.maHoaDon}"></td>
+            <td th:text="${hoadon.tongTien}"></td>
+            <td>
+                <a th:href="@{/customer/ve(maHoaDon=${hoadon.maHoaDon})}">Xem vé</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

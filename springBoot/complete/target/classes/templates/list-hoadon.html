@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách hóa đơn</title>
+</head>
+<body>
+    <h1>Danh sách hóa đơn</h1>
+    <a th:href="@{/nhanvien/hoadon/add}">Thêm hóa đơn mới</a>
+    <table border="1">
+        <tr>
+            <th>Mã hóa đơn</th>
+            <th>Mã khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Thao tác</th>
+        </tr>
+        <tr th:each="hoadon : ${listHoaDon}">
+            <td th:text="${hoadon.maHoaDon}"></td>
+            <td th:text="${hoadon.maKhachHang}"></td>
+            <td th:text="${hoadon.tongTien}"></td>
+            <td>
+                <a th:href="@{/nhanvien/hoadon/edit/{id}(id=${hoadon.maHoaDon})}">Sửa</a>
+                <a th:href="@{/nhanvien/hoadon/delete/{id}(id=${hoadon.maHoaDon})}">Xóa</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

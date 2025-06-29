@@ -17,12 +17,12 @@ public class KhachHangService {
         return khachHangDao.getAll();
     }
 
-    public void createKhachHang(KhachHang kh) {
-        khachHangDao.create(kh);
-    }
-
     public KhachHang getKhachHangById(int id) {
         return khachHangDao.getByID(id);
+    }
+
+    public void createKhachHang(KhachHang kh) {
+        khachHangDao.create(kh);
     }
 
     public void updateKhachHang(KhachHang kh) {

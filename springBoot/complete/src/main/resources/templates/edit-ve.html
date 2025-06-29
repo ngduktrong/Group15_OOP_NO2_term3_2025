@@ -1,49 +1,30 @@
-<!-- File: edit-ve.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Sửa Vé</title>
-  <link rel="stylesheet" th:href="@{/css/admin.css}" />
+    <meta charset="UTF-8">
+    <title>Sửa vé</title>
 </head>
 <body>
-  <div class="container">
-    <h2>Sửa Vé</h2>
-    <form th:action="@{/admin/ve/edit}" th:object="${ve}" method="post">
-      <input type="hidden" th:field="*{maVe}" />
-      <div class="form-group">
-        <label>Mã Suất Chiếu</label>
-        <input type="number" th:field="*{maSuatChieu}" class="form-control" required />
-      </div>
-      <div class="form-group">
-        <label>Mã Phòng</label>
-        <input type="number" th:field="*{maPhong}" class="form-control" required />
-      </div>
-      <div class="form-group">
-        <label>Số Ghế</label>
-        <input type="text" th:field="*{soGhe}" class="form-control" required />
-      </div>
-      <div class="form-group">
-        <label>Giá Vé</label>
-        <input type="number" step="0.01" th:field="*{giaVe}" class="form-control" required />
-      </div>
-      <div class="form-group">
-        <label>Trạng Thái</label>
-        <select th:field="*{trangThai}" class="form-control">
-          <option value="available">available</option>
-          <option value="booked">booked</option>
-          <option value="paid">paid</option>
-          <option value="cancelled">cancelled</option>
-          <option value="pending">pending</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Ngày Đặt</label>
-        <input type="datetime-local" th:field="*{ngayDat}" class="form-control" />
-      </div>
-      <button type="submit" class="btn btn-primary">Cập nhật</button>
-      <a th:href="@{/admin/ve}" class="btn btn-secondary">Hủy</a>
+    <h1>Sửa vé</h1>
+    <form th:action="@{/nhanvien/ve/edit/{id}(id=${ve.maVe})}" th:object="${ve}" method="post">
+        <div>
+            <label>Mã suất chiếu:</label>
+            <input type="number" th:field="*{maSuatChieu}" required>
+        </div>
+        <div>
+            <label>Mã phòng:</label>
+            <input type="number" th:field="*{maPhong}" required>
+        </div>
+        <div>
+            <label>Số ghế:</label>
+            <input type="text" th:field="*{soGhe}" required>
+        </div>
+        <div>
+            <label>Giá vé:</label>
+            <input type="number" step="0.01" th:field="*{giaVe}" required>
+        </div>
+        <button type="submit">Cập nhật</button>
     </form>
-  </div>
+    <a th:href="@{/nhanvien/ve}">Quay lại</a>
 </body>
 </html>

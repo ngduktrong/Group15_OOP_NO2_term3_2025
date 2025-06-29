@@ -10,7 +10,8 @@ import java.util.List;
 @Service
 public class NhanVienService {
 
-    private final NhanVienDao nhanVienDao = new NhanVienDao();
+    @Autowired
+    private NhanVienDao nhanVienDao;
 
     public List<NhanVien> getAllNhanVien() {
         return nhanVienDao.getAll();
@@ -20,7 +21,7 @@ public class NhanVienService {
         return nhanVienDao.getById(id);
     }
 
-    public void addNhanVien(NhanVien nv) {
+    public void createNhanVien(NhanVien nv) {
         nhanVienDao.create(nv);
     }
 

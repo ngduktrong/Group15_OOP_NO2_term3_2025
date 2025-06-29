@@ -104,7 +104,9 @@ public class Ve {
     public void setNgayGioChieu(LocalDateTime ngayGioChieu) {
         this.ngayGioChieu = ngayGioChieu;
     }
-
+    public Ve() {
+        // Constructor rỗng
+    }
     @Override
     public String toString() {
         return "Ve{" +

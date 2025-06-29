@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Sửa vé</title>
+    <title>Thêm vé</title>
 </head>
 <body>
-    <h1>Sửa vé</h1>
-    <form th:action="@{/nhanvien/ve/edit/{id}(id=${ve.maVe})}" th:object="${ve}" method="post">
+    <h1>Thêm vé mới</h1>
+    <form th:action="@{/nhanvien/ve/add}" th:object="${ve}" method="post">
         <div>
             <label>Mã suất chiếu:</label>
             <input type="number" th:field="*{maSuatChieu}" required>
@@ -23,7 +23,7 @@
             <label>Giá vé:</label>
             <input type="number" step="0.01" th:field="*{giaVe}" required>
         </div>
-        <button type="submit">Cập nhật</button>
+        <button type="submit">Lưu</button>
     </form>
     <a th:href="@{/nhanvien/ve}">Quay lại</a>
 </body>

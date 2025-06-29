@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm hóa đơn</title>
+</head>
+<body>
+    <h1>Thêm hóa đơn mới</h1>
+    <form th:action="@{/nhanvien/hoadon/add}" th:object="${hoaDon}" method="post">
+        <div>
+            <label>Mã khách hàng:</label>
+            <input type="number" th:field="*{maKhachHang}" required>
+        </div>
+        <div>
+            <label>Tổng tiền:</label>
+            <input type="number" step="0.01" th:field="*{tongTien}" required>
+        </div>
+        <button type="submit">Lưu</button>
+    </form>
+    <a th:href="@{/nhanvien/hoadon}">Quay lại</a>
+</body>
+</html>
