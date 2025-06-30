@@ -10,8 +10,12 @@ import java.util.List;
 @Service
 public class NhanVienService {
 
+    private final NhanVienDao nhanVienDao;
+
     @Autowired
-    private NhanVienDao nhanVienDao;
+    public NhanVienService(NhanVienDao nhanVienDao) {
+        this.nhanVienDao = nhanVienDao;
+    }
 
     public List<NhanVien> getAllNhanVien() {
         return nhanVienDao.getAll();
@@ -25,11 +29,23 @@ public class NhanVienService {
         nhanVienDao.create(nv);
     }
 
-    public void updateNhanVien(NhanVien nv) {
-        nhanVienDao.update(nv);
+    public boolean updateNhanVien(NhanVien nv) {
+        try {
+            nhanVienDao.update(nv);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void deleteNhanVien(int id) {
-        nhanVienDao.delete(id);
+    public boolean deleteNhanVien(int id) {
+        try {
+            nhanVienDao.delete(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

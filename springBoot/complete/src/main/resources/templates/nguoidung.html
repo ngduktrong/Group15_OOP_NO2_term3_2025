@@ -2,17 +2,356 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách người dùng</title>
-    <link rel="stylesheet" th:href="@{list.css}">
+    <title>Quản lý người dùng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #2c3e50;
+            padding: 15px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h2:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            border-radius: 2px;
+        }
+        
+        h2 i {
+            background: #4361ee;
+            color: white;
+            padding: 12px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        /* ===== BACK BUTTON ===== */
+        .back-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        .back-button i {
+            font-size: 0.9rem;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-box {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e5eb;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .form-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+        
+        .form-box input {
+            padding: 14px;
+            margin: 5px 0;
+            width: 100%;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-box input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        .form-box button[type="submit"] {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 14px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .form-box button[type="submit"]:hover {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .form-box a button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .form-box a button:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        th {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 16px 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+        
+        th:last-child {
+            border-radius: 0 12px 0 0;
+        }
+        
+        td {
+            padding: 14px 15px;
+            text-align: center;
+            color: #495057;
+            border-bottom: 1px solid #e1e5eb;
+        }
+        
+        tbody tr {
+            transition: background 0.2s ease;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        /* ===== ACTIONS STYLES ===== */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .actions a {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(72, 149, 239, 0.1);
+            color: #4361ee;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+        
+        .actions a:hover {
+            background: #4361ee;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+        }
+        
+        .actions form {
+            display: inline-block;
+            margin: 0;
+        }
+        
+        .actions form button {
+            padding: 8px 15px;
+            background: rgba(247, 37, 133, 0.1);
+            color: #f72585;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(247, 37, 133, 0.2);
+        }
+        
+        .actions form button:hover {
+            background: #f72585;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.2);
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .form-box {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .actions a, .actions form button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        tbody tr {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        
+        .form-box {
+            animation: fadeIn 0.6s ease forwards;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h2>📋 Danh sách người dùng</h2>
 
-    <p><a class="add-link" th:href="@{/nguoidung/add}">➕ Thêm mới</a></p>
+<h2><i class="fas fa-users"></i> Quản lý Người dùng</h2>
 
-    <table>
-        <thead>
+<!-- Nút Quay lại -->
+<div class="back-container">
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
+        </button>
+    </a>
+</div>
+
+<!-- Form Thêm/Sửa -->
+<div class="form-box">
+    <form th:action="@{/nguoidung/save}" method="post" th:object="${nguoiDung}">
+        <input type="hidden" th:field="*{maNguoiDung}" />
+        <label>Họ tên:</label>
+        <input type="text" th:field="*{hoTen}" required />
+
+        <label>SĐT:</label>
+        <input type="text" th:field="*{soDienThoai}" required />
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required />
+
+        <label>Loại người dùng:</label>
+        <input type="text" th:field="*{loaiNguoiDung}" required />
+
+        <button type="submit" th:text="*{maNguoiDung} == 0 ? 'Thêm mới' : 'Cập nhật'"></button>
+        <a th:href="@{/nguoidung}"><button type="button">Huỷ</button></a>
+    </form>
+</div>
+
+<!-- Bảng danh sách -->
+<table>
+    <thead>
         <tr>
             <th>ID</th>
             <th>Họ tên</th>
@@ -21,23 +360,23 @@
             <th>Loại</th>
             <th>Hành động</th>
         </tr>
-        </thead>
-        <tbody>
+    </thead>
+    <tbody>
         <tr th:each="nd : ${dsNguoiDung}">
-            <td th:text="${nd.maNguoiDung}">1</td>
-            <td th:text="${nd.hoTen}">Tên</td>
-            <td th:text="${nd.soDienThoai}">SĐT</td>
-            <td th:text="${nd.email}">Email</td>
-            <td th:text="${nd.loaiNguoiDung}">Loại</td>
-            <td>
-                <a th:href="@{'/nguoidung/edit/' + ${nd.maNguoiDung}}">✏️ Sửa</a> |
+            <td th:text="${nd.maNguoiDung}"></td>
+            <td th:text="${nd.hoTen}"></td>
+            <td th:text="${nd.soDienThoai}"></td>
+            <td th:text="${nd.email}"></td>
+            <td th:text="${nd.loaiNguoiDung}"></td>
+            <td class="actions">
+                <a th:href="@{'/nguoidung/edit/' + ${nd.maNguoiDung}}">✏️ Sửa</a>
                 <form th:action="@{/nguoidung/delete/{id}(id=${nd.maNguoiDung})}" method="post" style="display:inline;">
                     <button type="submit" onclick="return confirm('Bạn có chắc muốn xoá?')">🗑️ Xoá</button>
                 </form>
             </td>
         </tr>
-        </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
+
 </body>
 </html>

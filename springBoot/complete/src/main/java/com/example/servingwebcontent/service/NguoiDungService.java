@@ -1,6 +1,9 @@
 package com.example.servingwebcontent.service;
 
+import com.example.servingwebcontent.dao.KhachHangDao;
 import com.example.servingwebcontent.dao.NguoiDungDao;
+import com.example.servingwebcontent.dao.NhanVienDao;
+import com.example.servingwebcontent.dao.TaiKhoanDao;
 import com.example.servingwebcontent.models.NguoiDung;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +34,20 @@ public class NguoiDungService {
         nguoiDungDao.update(nguoiDung);
     }
 
-    // Xoá người dùng
+    @Autowired
+    private TaiKhoanDao taiKhoanDao;
+
+    @Autowired
+    private KhachHangDao khachHangDao;
+
+    @Autowired
+    private NhanVienDao nhanVienDao;
+
     public void deleteNguoiDung(int id) {
-        nguoiDungDao.delete(id);
+    taiKhoanDao.deleteByMaNguoiDung(id); // 🔧 cần thêm hàm này trong DAO
+    khachHangDao.delete(id);
+    nhanVienDao.delete(id);
+    nguoiDungDao.delete(id);
     }
     
 }

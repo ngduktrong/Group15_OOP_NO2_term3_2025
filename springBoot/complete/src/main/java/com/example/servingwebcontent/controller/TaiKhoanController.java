@@ -47,7 +47,7 @@ public class TaiKhoanController {
         if (!taiKhoanService.createTaiKhoan(taiKhoan)) {
             return "redirect:/taikhoan?message=Không thể thêm tài khoản!";
         }
-        return "redirect:/taikhoan";
+        return "taikhoan";
     }
 
     @PostMapping("/edit/{username}")

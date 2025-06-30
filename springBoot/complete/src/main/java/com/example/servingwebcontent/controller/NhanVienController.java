@@ -1,11 +1,11 @@
 package com.example.servingwebcontent.controller;
+
 import com.example.servingwebcontent.models.NhanVien;
 import com.example.servingwebcontent.service.NhanVienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -16,43 +16,41 @@ public class NhanVienController {
     @Autowired
     private NhanVienService nhanVienService;
 
-    @GetMapping
-    public String listNhanVien(Model model) {
-        List<NhanVien> list = nhanVienService.getAllNhanVien();
-        model.addAttribute("listNhanVien", list);
-        return "nhanvien"; // Thymeleaf view: nhanvien.html
-    }
-
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
+    // Hiển thị danh sách nhân viên và form trống
+    @GetMapping({"", "/", "/view"})
+    public String viewNhanVien(Model model) {
+        List<NhanVien> ds = nhanVienService.getAllNhanVien();
+        model.addAttribute("listNhanVien", ds);
         model.addAttribute("nhanVien", new NhanVien());
-        return "nhanvien-form";
+        return "nhanvien";
     }
 
-    @PostMapping("/save")
-    public String saveNhanVien(@ModelAttribute("nhanVien") NhanVien nv, RedirectAttributes ra) {
-        if (nhanVienService.getNhanVienById(nv.getMaNguoiDung()) == null) {
-            nhanVienService.addNhanVien(nv);
-            ra.addFlashAttribute("success", "Thêm nhân viên thành công!");
-        } else {
-            nhanVienService.updateNhanVien(nv);
-            ra.addFlashAttribute("success", "Cập nhật nhân viên thành công!");
-        }
-        return "redirect:/nhanvien";
-    }
-
+    // Sửa nhân viên
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") int id, Model model) {
-        NhanVien nv = nhanVienService.getNhanVienById(id);
-        model.addAttribute("nhanVien", nv);
-        return "nhanvien-form";
+    public String editNhanVien(@PathVariable int id, Model model) {
+        NhanVien nhanVien = nhanVienService.getNhanVienById(id);
+        List<NhanVien> ds = nhanVienService.getAllNhanVien();
+        model.addAttribute("listNhanVien", ds);
+        model.addAttribute("nhanVien", nhanVien);
+        return "nhanvien";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteNhanVien(@PathVariable("id") int id, RedirectAttributes ra) {
+    // Lưu nhân viên (nếu chưa tồn tại thì thêm mới, nếu có thì cập nhật)
+    @PostMapping("/save")
+    public String saveNhanVien(@ModelAttribute("nhanVien") NhanVien nhanVien) {
+        NhanVien existing = nhanVienService.getNhanVienById(nhanVien.getMaNguoiDung());
+        if (existing == null) {
+            nhanVienService.createNhanVien(nhanVien); // ✅ Tự cập nhật LoaiNguoiDung trong DAO
+        } else {
+            nhanVienService.updateNhanVien(nhanVien);
+        }
+        return "redirect:/nhanvien/view";
+    }
+
+    // Xoá nhân viên
+    @PostMapping("/delete/{id}")
+    public String deleteNhanVien(@PathVariable int id) {
         nhanVienService.deleteNhanVien(id);
-        ra.addFlashAttribute("success", "Xóa nhân viên thành công!");
-        return "redirect:/nhanvien";
+        return "redirect:/nhanvien/view";
     }
 }
-

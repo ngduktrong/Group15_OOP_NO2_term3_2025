@@ -16,85 +16,46 @@ public class NguoiDungController {
     @Autowired
     private NguoiDungService nguoiDungService;
 
-    // ============ Thymeleaf Giao diện ============
-
-    // Trang hiển thị danh sách người dùng
+    // Hiển thị danh sách người dùng và form trống
     @GetMapping({"", "/", "/view"})
-    public String showListNguoiDung(Model model) {
+    public String viewNguoiDung(Model model) {
         List<NguoiDung> ds = nguoiDungService.getAllNguoiDungs();
         model.addAttribute("dsNguoiDung", ds);
-        return "nguoidung/list";
-    }
-
-    // Trang thêm người dùng
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
         model.addAttribute("nguoiDung", new NguoiDung());
-        return "nguoidung/add";
+        return "nguoidung";
     }
 
-    // Xử lý form thêm
-    @PostMapping("/save")
-    public String saveNguoiDung(@ModelAttribute("nguoiDung") NguoiDung nguoiDung) {
-        nguoiDungService.createNguoiDung(nguoiDung);
-        return "redirect:/nguoidung";
-    }
-
-    // Trang sửa người dùng
+    // Sửa người dùng (gửi dữ liệu và hiển thị lại danh sách + form điền sẵn)
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable int id, Model model) {
+    public String editNguoiDung(@PathVariable int id, Model model) {
         NguoiDung nguoiDung = nguoiDungService.getNguoiDungById(id);
+        List<NguoiDung> ds = nguoiDungService.getAllNguoiDungs();
+        model.addAttribute("dsNguoiDung", ds);
         model.addAttribute("nguoiDung", nguoiDung);
-        return "nguoidung/edit";
+        return "nguoidung";
     }
 
-    // Xử lý form cập nhật
-    @PostMapping("/update")
-    public String updateNguoiDung(@ModelAttribute("nguoiDung") NguoiDung nguoiDung) {
-        nguoiDungService.updateNguoiDung(nguoiDung);
-        return "redirect:/nguoidung";
+    // Lưu người dùng (thêm hoặc cập nhật), và hiển thị lại danh sách
+    @PostMapping("/save")
+    public String saveNguoiDung(@ModelAttribute("nguoiDung") NguoiDung nguoiDung, Model model) {
+        if (nguoiDung.getMaNguoiDung() == 0) {
+            nguoiDungService.createNguoiDung(nguoiDung);
+        } else {
+            nguoiDungService.updateNguoiDung(nguoiDung);
+        }
+        List<NguoiDung> ds = nguoiDungService.getAllNguoiDungs();
+        model.addAttribute("dsNguoiDung", ds);
+        model.addAttribute("nguoiDung", new NguoiDung());
+        return "nguoidung";
     }
 
-    // ✅ Xử lý xoá người dùng (từ giao diện)
+    // Xoá người dùng và hiển thị lại danh sách
     @PostMapping("/delete/{id}")
-    public String deleteNguoiDungFromWeb(@PathVariable int id) {
+    public String deleteNguoiDung(@PathVariable int id, Model model) {
         nguoiDungService.deleteNguoiDung(id);
-        return "redirect:/nguoidung";
+        List<NguoiDung> ds = nguoiDungService.getAllNguoiDungs();
+        model.addAttribute("dsNguoiDung", ds);
+        model.addAttribute("nguoiDung", new NguoiDung());
+        return "nguoidung";
     }
-
-    // ============ REST API (JSON) ============
-
-    @ResponseBody
-    @GetMapping("/api")
-    public List<NguoiDung> getAllNguoiDungsAPI() {
-        return nguoiDungService.getAllNguoiDungs();
-    }
-
-    @ResponseBody
-    @GetMapping("/api/{id}")
-    public NguoiDung getNguoiDungByIdAPI(@PathVariable int id) {
-        return nguoiDungService.getNguoiDungById(id);
-    }
-
-    @ResponseBody
-    @PostMapping("/api")
-    public String createNguoiDungAPI(@RequestBody NguoiDung nguoiDung) {
-        nguoiDungService.createNguoiDung(nguoiDung);
-        return "✅ Đã thêm người dùng!";
-    }
-
-    @ResponseBody
-    @PutMapping("/api/{id}")
-    public String updateNguoiDungAPI(@PathVariable int id, @RequestBody NguoiDung nguoiDung) {
-        nguoiDung.setMaNguoiDung(id);
-        nguoiDungService.updateNguoiDung(nguoiDung);
-        return "✅ Đã cập nhật người dùng!";
-    }
-
-    @ResponseBody
-    @DeleteMapping("/api/{id}")
-    public String deleteNguoiDungAPI(@PathVariable int id) {
-        nguoiDungService.deleteNguoiDung(id);
-        return "✅ Đã xoá người dùng!";
-    }
-}
+} 

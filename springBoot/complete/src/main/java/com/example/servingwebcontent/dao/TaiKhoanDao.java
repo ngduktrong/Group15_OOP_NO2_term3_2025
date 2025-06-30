@@ -110,5 +110,17 @@ public class TaiKhoanDao {
     }
     return null; // không tìm thấy
     }
-    
+    public void deleteByMaNguoiDung(int maNguoiDung) {
+    String sql = "DELETE FROM TaiKhoan WHERE MaNguoiDung = ?";
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, maNguoiDung);
+        stmt.executeUpdate();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    }
+
 }
