@@ -25,7 +25,7 @@ public class NhanVienController {
         return "nhanvien";
     }
 
-    // Sửa nhân viên
+    // Sửa nhân viên (hiển thị lại form có sẵn dữ liệu + danh sách)
     @GetMapping("/edit/{id}")
     public String editNhanVien(@PathVariable int id, Model model) {
         NhanVien nhanVien = nhanVienService.getNhanVienById(id);
@@ -35,22 +35,30 @@ public class NhanVienController {
         return "nhanvien";
     }
 
-    // Lưu nhân viên (nếu chưa tồn tại thì thêm mới, nếu có thì cập nhật)
+    // Lưu nhân viên (thêm hoặc cập nhật), hiển thị lại giao diện
     @PostMapping("/save")
-    public String saveNhanVien(@ModelAttribute("nhanVien") NhanVien nhanVien) {
+    public String saveNhanVien(@ModelAttribute("nhanVien") NhanVien nhanVien, Model model) {
         NhanVien existing = nhanVienService.getNhanVienById(nhanVien.getMaNguoiDung());
         if (existing == null) {
-            nhanVienService.createNhanVien(nhanVien); // ✅ Tự cập nhật LoaiNguoiDung trong DAO
+            nhanVienService.createNhanVien(nhanVien);
         } else {
             nhanVienService.updateNhanVien(nhanVien);
         }
-        return "redirect:/nhanvien/view";
+
+        List<NhanVien> ds = nhanVienService.getAllNhanVien();
+        model.addAttribute("listNhanVien", ds);
+        model.addAttribute("nhanVien", new NhanVien()); // reset form
+        return "nhanvien";
     }
 
-    // Xoá nhân viên
+    // Xóa nhân viên và hiển thị lại danh sách + form trống
     @PostMapping("/delete/{id}")
-    public String deleteNhanVien(@PathVariable int id) {
+    public String deleteNhanVien(@PathVariable int id, Model model) {
         nhanVienService.deleteNhanVien(id);
-        return "redirect:/nhanvien/view";
+
+        List<NhanVien> ds = nhanVienService.getAllNhanVien();
+        model.addAttribute("listNhanVien", ds);
+        model.addAttribute("nhanVien", new NhanVien()); // reset form
+        return "nhanvien";
     }
 }
