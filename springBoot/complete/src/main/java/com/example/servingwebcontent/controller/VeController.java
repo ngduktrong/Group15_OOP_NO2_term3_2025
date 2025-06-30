@@ -19,7 +19,7 @@ public class VeController {
     // Trang web: hiển thị danh sách vé qua Thymeleaf
     @GetMapping("/view")
     public String showVeList(Model model) {
-        List<Ve> danhSachVe = veService.getAllVes();
+        List<Ve> danhSachVe = veService.getAllVe();
         model.addAttribute("ves", danhSachVe);
         return "ve/list"; // => templates/ve/list.html
     }
@@ -28,7 +28,7 @@ public class VeController {
     @ResponseBody
     @GetMapping("/api")
     public List<Ve> getAllVes() {
-        return veService.getAllVes();
+        return veService.getAllVe();
     }
 
     // REST API: Lấy vé theo ID

@@ -53,9 +53,9 @@ public class LoginController {
 
     if (tk != null && tk.getMatKhau().equals(password)) {
         if ("admin".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "admin".equals(role)) {
-            return "redirect:/admin/dashboard";
+            return "admin-dashboard";
         } else if ("user".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "user".equals(role)) {
-            return "redirect:/user/dashboard";
+            return "user-dashboard";
         } else {
             model.addAttribute("error", "Vai trò không đúng.");
         }
@@ -115,7 +115,7 @@ public class LoginController {
 
         if (taiKhoanService.createTaiKhoan(newUser)) {
             redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
-            return "redirect:/login";
+            return "login";
         } else {
             model.addAttribute("error", "Không thể đăng ký. Vui lòng thử lại.");
             return "register";
