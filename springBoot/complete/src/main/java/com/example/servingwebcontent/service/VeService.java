@@ -32,6 +32,7 @@ public class VeService {
     public void deleteVe(int id) {
         veDao.delete(id);
     }
+
     public List<Ve> getVesByIds(List<Integer> veIds) {
         return veDao.getVesByIds(veIds);
     }
@@ -40,3 +41,4 @@ public class VeService {
         return veDao.getVeByMaHoaDon(maHoaDon);
     }
 }
+

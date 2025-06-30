@@ -41,7 +41,7 @@
             font-style: italic;
             color: #666;
         }
-        .print-btn {
+        .payment-btn {
             background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
@@ -50,8 +50,12 @@
             cursor: pointer;
             margin-top: 20px;
         }
-        .print-btn:hover {
+        .payment-btn:hover {
             background-color: #45a049;
+        }
+        .home-link {
+            display: block;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -96,6 +100,10 @@
                     <span>Ngày giờ chiếu:</span>
                     <span th:text="${ve.ngayGioChieu}"></span>
                 </div>
+                <div class="ticket-detail">
+                    <span>Trạng thái:</span>
+                    <span th:text="${ve.trangThai}"></span>
+                </div>
             </div>
             <div class="ticket-footer">
                 Cảm ơn bạn đã sử dụng dịch vụ!
@@ -103,14 +111,14 @@
         </div>
     </div>
     
-    <button class="print-btn" onclick="window.print()">In vé</button>
-    <a href="/" style="display: block; margin-top: 20px;">Quay về trang chủ</a>
+    <form th:if="${veIds != null and !veIds.empty}" th:action="@{/customer/ve/pay}" method="post">
+    <div th:each="id : ${veIds}">
+        <!-- mỗi input sẽ có name="veIds", Spring gom lại thành List<Integer> -->
+        <input type="hidden" name="veIds" th:value="${id}" />
+    </div>
+    <button type="submit" class="payment-btn">Thanh toán</button>
+</form>
 
-    <script>
-        // Optional: Add any JavaScript functionality you need
-        document.addEventListener('DOMContentLoaded', function() {
-            // You can add additional JavaScript here if needed
-        });
-    </script>
+    <a href="/" class="home-link">Quay về trang chủ</a>
 </body>
 </html>

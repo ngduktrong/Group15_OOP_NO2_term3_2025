@@ -3,9 +3,10 @@ package com.example.servingwebcontent.models;
 import java.time.LocalDateTime;
 
 public class Ve {
-    public enum TrangThaiVe {
-        available, booked, paid, cancelled, pending
-    }
+    // Thêm vào class Ve
+public enum TrangThaiVe {
+    pending, paid, cancelled
+}
 
     private int MaVe;
     private int MaSuatChieu;
