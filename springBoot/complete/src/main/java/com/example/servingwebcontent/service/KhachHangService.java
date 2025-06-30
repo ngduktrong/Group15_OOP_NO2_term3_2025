@@ -21,15 +21,33 @@ public class KhachHangService {
         return khachHangDao.getByID(id);
     }
 
-    public void createKhachHang(KhachHang kh) {
-        khachHangDao.create(kh);
+    public boolean createKhachHang(KhachHang kh) {
+        try {
+            khachHangDao.create(kh);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void updateKhachHang(KhachHang kh) {
-        khachHangDao.update(kh);
+    public boolean updateKhachHang(KhachHang kh) {
+        try {
+            khachHangDao.update(kh);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public void deleteKhachHang(int id) {
-        khachHangDao.delete(id);
+    public boolean deleteKhachHang(int id) {
+        try {
+            khachHangDao.delete(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -12,18 +12,27 @@ import java.util.List;
 public class KhachHangDao {
 
     public void create(KhachHang kh) {
-        String sql = "INSERT INTO KhachHang (MaNguoiDung, DiemTichLuy) VALUES (?, ?)";
-        try (Connection c = AivenConnection.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+    String sql = "INSERT INTO KhachHang (MaNguoiDung, DiemTichLuy) VALUES (?, ?)";
 
-            ps.setInt(1, kh.getMaNguoiDung());
-            ps.setInt(2, kh.getDiemTichLuy());
-            ps.executeUpdate();
-            System.out.println("Thêm khách hàng: " + kh.getMaNguoiDung());
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    try (Connection c = AivenConnection.getConnection();
+         PreparedStatement ps = c.prepareStatement(sql)) {
+
+        ps.setInt(1, kh.getMaNguoiDung());
+        ps.setInt(2, kh.getDiemTichLuy());
+
+        ps.executeUpdate();
+        System.out.println("✅ Thêm khách hàng thành công: " + kh.getMaNguoiDung());
+
+    } catch (SQLIntegrityConstraintViolationException ex) {
+        System.err.println("❌ Lỗi ràng buộc (trùng khóa chính hoặc khóa ngoại): " + ex.getMessage());
+        throw new RuntimeException("Ràng buộc bị vi phạm khi thêm khách hàng.", ex);
+
+    } catch (SQLException | ClassNotFoundException e) {
+        System.err.println("❌ Lỗi SQL khác khi thêm khách hàng: " + e.getMessage());
+        throw new RuntimeException("Lỗi không xác định khi thêm khách hàng.", e);
     }
+}
+
 
     public KhachHang getByID(int id) {
         String sql = "SELECT * FROM KhachHang WHERE MaNguoiDung = ?";

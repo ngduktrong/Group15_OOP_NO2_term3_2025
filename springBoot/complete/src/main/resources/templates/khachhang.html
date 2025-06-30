@@ -3,22 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý Khách hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 8px; }
+        /* ===== BASE STYLES ===== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 30px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #2c3e50;
+            padding-bottom: 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        h1:hover:after {
+            width: 150px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 20px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1e5eb;
+        }
+        
+        /* ===== BACK BUTTON STYLES ===== */
+        .back-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .message i, .error i {
+            font-size: 1.5rem;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e5eb;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: 600;
+            color: #495057;
+            transition: color 0.3s ease;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        button[type="submit"] {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            margin-top: 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        button[type="submit"]:active {
+            transform: translateY(1px);
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+        
+        th {
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            color: white;
+            padding: 16px 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: background 0.3s ease;
+        }
+        
+        th:hover {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+        }
+        
+        td {
+            padding: 14px 15px;
+            text-align: center;
+            color: #495057;
+            border-bottom: 1px solid #e1e5eb;
+            transition: all 0.2s ease;
+        }
+        
+        tbody tr {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* ===== POINTS STYLE ===== */
+        td:nth-child(2) {
+            font-weight: 700;
+            color: #e05a2a;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        td:nth-child(2):hover {
+            transform: scale(1.1);
+        }
+        
+        /* ===== ACTIONS STYLES ===== */
+        td:last-child {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        a:first-child {
+            background: rgba(72, 149, 239, 0.1);
+            color: #4361ee;
+            border: 1px solid rgba(67, 97, 238, 0.2);
+        }
+        
+        a:first-child:hover {
+            background: #4361ee;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+        }
+        
+        a:last-child {
+            background: rgba(247, 37, 133, 0.1);
+            color: #f72585;
+            border: 1px solid rgba(247, 37, 133, 0.2);
+        }
+        
+        a:last-child:hover {
+            background: #f72585;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.2);
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            form {
+                padding: 20px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .message-container {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+            }
+            
+            .message, .error {
+                width: calc(100% - 20px);
+            }
+            
+            td:last-child {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        form, table {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* ===== RIPPLE EFFECT ===== */
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
-<h1>Quản lý Khách Hàng</h1>
+<!-- Thông báo -->
+<div class="message-container">
+    <div th:if="${message}" class="message">
+        <i class="fas fa-check-circle"></i>
+        <span th:text="${message}"></span>
+    </div>
+    <div th:if="${error}" class="error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span th:text="${error}"></span>
+    </div>
+</div>
+
+<!-- Nút quay lại Dashboard -->
+<div class="back-container">
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại Giao Diện Chính
+        </button>
+    </a>
+</div>
+
+<h1><i class="fas fa-users"></i> Quản lý Khách Hàng</h1>
 
 <form th:action="@{/khachhang/{action}(action=${khachHang.maNguoiDung == 0 ? 'add' : 'update'})}" th:object="${khachHang}" method="post">
-    <label>Mã người dùng:</label>
-    <input type="number" th:field="*{maNguoiDung}" required/><br>
-    <label>Điểm tích lũy:</label>
-    <input type="number" th:field="*{diemTichLuy}" min="0" required/><br>
+    <label><i class="fas fa-id-card"></i> Mã người dùng:</label>
+    <input type="number" th:field="*{maNguoiDung}" required/>
+    
+    <label><i class="fas fa-star"></i> Điểm tích lũy:</label>
+    <input type="number" th:field="*{diemTichLuy}" min="0" required/>
+    
     <button type="submit" th:text="${khachHang.maNguoiDung == 0 ? 'Thêm mới' : 'Cập nhật'}"></button>
 </form>
 
-<h2>Danh sách khách hàng</h2>
+<h2><i class="fas fa-list"></i> Danh sách khách hàng</h2>
 <table>
     <tr>
         <th>Mã người dùng</th>
@@ -29,11 +423,84 @@
         <td th:text="${kh.maNguoiDung}"></td>
         <td th:text="${kh.diemTichLuy}"></td>
         <td>
-            <a th:href="@{'/khachhang/edit/' + ${kh.maNguoiDung}}">Sửa</a> |
+            <a th:href="@{'/khachhang/edit/' + ${kh.maNguoiDung}}">
+                <i class="fas fa-edit"></i> Sửa
+            </a>
             <a th:href="@{'/khachhang/delete/' + ${kh.maNguoiDung}}"
-               onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+               onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?')">
+                <i class="fas fa-trash-alt"></i> Xóa
+            </a>
         </td>
     </tr>
 </table>
+
+<script>
+    // Thêm hiệu ứng ripple cho nút
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+    
+    // Hiệu ứng hover cho hàng trong bảng
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.01)';
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = 'none';
+        });
+    });
+    
+    // Hiệu ứng khi nhấn nút
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('mousedown', function() {
+            this.style.transform = 'scale(0.98)';
+        });
+        
+        button.addEventListener('mouseup', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Hiệu ứng khi focus vào input
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transform = 'scale(1.02)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 4000);
+</script>
 </body>
 </html>

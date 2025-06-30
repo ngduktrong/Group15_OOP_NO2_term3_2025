@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/khachhang")
 public class KhachHangController {
@@ -14,35 +16,61 @@ public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
 
-    @GetMapping
-    public String listKhachHang(Model model) {
+    // Hiển thị danh sách và form thêm
+    @GetMapping({"", "/", "/view"})
+    public String viewKhachHang(Model model) {
+        List<KhachHang> list = khachHangService.getAllKhachHang();
+        model.addAttribute("listKhachHang", list);
+        model.addAttribute("khachHang", new KhachHang());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "");
+        return "khachhang";
+    }
+
+    // Hiển thị form sửa
+    @GetMapping("/edit/{id}")
+    public String editKhachHang(@PathVariable int id, Model model) {
+        KhachHang kh = khachHangService.getKhachHangById(id);
+        model.addAttribute("khachHang", kh);
+        model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
+        model.addAttribute("editMode", true);
+        model.addAttribute("message", "");
+        return "khachhang";
+    }
+
+    // Thêm khách hàng
+    @PostMapping("/add")
+    public String addKhachHang(@ModelAttribute("khachHang") KhachHang khachHang, Model model) {
+        boolean success = khachHangService.createKhachHang(khachHang);
+        String message = success ? "✅ Thêm khách hàng thành công!" : "❌ Không thể thêm khách hàng!";
         model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
         model.addAttribute("khachHang", new KhachHang());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", message);
         return "khachhang";
     }
 
-    @PostMapping("/add")
-    public String addKhachHang(@ModelAttribute("khachHang") KhachHang kh) {
-        khachHangService.createKhachHang(kh);
-        return "redirect:/khachhang";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable int id, Model model) {
-        model.addAttribute("khachHang", khachHangService.getKhachHangById(id));
-        model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
-        return "khachhang";
-    }
-
+    // Cập nhật khách hàng
     @PostMapping("/update")
-    public String updateKhachHang(@ModelAttribute("khachHang") KhachHang kh) {
-        khachHangService.updateKhachHang(kh);
-        return "redirect:/khachhang";
+    public String updateKhachHang(@ModelAttribute("khachHang") KhachHang khachHang, Model model) {
+        boolean success = khachHangService.updateKhachHang(khachHang);
+        String message = success ? "✅ Cập nhật khách hàng thành công!" : "❌ Không thể cập nhật khách hàng!";
+        model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
+        model.addAttribute("khachHang", new KhachHang());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", message);
+        return "khachhang";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteKhachHang(@PathVariable int id) {
-        khachHangService.deleteKhachHang(id);
-        return "redirect:/khachhang";
+    // Xoá khách hàng
+    @PostMapping("/delete/{id}")
+    public String deleteKhachHang(@PathVariable int id, Model model) {
+        boolean success = khachHangService.deleteKhachHang(id);
+        String message = success ? "✅ Xóa khách hàng thành công!" : "❌ Không thể xóa khách hàng!";
+        model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
+        model.addAttribute("khachHang", new KhachHang());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", message);
+        return "khachhang";
     }
 }
