@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
@@ -18,17 +17,26 @@ public class NhanVienController {
 
     @GetMapping({"", "/", "/view"})
     public String viewNhanVien(Model model) {
-        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        List<NhanVien> nhanVienList = nhanVienService.getAllNhanVien();
+        
+        model.addAttribute("listNhanVien", nhanVienList);
         model.addAttribute("nhanVien", new NhanVien());
         model.addAttribute("message", "");
+        model.addAttribute("totalEmployees", nhanVienList.size()); // Thêm tổng số nhân viên
+        
         return "nhanvien";
     }
 
     @GetMapping("/edit/{id}")
     public String editNhanVien(@PathVariable int id, Model model) {
-        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
-        model.addAttribute("nhanVien", nhanVienService.getNhanVienById(id));
+        NhanVien nhanVien = nhanVienService.getNhanVienById(id);
+        List<NhanVien> nhanVienList = nhanVienService.getAllNhanVien();
+        
+        model.addAttribute("listNhanVien", nhanVienList);
+        model.addAttribute("nhanVien", nhanVien);
         model.addAttribute("message", "");
+        model.addAttribute("totalEmployees", nhanVienList.size()); // Thêm tổng số nhân viên
+        
         return "nhanvien";
     }
 
@@ -39,16 +47,22 @@ public class NhanVienController {
 
         NhanVien existing = nhanVienService.getNhanVienById(nhanVien.getMaNguoiDung());
         if (existing == null) {
+            // Thêm nhân viên mới
             success = nhanVienService.createNhanVien(nhanVien);
             message = success ? "✅ Thêm nhân viên thành công!" : "❌ Thêm nhân viên thất bại!";
         } else {
+            // Cập nhật nhân viên hiện có
             success = nhanVienService.updateNhanVien(nhanVien);
             message = success ? "✅ Cập nhật nhân viên thành công!" : "❌ Cập nhật thất bại!";
         }
 
-        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        List<NhanVien> nhanVienList = nhanVienService.getAllNhanVien();
+        
+        model.addAttribute("listNhanVien", nhanVienList);
         model.addAttribute("nhanVien", new NhanVien());
         model.addAttribute("message", message);
+        model.addAttribute("totalEmployees", nhanVienList.size()); // Thêm tổng số nhân viên
+        
         return "nhanvien";
     }
 
@@ -57,9 +71,13 @@ public class NhanVienController {
         boolean success = nhanVienService.deleteNhanVien(id);
         String message = success ? "🗑 Đã xoá nhân viên." : "❌ Xoá thất bại!";
 
-        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        List<NhanVien> nhanVienList = nhanVienService.getAllNhanVien();
+        
+        model.addAttribute("listNhanVien", nhanVienList);
         model.addAttribute("nhanVien", new NhanVien());
         model.addAttribute("message", message);
+        model.addAttribute("totalEmployees", nhanVienList.size()); // Thêm tổng số nhân viên
+        
         return "nhanvien";
     }
 }
