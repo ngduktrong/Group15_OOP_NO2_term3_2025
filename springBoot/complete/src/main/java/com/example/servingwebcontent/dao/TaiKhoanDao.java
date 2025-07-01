@@ -28,8 +28,11 @@ public class TaiKhoanDao {
                 );
                 list.add(tk);
             }
+
+            System.out.println("📄 Đã lấy danh sách tài khoản (" + list.size() + "):");
+            list.forEach(t -> System.out.println("🔸 " + t.getTenDangNhap()));
         } catch (Exception e) {
-            System.out.println("Lỗi khi lấy danh sách tài khoản:");
+            System.out.println("❌ Lỗi khi lấy danh sách tài khoản:");
             e.printStackTrace();
         }
         return list;
@@ -45,10 +48,13 @@ public class TaiKhoanDao {
             stmt.setString(3, tk.getLoaiTaiKhoanAsString());
             stmt.setInt(4, tk.getMaNguoiDung());
 
-            return stmt.executeUpdate() > 0;
-
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("✅ Thêm tài khoản: " + tk.getTenDangNhap());
+                return true;
+            }
         } catch (Exception e) {
-            System.out.println("Lỗi khi thêm tài khoản:");
+            System.out.println("❌ Lỗi khi thêm tài khoản:");
             e.printStackTrace();
         }
         return false;
@@ -64,10 +70,13 @@ public class TaiKhoanDao {
             stmt.setInt(3, tk.getMaNguoiDung());
             stmt.setString(4, tk.getTenDangNhap());
 
-            return stmt.executeUpdate() > 0;
-
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("📝 Cập nhật tài khoản: " + tk.getTenDangNhap());
+                return true;
+            }
         } catch (Exception e) {
-            System.out.println("Lỗi khi cập nhật tài khoản:");
+            System.out.println("❌ Lỗi khi cập nhật tài khoản:");
             e.printStackTrace();
         }
         return false;
@@ -79,48 +88,54 @@ public class TaiKhoanDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, tenDangNhap);
-            return stmt.executeUpdate() > 0;
-
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("🗑 Xóa tài khoản: " + tenDangNhap);
+                return true;
+            }
         } catch (Exception e) {
-            System.out.println("Lỗi khi xóa tài khoản:");
+            System.out.println("❌ Lỗi khi xóa tài khoản:");
             e.printStackTrace();
         }
         return false;
     }
+
     public TaiKhoan getByUsername(String tenDangNhap) {
-    String sql = "SELECT * FROM TaiKhoan WHERE TenDangNhap = ?";
-    try (Connection conn = AivenConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM TaiKhoan WHERE TenDangNhap = ?";
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setString(1, tenDangNhap);
-        try (ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                return new TaiKhoan(
-                        rs.getString("TenDangNhap"),
-                        rs.getString("MatKhau"),
-                        rs.getString("LoaiTaiKhoan"),
-                        rs.getInt("MaNguoiDung")
-                );
+            stmt.setString(1, tenDangNhap);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("🔍 Tìm thấy tài khoản: " + tenDangNhap);
+                    return new TaiKhoan(
+                            rs.getString("TenDangNhap"),
+                            rs.getString("MatKhau"),
+                            rs.getString("LoaiTaiKhoan"),
+                            rs.getInt("MaNguoiDung")
+                    );
+                }
             }
+            System.out.println("⚠️ Không tìm thấy tài khoản: " + tenDangNhap);
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi khi lấy tài khoản theo tên đăng nhập:");
+            e.printStackTrace();
         }
+        return null;
+    }
 
-    } catch (Exception e) {
-        System.out.println("Lỗi khi lấy tài khoản theo tên đăng nhập:");
-        e.printStackTrace();
-    }
-    return null; // không tìm thấy
-    }
     public void deleteByMaNguoiDung(int maNguoiDung) {
-    String sql = "DELETE FROM TaiKhoan WHERE MaNguoiDung = ?";
-    try (Connection conn = AivenConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "DELETE FROM TaiKhoan WHERE MaNguoiDung = ?";
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-        stmt.setInt(1, maNguoiDung);
-        stmt.executeUpdate();
-
-    } catch (Exception e) {
-        e.printStackTrace();
+            stmt.setInt(1, maNguoiDung);
+            int rows = stmt.executeUpdate();
+            System.out.println("🗑 Xóa tài khoản với MaNguoiDung = " + maNguoiDung + " | Rows affected: " + rows);
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi khi xóa tài khoản theo MaNguoiDung:");
+            e.printStackTrace();
+        }
     }
-    }
-
 }
