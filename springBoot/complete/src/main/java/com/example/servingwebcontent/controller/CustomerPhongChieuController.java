@@ -6,6 +6,8 @@ import com.example.servingwebcontent.service.PhimService;
 import com.example.servingwebcontent.service.PhongChieuService;
 import com.example.servingwebcontent.service.SuatChieuService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,18 @@ private PhimService phimService;
 public String showSuatChieuByPhongAndPhim(
         @PathVariable int maPhim,
         @PathVariable int maPhong,
+        HttpSession session, // Thêm session
         Model model) {
+    
+    // Kiểm tra đăng nhập
+    if (session.getAttribute("maKhachHang") == null) {
+        return "login";
+    }
+    
+    // Truyền thông tin user
+    model.addAttribute("username", session.getAttribute("username"));
+    model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
+    
     List<SuatChieu> suatList = suatChieuService.getByMaPhongAndPhim(maPhong, maPhim);
     model.addAttribute("listSuatChieu", suatList);
     model.addAttribute("maPhong", maPhong);

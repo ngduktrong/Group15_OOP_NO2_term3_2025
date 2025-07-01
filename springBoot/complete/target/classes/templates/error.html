@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Trang Báo Lỗi</title>
+    <!-- Nếu bạn dùng Bootstrap, thêm link dưới -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Hiển thị thông báo lỗi nếu có -->
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <!-- Nếu không có biến error, hiển thị mặc định -->
+        <div th:unless="${error}">
+            <h2>Đã xảy ra lỗi không xác định.</h2>
+        </div>
+        <!-- Nút quay về trang chính -->
+        <a th:href="@{/customer/movies}" class="btn btn-primary mt-3">Quay về trang chủ</a>
+    </div>
+</body>
+</html>

@@ -1,13 +1,18 @@
 package com.example.servingwebcontent.controller;
+
 import jakarta.servlet.http.HttpSession;
+import com.example.servingwebcontent.models.Phim;
 import com.example.servingwebcontent.models.TaiKhoan;
 import com.example.servingwebcontent.service.TaiKhoanService;
+import com.example.servingwebcontent.service.PhimService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
@@ -16,10 +21,12 @@ public class LoginController {
     private String serverPort;
 
     private final TaiKhoanService taiKhoanService;
+    private final PhimService phimService;
 
     @Autowired
-    public LoginController(TaiKhoanService taiKhoanService) {
+    public LoginController(TaiKhoanService taiKhoanService, PhimService phimService) {
         this.taiKhoanService = taiKhoanService;
+        this.phimService = phimService;
     }
 
     @GetMapping("/login")
@@ -38,36 +45,48 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestParam String username,
-                    @RequestParam String password,
-                    @RequestParam String role,
-                    Model model) {
+                        @RequestParam String password,
+                        @RequestParam String role,
+                        HttpSession session,
+                        Model model) {
 
-    if (username.isEmpty() || password.isEmpty()) {
-        model.addAttribute("error", "Vui lòng nhập đầy đủ thông tin");
+        // Đảm bảo luôn có port
+        model.addAttribute("port", serverPort);
+
+        if (username.isEmpty() || password.isEmpty()) {
+            model.addAttribute("error", "Vui lòng nhập đầy đủ thông tin");
+            model.addAttribute("usernameInput", username);
+            model.addAttribute("roleInput", role);
+            return "login";
+        }
+
+        TaiKhoan tk = taiKhoanService.getByUsername(username);
+        if (tk != null && tk.getMatKhau().equals(password)) {
+            String loai = tk.getLoaiTaiKhoanAsString();
+            if ("admin".equalsIgnoreCase(loai) && "admin".equalsIgnoreCase(role)) {
+                return "admin-dashboard";
+            } else if ("user".equalsIgnoreCase(loai) && "user".equalsIgnoreCase(role)) {
+                // Lưu session
+                session.setAttribute("username", username);
+                session.setAttribute("maKhachHang", tk.getMaNguoiDung());
+
+                // Đẩy dữ liệu xuống view
+                List<Phim> phims = phimService.getAllPhim();
+                model.addAttribute("phims", phims);
+                model.addAttribute("username", username);
+                model.addAttribute("maKhachHang", tk.getMaNguoiDung());
+                return "customer/movies";
+            } else {
+                model.addAttribute("error", "Vai trò không đúng.");
+            }
+        } else {
+            model.addAttribute("error", "Sai tài khoản hoặc mật khẩu.");
+        }
+
         model.addAttribute("usernameInput", username);
         model.addAttribute("roleInput", role);
         return "login";
     }
-
-    TaiKhoan tk = taiKhoanService.getByUsername(username);
-
-    if (tk != null && tk.getMatKhau().equals(password)) {
-        if ("admin".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "admin".equals(role)) {
-            return "admin-dashboard";
-        } else if ("user".equalsIgnoreCase(tk.getLoaiTaiKhoanAsString()) && "user".equals(role)) {
-            return "user-dashboard";
-        } else {
-            model.addAttribute("error", "Vai trò không đúng.");
-        }
-    } else {
-        model.addAttribute("error", "Sai tài khoản hoặc mật khẩu.");
-    }
-
-    model.addAttribute("usernameInput", username);
-    model.addAttribute("roleInput", role);
-    return "login";
-    }
-
 
     @GetMapping("/register")
     public String registerForm(Model model) {
@@ -79,8 +98,9 @@ public class LoginController {
     public String register(@RequestParam String username,
                            @RequestParam String password,
                            @RequestParam String confirmPassword,
-                           RedirectAttributes redirectAttributes,
                            Model model) {
+
+        model.addAttribute("port", serverPort);
 
         if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             model.addAttribute("error", "Vui lòng điền đầy đủ thông tin");
@@ -114,7 +134,10 @@ public class LoginController {
         newUser.setMaNguoiDung(0);
 
         if (taiKhoanService.createTaiKhoan(newUser)) {
-            redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
+            // Trả về login với thông báo trong model
+            model.addAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
+            model.addAttribute("usernameInput", username);
+            model.addAttribute("roleInput", "user");
             return "login";
         } else {
             model.addAttribute("error", "Không thể đăng ký. Vui lòng thử lại.");
@@ -135,9 +158,10 @@ public class LoginController {
         model.addAttribute("role", "user");
         return "user-dashboard";
     }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-    session.invalidate();
-    return "login";
+        session.invalidate();
+        return "login";
     }
 }

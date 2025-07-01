@@ -1,20 +1,20 @@
 package com.example.servingwebcontent.models;
 public class Ghe {
     private String SoGhe;
-    private String MaPhong;
+    private int MaPhong;
     public String getSoGhe() {
         return SoGhe;
     }
     public void setSoGhe(String soGhe) {
         this.SoGhe = soGhe;
     }
-    public String getMaPhong() {
+    public int getMaPhong() {
         return MaPhong;
     }
-    public void setMaPhong(String maPhong) {
+    public void setMaPhong(int maPhong) {
         this.MaPhong = maPhong;
     }
-    public Ghe(String soGhe, String maPhong) {
+    public Ghe(String soGhe, int maPhong) {
         this.SoGhe = soGhe;
         this.MaPhong = maPhong;
     }

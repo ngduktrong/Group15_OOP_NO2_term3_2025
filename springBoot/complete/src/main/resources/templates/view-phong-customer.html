@@ -9,6 +9,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="#">RẠP PHIM ABC</a>
+    <div class="navbar-text text-light ms-auto">
+      <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
+      <span th:if="${maKhachHang}" class="ms-3" th:text="'Mã KH: ' + ${maKhachHang}"></span>
+      <a th:if="${username}" th:href="@{/logout}" 
+         class="btn btn-sm btn-outline-light ms-3">
+        Đăng xuất
+      </a>
+    </div>
+  </div>
+</nav>
   <div class="container">
     <header class="d-flex justify-content-between align-items-center my-4">
       <a th:href="@{/customer/movies}" class="btn btn-secondary">← Quay lại Phim</a>
@@ -18,7 +31,7 @@
     <div class="movie-grid">
       <div class="movie-card" th:each="p : ${listPhong}">
         <div class="card-body">
-          <h5>Phòng <span th:text="${p.tenPhong}">A</span> (ID: <span th:text="${p.maPhong}">1</span>)</h5>
+          <h5>Phòng: <span th:text="${p.tenPhong}">A</span> (ID: <span th:text="${p.maPhong}">1</span>)</h5>
           <p>Số ghế: <span th:text="${p.soLuongGhe}">50</span></p>
           <p>Loại: <span th:text="${p.loaiPhong}">2D</span></p>
           <a th:href="@{|/customer/phongchieu/select/${selectedPhim.maPhim}/${p.maPhong}|}" 

@@ -3,9 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>🎬 Phim Đang Chiếu</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
   <link rel="stylesheet" th:href="@{/css/customer-phim.css}" />
 </head>
 <body>
+  <!-- Navbar chung -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">RẠP PHIM ABC</a>
+      <div class="navbar-text text-light ms-auto">
+        <!-- Hiển thị tên user -->
+        <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
+        <!-- Hiển thị mã khách hàng -->
+        <span th:if="${maKhachHang}" class="ms-3" th:text="'Mã KH: ' + ${maKhachHang}"></span>
+        <!-- Nút đăng xuất -->
+        <a th:if="${username}" th:href="@{/logout}"
+           class="btn btn-sm btn-outline-light ms-3">
+          Đăng xuất
+        </a>
+      </div>
+    </div>
+  </nav>
+
   <div class="container">
     <h2 class="tieude">🎬 Phim Đang Chiếu</h2>
 
@@ -24,7 +43,7 @@
         <p><strong>Khởi chiếu:</strong> <span th:text="${phim.ngayKhoiChieu}">2025-01-01</span></p>
         <a th:href="@{|/customer/movies/select/${phim.maPhim}|}"
            th:attr="data-id=${phim.maPhim}"
-           class="btn book-ticket">
+           class="btn btn-primary book-ticket">
           Đặt vé
         </a>
       </div>
@@ -35,7 +54,7 @@
     </p>
   </div>
 
-  <!-- Include chung JS -->
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
   <script th:src="@{/js/phim.js}"></script>
 </body>
 </html>

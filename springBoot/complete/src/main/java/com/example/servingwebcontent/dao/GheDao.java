@@ -23,7 +23,7 @@ public class GheDao {
             while (rs.next()) {
                 list.add(new Ghe(
                         rs.getString("soGhe"),
-                        rs.getString("maPhong")
+                        rs.getInt("maPhong") // Đổi sang getInt
                 ));
             }
         } catch (Exception e) {
@@ -34,19 +34,19 @@ public class GheDao {
     }
 
     // ✅ Lấy ghế theo ID (soGhe + maPhong)
-    public Ghe getById(String soGhe, String maPhong) {
+    public Ghe getById(String soGhe, int maPhong) { // Đổi tham số maPhong sang int
         String sql = "SELECT * FROM Ghe WHERE soGhe = ? AND maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, soGhe);
-            ps.setString(2, maPhong);
+            ps.setInt(2, maPhong); // Đổi sang setInt
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
                 return new Ghe(
                         rs.getString("soGhe"),
-                        rs.getString("maPhong")
+                        rs.getInt("maPhong") // Đổi sang getInt
                 );
             }
         } catch (Exception e) {
@@ -64,7 +64,10 @@ public class GheDao {
             ps.setString(1, soGhe);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return new Ghe(rs.getString("soGhe"), rs.getString("maPhong"));
+                return new Ghe(
+                        rs.getString("soGhe"),
+                        rs.getInt("maPhong") // Đổi sang getInt
+                );
             }
         } catch (Exception e) {
             System.err.println("Lỗi khi tìm ghế theo soGhe:");
@@ -79,10 +82,13 @@ public class GheDao {
         String sql = "SELECT * FROM Ghe WHERE maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maPhong);
+            ps.setInt(1, maPhong); // Giữ nguyên vì đã là int
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Ghe(rs.getString("soGhe"), rs.getString("maPhong")));
+                list.add(new Ghe(
+                        rs.getString("soGhe"),
+                        rs.getInt("maPhong") // Đổi sang getInt
+                ));
             }
         } catch (Exception e) {
             System.err.println("Lỗi khi tìm ghế theo phòng:");
@@ -97,7 +103,7 @@ public class GheDao {
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ghe.getSoGhe());
-            ps.setString(2, ghe.getMaPhong());
+            ps.setInt(2, ghe.getMaPhong()); // Đổi sang setInt
             ps.executeUpdate();
         } catch (Exception e) {
             System.err.println("Lỗi khi thêm ghế:");
@@ -110,7 +116,7 @@ public class GheDao {
         String sql = "UPDATE Ghe SET maPhong = ? WHERE soGhe = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, ghe.getMaPhong());
+            ps.setInt(1, ghe.getMaPhong()); // Đổi sang setInt
             ps.setString(2, ghe.getSoGhe());
             ps.executeUpdate();
         } catch (Exception e) {
