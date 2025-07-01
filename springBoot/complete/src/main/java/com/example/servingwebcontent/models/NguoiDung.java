@@ -2,7 +2,7 @@ package com.example.servingwebcontent.models;
 public class NguoiDung {
 
     public enum LoaiNguoiDung {
-        KhachHang , NhanVien
+        KhachHang ,NhanVien
     }
     private int MaNguoiDung;
     private String HoTen;

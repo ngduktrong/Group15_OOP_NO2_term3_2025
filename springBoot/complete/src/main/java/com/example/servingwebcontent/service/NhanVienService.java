@@ -24,10 +24,11 @@ public class NhanVienService {
     public NhanVien getNhanVienById(int id) {
         return nhanVienDao.getById(id);
     }
-
-    public void createNhanVien(NhanVien nv) {
-        nhanVienDao.create(nv);
+    public boolean createNhanVien(NhanVien nv) {
+        return nhanVienDao.create(nv);
     }
+
+    
 
     public boolean updateNhanVien(NhanVien nv) {
         try {

@@ -1,5 +1,5 @@
 package com.example.servingwebcontent.controller;
-
+import jakarta.servlet.http.HttpSession;
 import com.example.servingwebcontent.models.TaiKhoan;
 import com.example.servingwebcontent.service.TaiKhoanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,5 +139,5 @@ public class LoginController {
     public String logout(HttpSession session) {
     session.invalidate();
     return "login";
-}
+    }
 }

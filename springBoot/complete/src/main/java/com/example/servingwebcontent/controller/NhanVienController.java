@@ -16,49 +16,50 @@ public class NhanVienController {
     @Autowired
     private NhanVienService nhanVienService;
 
-    // Hiển thị danh sách nhân viên và form trống
     @GetMapping({"", "/", "/view"})
     public String viewNhanVien(Model model) {
-        List<NhanVien> ds = nhanVienService.getAllNhanVien();
-        model.addAttribute("listNhanVien", ds);
+        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
         model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("message", "");
         return "nhanvien";
     }
 
-    // Sửa nhân viên (hiển thị lại form có sẵn dữ liệu + danh sách)
     @GetMapping("/edit/{id}")
     public String editNhanVien(@PathVariable int id, Model model) {
-        NhanVien nhanVien = nhanVienService.getNhanVienById(id);
-        List<NhanVien> ds = nhanVienService.getAllNhanVien();
-        model.addAttribute("listNhanVien", ds);
-        model.addAttribute("nhanVien", nhanVien);
+        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        model.addAttribute("nhanVien", nhanVienService.getNhanVienById(id));
+        model.addAttribute("message", "");
         return "nhanvien";
     }
 
-    // Lưu nhân viên (thêm hoặc cập nhật), hiển thị lại giao diện
     @PostMapping("/save")
     public String saveNhanVien(@ModelAttribute("nhanVien") NhanVien nhanVien, Model model) {
+        boolean success;
+        String message;
+
         NhanVien existing = nhanVienService.getNhanVienById(nhanVien.getMaNguoiDung());
         if (existing == null) {
-            nhanVienService.createNhanVien(nhanVien);
+            success = nhanVienService.createNhanVien(nhanVien);
+            message = success ? "✅ Thêm nhân viên thành công!" : "❌ Thêm nhân viên thất bại!";
         } else {
-            nhanVienService.updateNhanVien(nhanVien);
+            success = nhanVienService.updateNhanVien(nhanVien);
+            message = success ? "✅ Cập nhật nhân viên thành công!" : "❌ Cập nhật thất bại!";
         }
 
-        List<NhanVien> ds = nhanVienService.getAllNhanVien();
-        model.addAttribute("listNhanVien", ds);
-        model.addAttribute("nhanVien", new NhanVien()); // reset form
+        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("message", message);
         return "nhanvien";
     }
 
-    // Xóa nhân viên và hiển thị lại danh sách + form trống
     @PostMapping("/delete/{id}")
     public String deleteNhanVien(@PathVariable int id, Model model) {
-        nhanVienService.deleteNhanVien(id);
+        boolean success = nhanVienService.deleteNhanVien(id);
+        String message = success ? "🗑 Đã xoá nhân viên." : "❌ Xoá thất bại!";
 
-        List<NhanVien> ds = nhanVienService.getAllNhanVien();
-        model.addAttribute("listNhanVien", ds);
-        model.addAttribute("nhanVien", new NhanVien()); // reset form
+        model.addAttribute("listNhanVien", nhanVienService.getAllNhanVien());
+        model.addAttribute("nhanVien", new NhanVien());
+        model.addAttribute("message", message);
         return "nhanvien";
     }
 }

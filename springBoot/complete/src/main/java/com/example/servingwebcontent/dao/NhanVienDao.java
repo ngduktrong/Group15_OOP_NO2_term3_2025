@@ -11,22 +11,28 @@ import java.util.List;
 @Repository
 public class NhanVienDao {
 
-    public void create(NhanVien nv) {
-        String sql = "INSERT INTO NhanVien (MaNguoiDung, ChucVu, Luong, VaiTro) VALUES (?, ?, ?, ?)";
-        try (Connection c = AivenConnection.getConnection();
-             PreparedStatement ps = c.prepareStatement(sql)) {
+    public boolean create(NhanVien nv) {
+    String sql = "INSERT INTO NhanVien (MaNguoiDung, ChucVu, Luong, VaiTro) VALUES (?, ?, ?, ?)";
+    try (Connection c = AivenConnection.getConnection();
+         PreparedStatement ps = c.prepareStatement(sql)) {
 
-            ps.setInt(1, nv.getMaNguoiDung());
-            ps.setString(2, nv.getChucVu());
-            ps.setDouble(3, nv.getLuong());
-            ps.setString(4, nv.getVaiTro().name());
-            ps.executeUpdate();
+        ps.setInt(1, nv.getMaNguoiDung());
+        ps.setString(2, nv.getChucVu());
+        ps.setDouble(3, nv.getLuong());
+        ps.setString(4, nv.getVaiTro().name());
 
+        int rowsInserted = ps.executeUpdate();
+        if (rowsInserted > 0) {
             System.out.println("✅ Thêm nhân viên: " + nv.getMaNguoiDung());
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            return true;
         }
+    } catch (SQLException | ClassNotFoundException e) {
+        System.out.println("❌ Lỗi khi thêm nhân viên:");
+        e.printStackTrace();
     }
+    return false;
+}
+
 
     public void update(NhanVien nv) {
         String sql = "UPDATE NhanVien SET ChucVu = ?, Luong = ?, VaiTro = ? WHERE MaNguoiDung = ?";
