@@ -20,7 +20,7 @@
     <section class="mb-3">
       <p>Phim: <strong th:text="${selectedPhim.tenPhim}">Tên Phim</strong></p>
       <p>Suất: <strong th:text="${#temporals.format(selectedSuatChieu.ngayGioChieu, 'dd-MM-yyyy HH:mm')}">Ngày Giờ</strong></p>
-      <p>Giá vé: <strong th:text="${#numbers.formatDecimal(selectedSuatChieu.giaVe, 0, 'COMMA', 0, 'POINT')}">0</strong> VNĐ</p>
+      <!-- ĐÃ XÓA DÒNG HIỂN THỊ GIÁ VÉ -->
     </section>
 
     <!-- Form đặt vé -->
@@ -57,11 +57,11 @@
       <div class="summary mt-4 p-3 bg-light rounded">
         <h5>Thông tin đặt vé</h5>
         <p>Ghế đã chọn: <span id="selectedSeats">Chưa chọn</span></p>
-        <p>Tổng tiền: <span id="totalPrice">0</span> VNĐ</p>
+        <!-- ĐÃ XÓA DÒNG HIỂN THỊ TỔNG TIỀN -->
       </div>
 
       <div class="text-center mt-3">
-        <button type="submit" class="btn btn-success btn-lg" id="submitBtn" disabled>
+        <button type="submit" class="btn btn-success btn-lg">
           Xác nhận đặt vé
         </button>
       </div>
@@ -77,9 +77,6 @@
     document.addEventListener('DOMContentLoaded', function() {
       const seatCheckboxes = document.querySelectorAll('.seat-checkbox');
       const selectedSeatsDisplay = document.getElementById('selectedSeats');
-      const totalPriceDisplay = document.getElementById('totalPrice');
-      const submitBtn = document.getElementById('submitBtn');
-      const pricePerSeat = parseInt('[[${selectedSuatChieu.giaVe}]]', 10);
       
       seatCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateSelection);
@@ -94,13 +91,6 @@
         selectedSeatsDisplay.textContent = selectedSeats.length > 0 
           ? selectedSeats.join(', ') 
           : 'Chưa chọn';
-        
-        // Tính tổng tiền
-        const total = selectedSeats.length * pricePerSeat;
-        totalPriceDisplay.textContent = total.toLocaleString('vi-VN');
-        
-        // Kích hoạt nút submit nếu có ghế được chọn
-        submitBtn.disabled = selectedSeats.length === 0;
       }
     });
     /*]]>*/

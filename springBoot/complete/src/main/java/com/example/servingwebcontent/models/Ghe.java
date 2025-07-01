@@ -2,6 +2,7 @@ package com.example.servingwebcontent.models;
 public class Ghe {
     private String SoGhe;
     private int MaPhong;
+    
     public String getSoGhe() {
         return SoGhe;
     }
@@ -14,9 +15,11 @@ public class Ghe {
     public void setMaPhong(int maPhong) {
         this.MaPhong = maPhong;
     }
+    
     public Ghe(String soGhe, int maPhong) {
         this.SoGhe = soGhe;
         this.MaPhong = maPhong;
+        
     }
 
    

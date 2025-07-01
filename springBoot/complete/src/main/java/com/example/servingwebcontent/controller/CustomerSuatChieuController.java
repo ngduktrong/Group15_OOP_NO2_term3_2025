@@ -52,15 +52,27 @@ public String bookGheTheoSuat(
         // 2. Lấy thông tin suất chiếu
         SuatChieu sc = suatChieuService.getSuatChieuById(maSuatChieu);
         if (sc == null) {
+            logger.error("Không tìm thấy suất chiếu với ID: {}", maSuatChieu);
             model.addAttribute("error", "Suất chiếu không tồn tại");
-            return "error"; // Hoặc redirect về trang trước
+            return "error";
         }
 
         // 3. Lấy thông tin phòng và ghế
         int maPhong = sc.getMaPhong();
         int maPhim = sc.getMaPhim();
+        
+        logger.info("Đang xử lý suất chiếu: {}", sc);
+        logger.info("Mã phòng: {}, Mã phim: {}", maPhong, maPhim);
+        
         Phim phim = phimService.getPhimById(maPhim);
+        if (phim == null) {
+            logger.error("Không tìm thấy phim với ID: {}", maPhim);
+            model.addAttribute("error", "Thông tin phim không hợp lệ");
+            return "error";
+        }
+        
         List<Ghe> listGhe = gheService.getByMaPhong(maPhong);
+        logger.info("Số ghế tìm thấy: {}", listGhe.size());
 
         // 4. Truyền dữ liệu đầy đủ
         model.addAttribute("selectedPhim", phim);
@@ -74,8 +86,9 @@ public String bookGheTheoSuat(
         
     } catch (Exception e) {
         // Ghi log lỗi
-        logger.error("Lỗi khi xử lý đặt ghế", e);
-        model.addAttribute("error", "Đã xảy ra lỗi hệ thống");
+        logger.error("Lỗi khi xử lý đặt ghế: {}", e.getMessage());
+        logger.debug("Chi tiết lỗi:", e);
+        model.addAttribute("error", "Đã xảy ra lỗi hệ thống: " + e.getMessage());
         return "error";
     }
 }
