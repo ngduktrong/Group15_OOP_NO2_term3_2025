@@ -135,4 +135,9 @@ public class LoginController {
         model.addAttribute("role", "user");
         return "user-dashboard";
     }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+    session.invalidate();
+    return "login";
+}
 }
