@@ -1,24 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Hóa đơn của tôi</title>
+  <meta charset="UTF-8">
+  <title>Thanh Toán Hóa Đơn</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 </head>
 <body>
-    <h1>Hóa đơn của tôi</h1>
-    <table border="1">
-        <tr>
-            <th>Mã hóa đơn</th>
-            <th>Tổng tiền</th>
-            <th>Chi tiết vé</th>
-        </tr>
-        <tr th:each="hoadon : ${listHoaDon}">
-            <td th:text="${hoadon.maHoaDon}"></td>
-            <td th:text="${hoadon.tongTien}"></td>
-            <td>
-                <a th:href="@{/customer/ve(maHoaDon=${hoadon.maHoaDon})}">Xem vé</a>
-            </td>
-        </tr>
-    </table>
+<div class="container">
+  <h2>THANH TOÁN HÓA ĐƠN</h2>
+  
+  <form th:action="@{/customer/hoadon/thanhtoan}" method="post">
+    <!-- Thông tin hóa đơn -->
+    <div class="form-group">
+      <label>Mã nhân viên:</label>
+      <input type="text" class="form-control" th:value="6" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label>Mã khách hàng:</label>
+      <input type="text" class="form-control" th:value="${hoaDon.maKhachHang}" readonly>
+    </div>
+    
+    <!-- Thông tin phim và suất chiếu -->
+    <div class="form-group">
+      <label>Phim:</label>
+      <input type="text" class="form-control" th:value="${phim.tenPhim}" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label>Suất chiếu:</label>
+      <input type="text" class="form-control" 
+             th:value="${suatChieu.ngayChieu} - ${suatChieu.gioChieu}" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label>Phòng:</label>
+      <input type="text" class="form-control" th:value="${maPhong}" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label>Ghế đã chọn:</label>
+      <input type="text" class="form-control" 
+             th:value="${#strings.join(selectedSeats, ', ')}" readonly>
+    </div>
+    
+    <div class="form-group">
+      <label>Tổng tiền:</label>
+      <input type="text" class="form-control" th:value="${tongTien} VND" readonly>
+    </div>
+    
+    <!-- Các trường ẩn để gửi dữ liệu -->
+    <input type="hidden" name="soGhe" th:value="${#strings.join(selectedSeats, ',')}">
+    <input type="hidden" name="maSuatChieu" th:value="${suatChieu.maSuatChieu}">
+    <input type="hidden" name="maPhong" th:value="${maPhong}">
+    <input type="hidden" th:field="*{hoaDon.maKhachHang}">
+    <input type="hidden" th:field="*{hoaDon.tongTien}">
+    <input type="hidden" th:field="*{hoaDon.maNhanVien}" value="6">
+    
+    <button type="submit" class="btn btn-primary">Thanh toán</button>
+  </form>
+</div>
 </body>
 </html>

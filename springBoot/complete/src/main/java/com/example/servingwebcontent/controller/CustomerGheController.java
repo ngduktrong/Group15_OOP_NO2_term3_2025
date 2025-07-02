@@ -1,8 +1,15 @@
 package com.example.servingwebcontent.controller;
 
 import com.example.servingwebcontent.models.Ghe;
+import com.example.servingwebcontent.models.HoaDon;
+import com.example.servingwebcontent.models.Phim;
+import com.example.servingwebcontent.models.SuatChieu;
 import com.example.servingwebcontent.models.Ve;
 import com.example.servingwebcontent.service.GheService;
+import com.example.servingwebcontent.service.SuatChieuService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,42 +20,73 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/customer/ghe")
 public class CustomerGheController {
 
-   @Autowired
-private GheService gheService;
+    @Autowired
+    private GheService gheService;
 
-/**
- * Truy cập trực tiếp theo phòng (tuỳ chọn)
- */
-@GetMapping("/{maPhong}")
-public String listGheByPhong(
-        @PathVariable int maPhong,
+    @Autowired
+    private SuatChieuService suatChieuService;
+
+    @Autowired
+    private com.example.servingwebcontent.service.PhimService phimService;
+
+    @GetMapping("/{maPhong}")
+    public String listGheByPhong(
+            @PathVariable int maPhong,
+            @RequestParam int maSuatChieu,
+            Model model) {
+        List<Ghe> list = gheService.getByMaPhong(maPhong);
+        SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
+        
+        model.addAttribute("listGhe", list);
+        model.addAttribute("maPhong", maPhong);
+        model.addAttribute("suatChieu", suatChieu);
+        return "list-ghe-customer";
+    }
+
+    @PostMapping("/chon-ghe")
+        public String processSeatSelection(
+        @RequestParam int maSuatChieu,
+        @RequestParam String[] soGhe,
+        @RequestParam int maPhong,
+        HttpSession session,
         Model model) {
-    List<Ghe> list = gheService.getByMaPhong(maPhong);
-    model.addAttribute("listGhe", list);
+    
+    // Kiểm tra đăng nhập
+    if (session.getAttribute("maKhachHang") == null) {
+        return "redirect:/login";
+    }
+
+    // Kiểm tra có chọn ghế
+    if (soGhe == null || soGhe.length == 0) {
+        model.addAttribute("error", "Vui lòng chọn ít nhất 1 ghế");
+        return "redirect:/customer/ghe/" + maPhong + "?maSuatChieu=" + maSuatChieu;
+    }
+
+    // Lấy thông tin cần thiết
+    SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
+    Phim phim = phimService.getPhimById(suatChieu.getMaPhim());
+    double tongTien = soGhe.length * 50000;
+    int maKhachHang = (int) session.getAttribute("maKhachHang");
+    
+    // Tạo đối tượng hóa đơn
+    HoaDon hoaDon = new HoaDon();
+    hoaDon.setMaKhachHang(maKhachHang);
+    hoaDon.setTongTien(tongTien);
+    
+    // Thêm dữ liệu vào model
+    model.addAttribute("hoaDon", hoaDon);
+    model.addAttribute("selectedSeats", Arrays.asList(soGhe));
+    model.addAttribute("suatChieu", suatChieu);
+    model.addAttribute("phim", phim);
     model.addAttribute("maPhong", maPhong);
-    return "list-ghe-customer";
-}
-@PostMapping("/chon-ghe")
-public String chonGhe(@RequestParam int maKhachHang, 
-                     @RequestParam int maSuatChieu,
-                     @RequestParam String soGhe,
-                     @RequestParam double giaVe,
-                     Model model) {
+    model.addAttribute("tongTien", tongTien);
     
-    // Tạo vé tạm thời (chưa lưu vào DB)
-    Ve ve = new Ve();
-    ve.setMaSuatChieu(maSuatChieu);
-    ve.setSoGhe(soGhe);
-    ve.setGiaVe(giaVe);
-    // Các thông tin khác...
-    
-    model.addAttribute("ve", ve);
-    model.addAttribute("maKhachHang", maKhachHang);
-    return "redirect:/customer/hoadon/thanhtoan";
+    return "list-hoadon-customer"; // Trả về trực tiếp view hóa đơn
 }
 }

@@ -3,6 +3,7 @@ package com.example.servingwebcontent.controller;
 import jakarta.servlet.http.HttpSession;
 import com.example.servingwebcontent.models.Phim;
 import com.example.servingwebcontent.models.SuatChieu;
+import com.example.servingwebcontent.models.PhongChieu;
 import com.example.servingwebcontent.service.PhimService;
 import com.example.servingwebcontent.service.PhongChieuService;
 import com.example.servingwebcontent.service.SuatChieuService;
@@ -31,54 +32,61 @@ public class CustomerController {
     @Autowired
     private PhongChieuService phongChieuService;
 
-    /**
-     * 1. Danh sách phim (vào /customer/movies)
-     */
+    // 1. Hiển thị danh sách phim
     @GetMapping("/movies")
     public String listMoviesForCustomer(Model model, HttpSession session) {
-        // Kiểm tra session hợp lệ
-        if (session.getAttribute("username") == null ||
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("username") == null || 
             session.getAttribute("maKhachHang") == null) {
-            return "login";
+            return "redirect:/login";
         }
 
-        // Đẩy thông tin user xuống view
+        // Thông tin user
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
 
+        // Danh sách phim
         List<Phim> phims = phimService.getAllPhim();
         model.addAttribute("phims", phims);
+        
         return "customer/movies";
     }
 
-    /**
-     * 2. Sau khi chọn phim, hiển thị các phòng có suất chiếu của phim đó
-     */
+    // 2. Chọn phim -> Hiển thị phòng chiếu
     @GetMapping("/movies/select/{maPhim}")
-    public String listPhongByPhim(@PathVariable int maPhim,
-                                  Model model,
-                                  HttpSession session) {
-        // Kiểm tra session hợp lệ
-        if (session.getAttribute("username") == null ||
+    public String listPhongByPhim(
+            @PathVariable int maPhim,
+            HttpSession session,
+            Model model) {
+        
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("username") == null || 
             session.getAttribute("maKhachHang") == null) {
-            return "login";
+            return "redirect:/login";
         }
 
-        // Đẩy thông tin user xuống view
+        // Thông tin user
         model.addAttribute("username", session.getAttribute("username"));
         model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
 
-        // Lấy danh sách suất chiếu và phòng
+        // Lấy thông tin phim đã chọn
+        Phim selectedPhim = phimService.getPhimById(maPhim);
+        if (selectedPhim == null) {
+            return "redirect:/customer/movies";
+        }
+        model.addAttribute("selectedPhim", selectedPhim);
+        session.setAttribute("selectedPhim", selectedPhim);
+
+        // Lấy danh sách phòng có chiếu phim này
         List<SuatChieu> suatList = suatChieuService.getByMaPhim(maPhim);
         Set<Integer> phongIds = suatList.stream()
             .map(SuatChieu::getMaPhong)
             .collect(Collectors.toSet());
-        var phongList = phongChieuService.getAllPhongChieu().stream()
+        
+        List<PhongChieu> phongList = phongChieuService.getAllPhongChieu().stream()
             .filter(p -> phongIds.contains(p.getMaPhong()))
             .collect(Collectors.toList());
 
-        model.addAttribute("phims", phimService.getAllPhim());
-        model.addAttribute("selectedPhim", phimService.getPhimById(maPhim));
         model.addAttribute("listPhong", phongList);
         return "view-phong-customer";
     }

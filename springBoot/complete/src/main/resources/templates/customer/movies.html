@@ -2,21 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>🎬 Phim Đang Chiếu</title>
+  <title>🎬 Phim Đang Chiếu | Rạp ABC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
   <link rel="stylesheet" th:href="@{/css/customer-phim.css}" />
 </head>
 <body>
-  <!-- Navbar chung -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="#">RẠP PHIM ABC</a>
+      <a class="navbar-brand" th:href="@{/customer/movies}">RẠP PHIM ABC</a>
       <div class="navbar-text text-light ms-auto">
-        <!-- Hiển thị tên user -->
         <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
-        <!-- Hiển thị mã khách hàng -->
-        <span th:if="${maKhachHang}" class="ms-3" th:text="'Mã KH: ' + ${maKhachHang}"></span>
-        <!-- Nút đăng xuất -->
+        <span th:if="${maKhachHang}" class="ms-3 badge bg-light text-dark" 
+              th:text="'Mã KH: ' + ${maKhachHang}"></span>
         <a th:if="${username}" th:href="@{/logout}"
            class="btn btn-sm btn-outline-light ms-3">
           Đăng xuất
@@ -26,35 +25,55 @@
   </nav>
 
   <div class="container">
-    <h2 class="tieude">🎬 Phim Đang Chiếu</h2>
+    <h1 class="text-center my-4">🎬 Phim Đang Chiếu</h1>
 
-    <div class="movie-grid">
-      <div class="movie-card" th:each="phim : ${phims}">
-        <div class="poster-wrapper">
-          <img class="poster"
-               th:if="${phim.duongDanPoster != null and phim.duongDanPoster != ''}"
-               th:src="@{${phim.duongDanPoster}}"
-               alt="Poster phim"/>
-          <div th:if="${phim.duongDanPoster == null or phim.duongDanPoster == ''}"
-               class="no-poster">Chưa có poster</div>
-        </div>
-        <h3 th:text="${phim.tenPhim}">Tên phim</h3>
-        <p><strong>Thời lượng:</strong> <span th:text="${phim.thoiLuong}">120</span> phút</p>
-        <p><strong>Khởi chiếu:</strong> <span th:text="${phim.ngayKhoiChieu}">2025-01-01</span></p>
-        <a th:href="@{|/customer/movies/select/${phim.maPhim}|}"
-           th:attr="data-id=${phim.maPhim}"
-           class="btn btn-primary book-ticket">
-          Đặt vé
-        </a>
-      </div>
+    <div th:if="${#lists.isEmpty(phims)}" class="alert alert-info text-center">
+      Hiện chưa có phim nào đang chiếu.
     </div>
 
-    <p th:if="${#lists.isEmpty(phims)}" class="empty-message">
-      Hiện chưa có phim nào.
-    </p>
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+      <div class="col" th:each="phim : ${phims}">
+        <div class="card h-100 shadow-sm">
+          <div class="poster-wrapper ratio ratio-16x9">
+            <img th:if="${phim.duongDanPoster}" 
+                 th:src="@{${phim.duongDanPoster}}" 
+                 class="card-img-top poster" 
+                 alt="Poster phim"
+                 onerror="this.onerror=null;this.src='/images/default-poster.jpg'">
+            <div th:unless="${phim.duongDanPoster}" class="no-poster d-flex align-items-center justify-content-center">
+              <span class="text-muted">Chưa có poster</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title" th:text="${phim.tenPhim}">Tên phim</h5>
+            <div class="card-text">
+              <p><i class="bi bi-clock"></i> <strong>Thời lượng:</strong> <span th:text="${phim.thoiLuong} + ' phút'">120 phút</span></p>
+              <p><i class="bi bi-calendar"></i> <strong>Khởi chiếu:</strong> 
+                <span th:text="${#temporals.format(phim.ngayKhoiChieu, 'dd/MM/yyyy')}">01/01/2025</span>
+              </p>
+            </div>
+          </div>
+          <div class="card-footer bg-transparent">
+            <a th:href="@{|/customer/movies/select/${phim.maPhim}|}" 
+               class="btn btn-primary w-100 book-ticket">
+              Đặt vé ngay
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/js/phim.js}"></script>
+  <script>
+    // Xử lý khi poster lỗi
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.poster').forEach(img => {
+        img.onerror = function() {
+          this.src = '/images/default-poster.jpg';
+        };
+      });
+    });
+  </script>
 </body>
 </html>

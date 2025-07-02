@@ -1,13 +1,8 @@
 package com.example.servingwebcontent.controller;
 
-import com.example.servingwebcontent.models.PhongChieu;
-import com.example.servingwebcontent.models.SuatChieu;
-import com.example.servingwebcontent.service.PhimService;
-import com.example.servingwebcontent.service.PhongChieuService;
-import com.example.servingwebcontent.service.SuatChieuService;
-
+import com.example.servingwebcontent.models.*;
+import com.example.servingwebcontent.service.*;
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,35 +15,49 @@ import java.util.List;
 public class CustomerPhongChieuController {
 
     @Autowired
-private SuatChieuService suatChieuService;
-
-@Autowired
-private PhimService phimService;
-
-/**
- * 3. Chọn phòng sau khi đã chọn phim
- */
-@GetMapping("/customer/phongchieu/select/{maPhim}/{maPhong}")
-public String showSuatChieuByPhongAndPhim(
-        @PathVariable int maPhim,
-        @PathVariable int maPhong,
-        HttpSession session, // Thêm session
-        Model model) {
+    private SuatChieuService suatChieuService;
     
-    // Kiểm tra đăng nhập
-    if (session.getAttribute("maKhachHang") == null) {
-        return "login";
+    @Autowired
+    private PhimService phimService;
+    
+    @Autowired
+    private PhongChieuService phongChieuService;
+
+    @GetMapping("/customer/phong/select/{maPhim}/{maPhong}")
+    public String showSuatChieuByPhongAndPhim(
+            @PathVariable int maPhim,
+            @PathVariable int maPhong,
+            HttpSession session,
+            Model model) {
+        
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("username") == null || 
+            session.getAttribute("maKhachHang") == null) {
+            return "redirect:/login";
+        }
+
+        // Lấy thông tin phim và phòng
+        Phim selectedPhim = phimService.getPhimById(maPhim);
+        PhongChieu selectedPhong = phongChieuService.getPhongChieuById(maPhong);
+        
+        if (selectedPhim == null || selectedPhong == null) {
+            return "redirect:/customer/movies";
+        }
+
+        // Lưu vào session cho các bước sau
+        session.setAttribute("selectedPhim", selectedPhim);
+        session.setAttribute("selectedPhong", selectedPhong);
+
+        // Lấy danh sách suất chiếu theo phim và phòng
+        List<SuatChieu> suatList = suatChieuService.getByMaPhongAndPhim(maPhong, maPhim);
+        
+        // Thêm dữ liệu vào model
+        model.addAttribute("username", session.getAttribute("username"));
+        model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
+        model.addAttribute("selectedPhim", selectedPhim);
+        model.addAttribute("selectedPhong", selectedPhong);
+        model.addAttribute("listSuatChieu", suatList);
+        
+        return "list-suat-chieu-customer";
     }
-    
-    // Truyền thông tin user
-    model.addAttribute("username", session.getAttribute("username"));
-    model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
-    
-    List<SuatChieu> suatList = suatChieuService.getByMaPhongAndPhim(maPhong, maPhim);
-    model.addAttribute("listSuatChieu", suatList);
-    model.addAttribute("maPhong", maPhong);
-    model.addAttribute("selectedPhim", phimService.getPhimById(maPhim));
-    return "list-suat-chieu-customer";
 }
-}
-

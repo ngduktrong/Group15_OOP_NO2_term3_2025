@@ -77,4 +77,10 @@ public class SuatChieuService {
             return false;
         }
     }
+    public List<SuatChieu> getByMaPhim(int maPhim) {
+        return suatChieuDao.getByMaPhim(maPhim);
+    }
+    public List<SuatChieu> getByMaPhongAndPhim(int maPhong, int maPhim) {
+        return suatChieuDao.getByMaPhongAndPhim(maPhong, maPhim);
+    }
 }

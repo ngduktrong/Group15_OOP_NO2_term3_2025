@@ -41,8 +41,7 @@
           <td th:text="${sc.maSuatChieu}">101</td>
           <td th:text="${#temporals.format(sc.ngayGioChieu, 'dd-MM-yyyy HH:mm')}">01-01-2025 18:00</td>
           <td>
-            <a class="btn btn-success btn-sm"
-               th:href="@{|/customer/suatchieu/book/${sc.maSuatChieu}|}">Chọn suất</a>
+            <a th:href="@{|/customer/suatchieu/book/${sc.maSuatChieu}|}" class="btn btn-success">Chọn suất</a>
           </td>
         </tr>
       </tbody>
