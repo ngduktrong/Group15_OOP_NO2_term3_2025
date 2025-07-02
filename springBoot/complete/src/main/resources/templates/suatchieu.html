@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>🎬 Quản lý Suất Chiếu</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>🎬 Quản lý Suất Chiếu</h1>
+
+    <!-- Thông báo -->
+    <div th:if="${message}" style="color: green; font-weight: bold;">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- Form thêm/sửa -->
+    <form th:action="@{${editMode} ? '/suatchieu/edit' : '/suatchieu/add'}"
+          th:object="${suatchieu}" method="post">
+        <input type="hidden" th:field="*{maSuatChieu}"/>
+
+        <label>Mã Phim:</label>
+        <input type="number" th:field="*{maPhim}" required/><br/>
+
+        <label>Mã Phòng:</label>
+        <input type="number" th:field="*{maPhong}" required/><br/>
+
+        <label>Ngày Giờ Chiếu:</label>
+        <input type="datetime-local" th:field="*{ngayGioChieu}" required/><br/>
+
+        <button type="submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
+        <a th:href="@{/suatchieu}" style="margin-left: 10px;">Hủy</a>
+    </form>
+
+    <hr/>
+
+    <!-- Danh sách suất chiếu -->
+    <h2>📋 Danh sách Suất Chiếu</h2>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Mã</th>
+            <th>Mã Phim</th>
+            <th>Mã Phòng</th>
+            <th>Ngày Giờ Chiếu</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sc : ${suatchieuList}">
+            <td th:text="${sc.maSuatChieu}"></td>
+            <td th:text="${sc.maPhim}"></td>
+            <td th:text="${sc.maPhong}"></td>
+            <td th:text="${sc.ngayGioChieuFormatted}"></td>
+            <td>
+                <a th:href="@{'/suatchieu/edit/' + ${sc.maSuatChieu}}">✏️ Sửa</a>
+                <form th:action="@{'/suatchieu/delete/' + ${sc.maSuatChieu}}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Xác nhận xoá suất chiếu này?')">🗑️ Xoá</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

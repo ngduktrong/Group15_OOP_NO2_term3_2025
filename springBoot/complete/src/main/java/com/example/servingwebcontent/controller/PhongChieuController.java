@@ -3,62 +3,78 @@ package com.example.servingwebcontent.controller;
 import com.example.servingwebcontent.models.PhongChieu;
 import com.example.servingwebcontent.service.PhongChieuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/phongchieu")
+@Controller
+@RequestMapping("/phongchieu")
 public class PhongChieuController {
 
+    private final PhongChieuService phongChieuService;
+
     @Autowired
-    private PhongChieuService phongChieuService;
-
-    
-    @GetMapping
-    public List<PhongChieu> getAll() {
-        return phongChieuService.getAllPhongChieu();
+    public PhongChieuController(PhongChieuService phongChieuService) {
+        this.phongChieuService = phongChieuService;
     }
 
-    
-    @GetMapping("/{id}")
-    public PhongChieu getById(@PathVariable int id) {
-        PhongChieu p = phongChieuService.getPhongChieuById(id);
-        if (p == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phòng chiếu không tìm thấy");
-        }
-        return p;
+    @GetMapping({"", "/", "/view"})
+    public String viewPhongChieu(Model model) {
+        List<PhongChieu> list = phongChieuService.getAllPhongChieu();
+        model.addAttribute("phongList", list);
+        model.addAttribute("phongchieu", new PhongChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "");
+        return "phongchieu";
     }
 
-   
-    @PostMapping
-    public PhongChieu create(@RequestBody PhongChieu p) {
-        phongChieuService.createPhongChieu(p);
-        return p;
+    @GetMapping("/edit/{id}")
+    public String editPhong(@PathVariable("id") int id, Model model) {
+        PhongChieu pc = phongChieuService.getPhongChieuById(id);
+        if (pc == null) pc = new PhongChieu();
+
+        model.addAttribute("phongList", phongChieuService.getAllPhongChieu());
+        model.addAttribute("phongchieu", pc);
+        model.addAttribute("editMode", true);
+        model.addAttribute("message", "");
+        return "phongchieu";
     }
 
-  
-    @PutMapping("/{id}")
-    public PhongChieu update(@PathVariable int id, @RequestBody PhongChieu p) {
-        PhongChieu existing = phongChieuService.getPhongChieuById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phòng chiếu không tìm thấy");
-        }
-        p.setMaPhong(id);
-        phongChieuService.updatePhongChieu(p);
-        return p;
+    @PostMapping("/add")
+    public String addPhong(@ModelAttribute PhongChieu phongchieu, Model model) {
+        phongChieuService.createPhongChieu(phongchieu);
+        System.out.println("📥 [ADD] Thêm phòng chiếu: " + phongchieu.getTenPhong());
+
+        model.addAttribute("phongList", phongChieuService.getAllPhongChieu());
+        model.addAttribute("phongchieu", new PhongChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "✅ Thêm phòng chiếu thành công!");
+        return "phongchieu";
     }
 
-   
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable int id) {
-        PhongChieu existing = phongChieuService.getPhongChieuById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Phòng chiếu không tìm thấy");
-        }
+    @PostMapping("/edit")
+    public String updatePhong(@ModelAttribute PhongChieu phongchieu, Model model) {
+        phongChieuService.updatePhongChieu(phongchieu);
+        System.out.println("✏️ [UPDATE] Cập nhật phòng chiếu (ID: " + phongchieu.getMaPhong() + ")");
+
+        model.addAttribute("phongList", phongChieuService.getAllPhongChieu());
+        model.addAttribute("phongchieu", new PhongChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "✅ Cập nhật phòng chiếu thành công!");
+        return "phongchieu";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deletePhong(@PathVariable("id") int id, Model model) {
         phongChieuService.deletePhongChieu(id);
-        return "Đã xóa phòng chiếu!";
+        System.out.println("🗑️ [DELETE] Đã xoá phòng chiếu có ID: " + id);
+
+        model.addAttribute("phongList", phongChieuService.getAllPhongChieu());
+        model.addAttribute("phongchieu", new PhongChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "✅ Xoá phòng chiếu thành công!");
+        return "phongchieu";
     }
 }

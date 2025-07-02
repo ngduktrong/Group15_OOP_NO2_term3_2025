@@ -9,21 +9,52 @@ import java.util.List;
 
 @Service
 public class PhimService {
+
+    private final PhimDao phimDao;
+
     @Autowired
-    private PhimDao phimDao;
+    public PhimService(PhimDao phimDao) {
+        this.phimDao = phimDao;
+    }
+
     public List<Phim> getAllPhim() {
         return phimDao.getAll();
     }
+
     public Phim getPhimById(int id) {
         return phimDao.getById(id);
     }
-    public void createPhim(Phim phim) {
-        phimDao.create(phim);
+
+    public boolean createPhim(Phim phim) {
+        try {
+            phimDao.create(phim);
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi tạo phim:");
+            e.printStackTrace();
+            return false;
+        }
     }
-    public void updatePhim(Phim phim) {
-        phimDao.update(phim);
+
+    public boolean updatePhim(Phim phim) {
+        try {
+            phimDao.update(phim);
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi cập nhật phim:");
+            e.printStackTrace();
+            return false;
+        }
     }
-    public void deletePhim(int id) {
-        phimDao.delete(id);
+
+    public boolean deletePhim(int id) {
+        try {
+            phimDao.delete(id);
+            return true;
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi xóa phim:");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

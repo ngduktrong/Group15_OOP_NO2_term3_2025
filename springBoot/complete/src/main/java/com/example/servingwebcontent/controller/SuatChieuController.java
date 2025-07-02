@@ -3,62 +3,79 @@ package com.example.servingwebcontent.controller;
 import com.example.servingwebcontent.models.SuatChieu;
 import com.example.servingwebcontent.service.SuatChieuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/suatchieu")
+@Controller
+@RequestMapping("/suatchieu")
 public class SuatChieuController {
 
+    private final SuatChieuService suatChieuService;
+
     @Autowired
-    private SuatChieuService suatChieuService;
-
-    
-    @GetMapping
-    public List<SuatChieu> getAll() {
-        return suatChieuService.getAllSuatChieu();
+    public SuatChieuController(SuatChieuService suatChieuService) {
+        this.suatChieuService = suatChieuService;
     }
 
-    
-    @GetMapping("/{id}")
-    public SuatChieu getById(@PathVariable int id) {
-        SuatChieu s = suatChieuService.getSuatChieuById(id);
-        if (s == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Suất chiếu không tìm thấy");
-        }
-        return s;
+    // Hiển thị danh sách và form thêm mới
+    @GetMapping({"", "/", "/view"})
+    public String viewSuatChieu(Model model) {
+        List<SuatChieu> list = suatChieuService.getAllSuatChieu();
+        model.addAttribute("suatchieuList", list);
+        model.addAttribute("suatchieu", new SuatChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "");
+        return "suatchieu";
     }
 
+    // Hiển thị form sửa
+    @GetMapping("/edit/{id}")
+    public String editSuatChieu(@PathVariable("id") int id, Model model) {
+        SuatChieu sc = suatChieuService.getSuatChieuById(id);
+        if (sc == null) sc = new SuatChieu();
 
-    @PostMapping
-    public SuatChieu create(@RequestBody SuatChieu s) {
-        suatChieuService.createSuatChieu(s);
-        return s;
+        model.addAttribute("suatchieuList", suatChieuService.getAllSuatChieu());
+        model.addAttribute("suatchieu", sc);
+        model.addAttribute("editMode", true);
+        model.addAttribute("message", "");
+        return "suatchieu";
     }
 
-   
-    @PutMapping("/{id}")
-    public SuatChieu update(@PathVariable int id, @RequestBody SuatChieu s) {
-        SuatChieu existing = suatChieuService.getSuatChieuById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Suất chiếu không tìm thấy");
-        }
-        s.setMaSuatChieu(id);
-        suatChieuService.updateSuatChieu(s);
-        return s;
+    // Thêm mới suất chiếu
+    @PostMapping("/add")
+    public String addSuatChieu(@ModelAttribute SuatChieu suatchieu, Model model) {
+        boolean success = suatChieuService.createSuatChieu(suatchieu);
+        model.addAttribute("suatchieuList", suatChieuService.getAllSuatChieu());
+        model.addAttribute("suatchieu", new SuatChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", success
+            ? "✅ Thêm suất chiếu thành công!"
+            : "❌ Không thể thêm suất chiếu: Mã phim hoặc mã phòng không tồn tại.");
+    return "suatchieu";
     }
 
+    // Cập nhật suất chiếu
+    @PostMapping("/edit")
+    public String updateSuatChieu(@ModelAttribute SuatChieu suatchieu, Model model) {
+        suatChieuService.updateSuatChieu(suatchieu);
+        model.addAttribute("suatchieuList", suatChieuService.getAllSuatChieu());
+        model.addAttribute("suatchieu", new SuatChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "✅ Cập nhật suất chiếu thành công!");
+        return "suatchieu";
+    }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable int id) {
-        SuatChieu existing = suatChieuService.getSuatChieuById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Suất chiếu không tìm thấy");
-        }
+    // Xoá suất chiếu
+    @PostMapping("/delete/{id}")
+    public String deleteSuatChieu(@PathVariable("id") int id, Model model) {
         suatChieuService.deleteSuatChieu(id);
-        return "Đã xóa suất chiếu!";
+        model.addAttribute("suatchieuList", suatChieuService.getAllSuatChieu());
+        model.addAttribute("suatchieu", new SuatChieu());
+        model.addAttribute("editMode", false);
+        model.addAttribute("message", "🗑️ Xoá suất chiếu thành công!");
+        return "suatchieu";
     }
 }

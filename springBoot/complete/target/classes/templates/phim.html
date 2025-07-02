@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>🎬 Quản lý Phim</title>
+    <link rel="stylesheet" th:href="@{/css/phim.css}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 30px;
+            background-color: #f4f7f9;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            padding: 10px 16px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+        }
+        th, td {
+            border: 1px solid #e1e1e1;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .message {
+            color: green;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎬 Quản lý phim</h1>
+
+<!-- ✅ THÔNG BÁO -->
+<div th:if="${message}" class="message" th:text="${message}"></div>
+
+<!-- ✅ FORM THÊM / SỬA -->
+<form th:action="@{${editMode} ? '/phim/edit/' + ${phim.maPhim} : '/phim/add'}" method="post" th:object="${phim}">
+    <input type="hidden" th:field="*{maPhim}"/>
+
+    <label>Tên phim:</label>
+    <input type="text" th:field="*{tenPhim}" required/>
+
+    <label>Thời lượng (phút):</label>
+    <input type="number" th:field="*{thoiLuong}" min="1" required/>
+
+    <label>Ngày khởi chiếu:</label>
+    <input type="date" th:field="*{ngayKhoiChieu}" required/>
+
+    <label>Nước sản xuất:</label>
+    <input type="text" th:field="*{nuocSanXuat}" required/>
+
+    <label>Định dạng:</label>
+    <input type="text" th:field="*{dinhDang}" required/>
+
+    <label>Đạo diễn:</label>
+    <input type="text" th:field="*{daoDien}" required/>
+
+    <label>Mô tả:</label>
+    <textarea th:field="*{moTa}" rows="3"></textarea>
+
+    <label>Đường dẫn poster:</label>
+    <input type="text" th:field="*{duongDanPoster}"/>
+
+    <button type="submit" th:text="${editMode} ? 'Cập nhật phim' : 'Thêm phim'"></button>
+</form>
+
+<!-- ✅ DANH SÁCH PHIM -->
+<table>
+    <thead>
+        <tr>
+            <th>Mã</th>
+            <th>Tên phim</th>
+            <th>Thời lượng</th>
+            <th>Ngày khởi chiếu</th>
+            <th>Quốc gia</th>
+            <th>Định dạng</th>
+            <th>Đạo diễn</th>
+            <th>Mô tả</th>
+            <th>Poster</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="p : ${phims}">
+            <td th:text="${p.maPhim}">1</td>
+            <td th:text="${p.tenPhim}">Tên phim</td>
+            <td th:text="${p.thoiLuong}">90</td>
+            <td th:text="${p.ngayKhoiChieu}">2025-01-01</td>
+            <td th:text="${p.nuocSanXuat}">USA</td>
+            <td th:text="${p.dinhDang}">2D</td>
+            <td th:text="${p.daoDien}">Đạo diễn</td>
+            <td th:text="${p.moTa}">Mô tả</td>
+            <td><img th:src="@{'/images/' + ${p.duongDanPoster}}" alt="Poster" width="60"/></td>
+            <td class="actions">
+                <a th:href="@{'/phim/edit/' + ${p.maPhim}}">✏️</a>
+                <form th:action="@{'/phim/delete/' + ${p.maPhim}}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Bạn có chắc muốn xoá?')">🗑️</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

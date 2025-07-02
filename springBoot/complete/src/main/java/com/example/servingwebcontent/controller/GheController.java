@@ -10,48 +10,53 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/nhanvien/ghe")
+@RequestMapping("/ghe")
 public class GheController {
 
+    private final GheService gheService;
+
     @Autowired
-    private GheService gheService;
-
-    @GetMapping
-    public String showList(Model model) {
-        model.addAttribute("dsGhe", gheService.getAll());
-        return "list-ghe";
+    public GheController(GheService gheService) {
+        this.gheService = gheService;
     }
 
-    @GetMapping("/add")
-    public String showAddForm(Model model) {
+    // ✅ Hiển thị danh sách ghế và form thêm mới
+    @GetMapping({"", "/", "/view"})
+    public String viewGhe(Model model) {
+        List<Ghe> list = gheService.getAllGhe();
+        model.addAttribute("gheList", list);
         model.addAttribute("ghe", new Ghe());
-        return "add-ghe";
+        model.addAttribute("message", "");
+        return "ghe";
     }
 
+    // ✅ Thêm ghế mới (có kiểm tra phòng, số lượng ghế tối đa)
     @PostMapping("/add")
-    public String doAdd(@ModelAttribute Ghe ghe, Model model) {
-        gheService.create(ghe);
-        model.addAttribute("dsGhe", gheService.getAll());
-        return "list-ghe";
+    public String addGhe(@ModelAttribute Ghe ghe, Model model) {
+        boolean success = gheService.createGhe(ghe);
+        String message = success
+                ? "✅ Thêm ghế thành công!"
+                : "❌ Thêm thất bại: Phòng không hợp lệ, ghế đã tồn tại, hoặc đã đủ ghế tối đa!";
+
+        model.addAttribute("gheList", gheService.getAllGhe());
+        model.addAttribute("ghe", new Ghe());
+        model.addAttribute("message", message);
+        return "ghe";
     }
 
-    @GetMapping("/edit/{SoGhe}")
-    public String showEdit(@PathVariable String SoGhe, Model model) {
-        model.addAttribute("ghe", gheService.getBySoGhe(SoGhe));
-        return "edit-ghe";
-    }
+    // ✅ Xoá ghế theo soGhe và maPhong
+    @PostMapping("/delete")
+    public String deleteGhe(@RequestParam("soGhe") String soGhe,
+                            @RequestParam("maPhong") int maPhong,
+                            Model model) {
+        boolean success = gheService.deleteGhe(soGhe, maPhong);
+        String message = success
+                ? "✅ Xoá ghế thành công!"
+                : "❌ Không thể xoá ghế (ghế không tồn tại)!";
 
-    @PostMapping("/edit")
-    public String doEdit(@ModelAttribute Ghe ghe, Model model) {
-        gheService.update(ghe);
-        model.addAttribute("dsGhe", gheService.getAll());
-        return "list-ghe";
-    }
-
-    @GetMapping("/delete/{SoGhe}")
-    public String delete(@PathVariable String SoGhe, Model model) {
-        gheService.delete(SoGhe);
-        model.addAttribute("dsGhe", gheService.getAll());
-        return "list-ghe";
+        model.addAttribute("gheList", gheService.getAllGhe());
+        model.addAttribute("ghe", new Ghe());
+        model.addAttribute("message", message);
+        return "ghe";
     }
 }

@@ -142,4 +142,5 @@ public class SuatChieuDao {
         if (ts != null) s.setNgayGioChieu(ts.toLocalDateTime());
         return s;
     }
+    
 }

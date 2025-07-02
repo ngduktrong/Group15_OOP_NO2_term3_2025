@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Phòng Chiếu</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1>🎬 Quản Lý Phòng Chiếu</h1>
+    <p th:text="${message}" style="color: green;"></p>
+
+    <form th:action="@{${editMode} ? '/phongchieu/edit' : '/phongchieu/add'}"
+          th:object="${phongchieu}" method="post">
+        <input type="hidden" th:field="*{maPhong}"/>
+
+        <label>Tên Phòng:</label>
+        <input type="text" th:field="*{tenPhong}" required/><br>
+
+        <label>Số lượng ghế:</label>
+        <input type="number" th:field="*{soLuongGhe}" min="1" required/><br>
+
+        <label>Loại phòng:</label>
+        <input type="text" th:field="*{loaiPhong}" required/><br>
+
+        <button type="submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'">Thêm</button>
+
+        <!-- Nút hủy khi đang ở chế độ sửa -->
+        <a th:if="${editMode}" th:href="@{/phongchieu/view}">
+            <button type="button">Huỷ</button>
+        </a>
+    </form>
+
+    <hr>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Phòng</th>
+            <th>Số lượng ghế</th>
+            <th>Loại phòng</th>
+            <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="phong : ${phongList}">
+            <td th:text="${phong.maPhong}"></td>
+            <td th:text="${phong.tenPhong}"></td>
+            <td th:text="${phong.soLuongGhe}"></td>
+            <td th:text="${phong.loaiPhong}"></td>
+            <td>
+                <a th:href="@{'/phongchieu/edit/' + ${phong.maPhong}}">✏️ Sửa</a> |
+                <form th:action="@{'/phongchieu/delete/' + ${phong.maPhong}}"
+                      method="post" style="display:inline"
+                      onsubmit="return confirm('Bạn có chắc muốn xoá?')">
+                    <button type="submit">🗑️ Xoá</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

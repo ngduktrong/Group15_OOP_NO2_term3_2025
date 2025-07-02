@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Ghế</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f0f2f5;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.5;
+        }
+        
+        /* ===== CONTAINER STYLES ===== */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            position: relative;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            color: #1a73e8;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .header p {
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+        
+        /* ===== ERROR MESSAGE ===== */
+        .error-message {
+            background: #fce8e6;
+            color: #d93025;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 0 25px 0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #d93025;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.1);
+        }
+        
+        .example {
+            font-size: 0.85rem;
+            color: #5f6368;
+            margin-top: 5px;
+            margin-left: 32px;
+        }
+        
+        .submit-btn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .submit-btn:hover {
+            background: #1669d6;
+            box-shadow: 0 2px 6px rgba(26, 115, 232, 0.3);
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-container {
+            margin-top: 30px;
+        }
+        
+        .table-header {
+            font-size: 1.2rem;
+            color: #202124;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #202124;
+            font-size: 0.9rem;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #eaeaea;
+            transition: background 0.2s ease;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 12px 15px;
+            color: #202124;
+        }
+        
+        .delete-btn {
+            background: transparent;
+            color: #d93025;
+            border: 1px solid #f5c6cb;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .delete-btn:hover {
+            background: #fce8e6;
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+            text-align: center;
+            color: #5f6368;
+            font-size: 0.85rem;
+        }
+        
+        /* ===== BACK BUTTON ===== */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            color: #5f6368;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+        
+        .back-btn:hover {
+            background: #f0f2f5;
+            color: #1a73e8;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Nút quay lại -->
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-btn" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+    </button></a>
+    
+    <div class="header">
+        <h1><i class="fas fa-chair"></i> Quản lý Ghế</h1>
+        <p>Thêm và quản lý ghế trong các phòng chiếu</p>
+    </div>
+
+    <!-- Thông báo lỗi -->
+    <div th:if="${errorMessage}" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <!-- Form Thêm Ghế -->
+    <div class="form-container">
+        <form th:action="@{/ghe/add}" method="post">
+            <div class="form-group">
+                <label for="soGhe"><i class="fas fa-hashtag"></i> Số Ghế:</label>
+                <input type="text" id="soGhe" name="soGhe" required placeholder="Nhập số ghế" />
+                <div class="example">VD: A01</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="maPhong"><i class="fas fa-door-open"></i> Mã Phòng:</label>
+                <input type="number" id="maPhong" name="maPhong" required placeholder="Nhập mã phòng" min="1" />
+                <div class="example">VD: 1</div>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-plus"></i> Thêm Ghế
+            </button>
+        </form>
+    </div>
+
+    <!-- Danh sách ghế -->
+    <div class="table-container">
+        <div class="table-header">
+            <i class="fas fa-list"></i>
+            <h2>Danh sách Ghế</h2>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Số Ghế</th>
+                    <th>Mã Phòng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ghe : ${gheList}">
+                    <td th:text="${ghe.soGhe}"></td>
+                    <td th:text="${ghe.maPhong}"></td>
+                    <td>
+                        <form th:action="@{/ghe/delete}" method="post" style="display:inline;">
+                            <input type="hidden" name="soGhe" th:value="${ghe.soGhe}" />
+                            <input type="hidden" name="maPhong" th:value="${ghe.maPhong}" />
+                            <button type="submit" class="delete-btn" onclick="return confirm('Bạn có chắc chắn muốn xoá ghế này?')">
+                                <i class="fas fa-trash"></i> Xoá
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>Hệ thống Quản lý Rạp chiếu phim</p>
+        <p>© 2023 - Bản quyền thuộc về công ty TNHH ABC</p>
+    </div>
+</div>
+
+<script>
+    // Tự động đặt trọng tâm vào trường nhập đầu tiên
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstInput = document.querySelector('input');
+        if (firstInput) {
+            firstInput.focus();
+        }
+        
+        // Thêm hiệu ứng khi nhập liệu
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#1a73e8';
+                this.style.boxShadow = '0 0 0 2px rgba(26, 115, 232, 0.1)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#dadce0';
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
+</script>
+</body>
+</html>
