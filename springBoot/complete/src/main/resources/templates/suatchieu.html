@@ -2,65 +2,432 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>🎬 Quản lý Suất Chiếu</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --cinema-color: #2c3e50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container-custom {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef, #dee2e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 i {
+            color: #ff5722;
+            margin-right: 15px;
+        }
+        
+        .card-custom {
+            background: rgba(44, 62, 80, 0.9);
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .card-header-custom {
+            background: linear-gradient(135deg, var(--cinema-color), #1a2a6c);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-body-custom {
+            padding: 25px;
+        }
+        
+        .form-label {
+            color: #e9ecef;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-control-custom {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px 15px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .form-control-custom:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            color: #fff;
+        }
+        
+        .btn-custom {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, var(--success-color), #17a673);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #17a673, var(--success-color));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-cancel {
+            background: linear-gradient(135deg, var(--secondary-color), #6c757d);
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: linear-gradient(135deg, #6c757d, var(--secondary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .table-custom {
+            width: 100%;
+            background: rgba(44, 62, 80, 0.8);
+            color: #fff;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .table-custom thead th {
+            background: linear-gradient(135deg, var(--cinema-color), #1a2a6c);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+        }
+        
+        .table-custom tbody td {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+        
+        .table-custom tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .table-custom tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .table-custom tbody tr:hover {
+            background: rgba(78, 115, 223, 0.15);
+            transform: translateX(5px);
+        }
+        
+        .table-custom tbody tr:hover td {
+            color: #fff;
+        }
+        
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .edit-btn {
+            background: linear-gradient(135deg, var(--warning-color), #e0a800);
+            color: #212529;
+        }
+        
+        .edit-btn:hover {
+            background: linear-gradient(135deg, #e0a800, var(--warning-color));
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            color: #212529;
+            text-decoration: none;
+        }
+        
+        .delete-btn {
+            background: linear-gradient(135deg, var(--danger-color), #bd2130);
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #bd2130, var(--danger-color));
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .message-box {
+            background: rgba(25, 135, 84, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #adb5bd;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-group-custom {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .clapper-icon {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2.5rem;
+            opacity: 0.1;
+        }
+        
+        @media (max-width: 768px) {
+            .container-custom {
+                padding: 15px;
+            }
+            
+            .btn-group-custom {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn-custom {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>🎬 Quản lý Suất Chiếu</h1>
+    <div class="container-custom">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="bi bi-camera-reels"></i> Quản lý Suất Chiếu</h1>
+            <p class="text-light">Quản lý và sắp xếp các suất chiếu phim trong hệ thống</p>
+            <i class="bi bi-ticket-perforated clapper-icon"></i>
+        </div>
 
-    <!-- Thông báo -->
-    <div th:if="${message}" style="color: green; font-weight: bold;">
-        <p th:text="${message}"></p>
+        <!-- Thông báo -->
+        <div th:if="${message}" class="message-box">
+            <i class="bi bi-check-circle-fill" style="font-size: 1.5rem;"></i>
+            <div th:text="${message}"></div>
+        </div>
+
+        <!-- Form thêm/sửa -->
+        <div class="card-custom">
+            <div class="card-header-custom">
+                <i class="bi bi-plus-circle me-2"></i>
+                <span th:text="${editMode} ? 'CẬP NHẬT SUẤT CHIẾU' : 'THÊM SUẤT CHIẾU MỚI'"></span>
+            </div>
+            <div class="card-body-custom">
+                <form th:action="@{${editMode} ? '/suatchieu/edit' : '/suatchieu/add'}"
+                    th:object="${suatchieu}" method="post">
+                    <input type="hidden" th:field="*{maSuatChieu}"/>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mã Phim:</label>
+                        <input type="number" class="form-control-custom" th:field="*{maPhim}" required/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mã Phòng:</label>
+                        <input type="number" class="form-control-custom" th:field="*{maPhong}" required/>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Ngày Giờ Chiếu:</label>
+                        <input type="datetime-local" class="form-control-custom" th:field="*{ngayGioChieu}" required/>
+                    </div>
+
+                    <div class="btn-group-custom">
+                        <button type="submit" class="btn-custom btn-submit">
+                            <i class="bi" th:class="${editMode} ? 'bi-arrow-repeat' : 'bi-plus-circle'"></i>
+                            <span th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></span>
+                        </button>
+                        
+                        <a th:href="@{/suatchieu}" class="btn-custom btn-cancel">
+                            <i class="bi bi-x-circle"></i> Hủy bỏ
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Danh sách suất chiếu -->
+        <div class="card-custom">
+            <div class="card-header-custom">
+                <i class="bi bi-list me-2"></i>
+                DANH SÁCH SUẤT CHIẾU
+            </div>
+            <div class="card-body-custom">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Mã Phim</th>
+                            <th>Mã Phòng</th>
+                            <th>Ngày Giờ Chiếu</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="sc : ${suatchieuList}">
+                            <td th:text="${sc.maSuatChieu}"></td>
+                            <td th:text="${sc.maPhim}"></td>
+                            <td th:text="${sc.maPhong}"></td>
+                            <td th:text="${sc.ngayGioChieuFormatted}"></td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a th:href="@{'/suatchieu/edit/' + ${sc.maSuatChieu}}" class="action-btn edit-btn">
+                                        <i class="bi bi-pencil"></i> Sửa
+                                    </a>
+                                    <form th:action="@{'/suatchieu/delete/' + ${sc.maSuatChieu}}" method="post" style="display:inline;">
+                                        <button type="submit" class="action-btn delete-btn" 
+                                                onclick="return confirm('Bạn có chắc muốn xoá suất chiếu này?')">
+                                            <i class="bi bi-trash"></i> Xoá
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${suatchieuList.isEmpty()}">
+                            <td colspan="5" class="empty-state">
+                                <i class="bi bi-calendar-x"></i>
+                                <h4>Chưa có suất chiếu nào</h4>
+                                <p>Hãy thêm suất chiếu mới bằng form bên trên</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <!-- Form thêm/sửa -->
-    <form th:action="@{${editMode} ? '/suatchieu/edit' : '/suatchieu/add'}"
-          th:object="${suatchieu}" method="post">
-        <input type="hidden" th:field="*{maSuatChieu}"/>
-
-        <label>Mã Phim:</label>
-        <input type="number" th:field="*{maPhim}" required/><br/>
-
-        <label>Mã Phòng:</label>
-        <input type="number" th:field="*{maPhong}" required/><br/>
-
-        <label>Ngày Giờ Chiếu:</label>
-        <input type="datetime-local" th:field="*{ngayGioChieu}" required/><br/>
-
-        <button type="submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
-        <a th:href="@{/suatchieu}" style="margin-left: 10px;">Hủy</a>
-    </form>
-
-    <hr/>
-
-    <!-- Danh sách suất chiếu -->
-    <h2>📋 Danh sách Suất Chiếu</h2>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>Mã</th>
-            <th>Mã Phim</th>
-            <th>Mã Phòng</th>
-            <th>Ngày Giờ Chiếu</th>
-            <th>Thao tác</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="sc : ${suatchieuList}">
-            <td th:text="${sc.maSuatChieu}"></td>
-            <td th:text="${sc.maPhim}"></td>
-            <td th:text="${sc.maPhong}"></td>
-            <td th:text="${sc.ngayGioChieuFormatted}"></td>
-            <td>
-                <a th:href="@{'/suatchieu/edit/' + ${sc.maSuatChieu}}">✏️ Sửa</a>
-                <form th:action="@{'/suatchieu/delete/' + ${sc.maSuatChieu}}" method="post" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Xác nhận xoá suất chiếu này?')">🗑️ Xoá</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Hiệu ứng hover cho các hàng trong bảng
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('.table-custom tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+            
+            // Hiệu ứng khi nhấn nút
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(2px)';
+                });
+                
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
