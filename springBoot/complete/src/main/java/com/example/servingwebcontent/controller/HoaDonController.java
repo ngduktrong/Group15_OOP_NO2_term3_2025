@@ -3,62 +3,116 @@ package com.example.servingwebcontent.controller;
 import com.example.servingwebcontent.models.HoaDon;
 import com.example.servingwebcontent.service.HoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/hoadon")
+@Controller
+@RequestMapping("/hoadon")
 public class HoaDonController {
 
     @Autowired
     private HoaDonService hoaDonService;
 
-    
+    /**
+     * Hiển thị danh sách hóa đơn với các chức năng tìm kiếm:
+     * - Theo khoảng ngày (từ ngày - đến ngày)
+     * - Theo ngày lập
+     * - Theo mã khách hàng
+     * Mỗi điều kiện hoạt động riêng biệt (chỉ cần thỏa 1 là được)
+     */
     @GetMapping
-    public List<HoaDon> getAllHoaDon() {
-        return hoaDonService.getAllHoaDon();
+    public String listHoaDon(
+            @RequestParam(value = "ngay", required = false) String ngayLap,
+            @RequestParam(value = "maKH", required = false) Integer maKH,
+            @RequestParam(value = "tuNgay", required = false) String tuNgay,
+            @RequestParam(value = "denNgay", required = false) String denNgay,
+            Model model) {
+
+        List<HoaDon> list = new ArrayList<>();
+        double tongDoanhThu = 0;
+
+        if (tuNgay != null && !tuNgay.isEmpty() && denNgay != null && !denNgay.isEmpty()) {
+            list = hoaDonService.getHoaDonByKhoangNgay(tuNgay, denNgay);
+            tongDoanhThu = hoaDonService.getTongDoanhThuTheoKhoangNgay(tuNgay, denNgay);
+            model.addAttribute("tuNgay", tuNgay);
+            model.addAttribute("denNgay", denNgay);
+            model.addAttribute("tongDoanhThuKhoang", tongDoanhThu);
+
+        } else if (ngayLap != null && !ngayLap.isEmpty()) {
+            list = hoaDonService.getHoaDonByNgayLap(ngayLap);
+            tongDoanhThu = hoaDonService.getTongDoanhThuTheoNgay(ngayLap);
+            model.addAttribute("searchDate", ngayLap);
+            model.addAttribute("doanhThu", tongDoanhThu);
+
+        } else if (maKH != null && maKH > 0) {
+            list = hoaDonService.getHoaDonByMaKhachHang(maKH);
+            model.addAttribute("maKH", maKH);
+
+        } else {
+            list = hoaDonService.getAllHoaDon();
+        }
+
+        model.addAttribute("hoaDonList", list);
+        model.addAttribute("hoaDon", new HoaDon());
+        return "hoadon";
     }
 
-    
-    @GetMapping("/{id}")
-    public HoaDon getHoaDonById(@PathVariable int id) {
+    /**
+     * Thêm hóa đơn mới
+     */
+    @PostMapping("/add")
+    public String addHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
+        boolean success = hoaDonService.createHoaDon(hoaDon);
+        String message = success ? "✅ Thêm hóa đơn thành công!" : "❌ Thêm hóa đơn thất bại!";
+        model.addAttribute("message", message);
+        model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
+        model.addAttribute("hoaDon", new HoaDon());
+        return "hoadon";
+    }
+
+    /**
+     * Cập nhật hóa đơn
+     */
+    @PostMapping("/update")
+    public String updateHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
+        boolean success = hoaDonService.updateHoaDon(hoaDon);
+        String message = success ? "✅ Cập nhật hóa đơn thành công!" : "❌ Cập nhật hóa đơn thất bại!";
+        model.addAttribute("message", message);
+        model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
+        model.addAttribute("hoaDon", new HoaDon());
+        return "hoadon";
+    }
+
+    /**
+     * Xóa hóa đơn
+     */
+    @PostMapping("/delete")
+    public String deleteHoaDon(@RequestParam("maHoaDon") int id, Model model) {
+        boolean success = hoaDonService.deleteHoaDon(id);
+        String message = success ? "✅ Xóa hóa đơn thành công!" : "❌ Xóa hóa đơn thất bại!";
+        model.addAttribute("message", message);
+        model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
+        model.addAttribute("hoaDon", new HoaDon());
+        return "hoadon";
+    }
+
+    /**
+     * Hiển thị form sửa hóa đơn
+     */
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable int id, Model model) {
         HoaDon hd = hoaDonService.getHoaDonById(id);
         if (hd == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tìm thấy");
+            model.addAttribute("message", "❌ Không tìm thấy hóa đơn để sửa!");
+            model.addAttribute("hoaDon", new HoaDon());
+        } else {
+            model.addAttribute("hoaDon", hd);
         }
-        return hd;
-    }
-
-    @PostMapping
-    public HoaDon createHoaDon(@RequestBody HoaDon hd) {
-        
-        hoaDonService.createHoaDon(hd);
-        return hd;
-    }
-
-    
-    @PutMapping("/{id}")
-    public HoaDon updateHoaDon(@PathVariable int id, @RequestBody HoaDon hd) {
-        HoaDon existing = hoaDonService.getHoaDonById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tìm thấy");
-        }
-        hd.setMaHoaDon(id);
-        hoaDonService.updateHoaDon(hd);
-        return hd;
-    }
-
-   
-    @DeleteMapping("/{id}")
-    public String deleteHoaDon(@PathVariable int id) {
-        HoaDon existing = hoaDonService.getHoaDonById(id);
-        if (existing == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Hóa đơn không tìm thấy");
-        }
-        hoaDonService.deleteHoaDon(id);
-        return "Đã xóa hóa đơn!";
+        model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
+        return "hoadon";
     }
 }
