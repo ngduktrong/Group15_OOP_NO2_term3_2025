@@ -33,9 +33,14 @@ public class HoaDonService {
         return hoaDonDao.getById(id);
     }
 
-    // ✅ Tạo hóa đơn mới sau khi đã thanh toán vé
+    // ✅ Tạo hóa đơn mới + cập nhật NgayLap từ vé
     public boolean createHoaDon(HoaDon hoaDon) {
         try {
+            if (hoaDon.getTongTien() < 0) {
+                System.out.println("❌ Tổng tiền không được âm!");
+                return false;
+            }
+
             if (!isValidKhachHang(hoaDon.getMaKhachHang())) {
                 System.out.println("❌ Mã khách hàng không tồn tại!");
                 return false;
@@ -46,12 +51,11 @@ public class HoaDonService {
                 return false;
             }
 
-            if (hoaDon.getTongTien() < 0) {
-                System.out.println("❌ Tổng tiền không được âm!");
-                return false;
-            }
-
             hoaDonDao.create(hoaDon);
+
+            // ⏱️ Sau khi tạo -> cập nhật NgayLap từ vé
+            capNhatNgayLapTuVe(hoaDon.getMaHoaDon());
+
             System.out.println("✅ Tạo hóa đơn thành công!");
             return true;
 
@@ -68,6 +72,11 @@ public class HoaDonService {
             return false;
         }
 
+        if (hoaDon.getTongTien() < 0) {
+            System.out.println("❌ Tổng tiền không được âm!");
+            return false;
+        }
+
         if (!isValidKhachHang(hoaDon.getMaKhachHang())) {
             System.out.println("❌ Mã khách hàng không tồn tại!");
             return false;
@@ -78,12 +87,9 @@ public class HoaDonService {
             return false;
         }
 
-        if (hoaDon.getTongTien() < 0) {
-            System.out.println("❌ Tổng tiền không được âm!");
-            return false;
-        }
-
         hoaDonDao.update(hoaDon);
+        capNhatNgayLapTuVe(hoaDon.getMaHoaDon());
+
         System.out.println("✅ Cập nhật hóa đơn thành công!");
         return true;
     }
@@ -125,13 +131,19 @@ public class HoaDonService {
         return hoaDonDao.getTongDoanhThuTheoKhoangNgay(tuNgay, denNgay);
     }
 
-    // 🔍 Kiểm tra khách hàng có tồn tại
+    // ✅ Cập nhật NgayLap từ bảng Vé khi trạng thái vé = 'paid'
+    public void capNhatNgayLapTuVe(int maHoaDon) {
+        hoaDonDao.capNhatNgayLapTuVe(maHoaDon);
+    }
+
+    // 🔍 Kiểm tra khách hàng có tồn tại (cho phép null)
     private boolean isValidKhachHang(Integer maKH) {
         return maKH == null || khachHangDao.getByID(maKH) != null;
     }
 
-    // 🔍 Kiểm tra nhân viên có tồn tại
+    // 🔍 Kiểm tra nhân viên có tồn tại (cho phép null)
     private boolean isValidNhanVien(Integer maNV) {
         return maNV == null || nhanVienDao.getById(maNV) != null;
     }
 }
+// ✅ Phương thức này sẽ cập nhật NgayLap trong hóa đơn từ vé khi trạng thái vé = 'paid'

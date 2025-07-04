@@ -2,105 +2,89 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>📄 Quản Lý Hóa Đơn</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Quản lý Hóa Đơn</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body class="container py-4">
+<body>
+<div class="container">
+    <h1>📄 Quản lý Hóa Đơn</h1>
 
-    <h2 class="mb-4">📄 Danh sách hóa đơn</h2>
+    <!-- ✅ Thông báo -->
+    <p th:if="${message}" th:text="${message}" class="message" style="color: green;"></p>
 
-    <!-- Thông báo -->
-    <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
-
-    <!-- Form tìm kiếm -->
-    <form method="get" action="/hoadon" class="row g-2 mb-3">
-        <div class="col-md-3">
-            <input type="date" name="ngay" class="form-control" th:value="${searchDate}">
-        </div>
-        <div class="col-md-3">
-            <input type="number" name="maKH" class="form-control" placeholder="Tìm theo mã khách hàng" th:value="${maKH}">
-        </div>
-        <div class="col-md-3">
-            <input type="date" name="tuNgay" class="form-control" placeholder="Từ ngày" th:value="${tuNgay}">
-        </div>
-        <div class="col-md-3">
-            <input type="date" name="denNgay" class="form-control" placeholder="Đến ngày" th:value="${denNgay}">
-        </div>
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-primary mt-2">🔍 Lọc / Tính doanh thu</button>
-            <a href="/hoadon" class="btn btn-secondary mt-2">🔄 Reset</a>
-        </div>
+    <!-- ✅ Tìm kiếm -->
+    <form method="get" th:action="@{/hoadon}" class="form-inline" style="margin-bottom: 1em;">
+        <input type="date" name="ngay" th:value="${searchDate}" placeholder="Ngày lập">
+        <input type="number" name="maKH" th:value="${maKH}" placeholder="Mã KH">
+        <input type="date" name="tuNgay" th:value="${tuNgay}" placeholder="Từ ngày">
+        <input type="date" name="denNgay" th:value="${denNgay}" placeholder="Đến ngày">
+        <button type="submit">🔍 Tìm</button>
     </form>
 
-    <!-- Tổng doanh thu -->
-    <div class="mb-3">
-        <div th:if="${doanhThu}" class="alert alert-success">
-            💰 Doanh thu ngày [[${searchDate}]]: <strong>[[${doanhThu}]] VNĐ</strong>
-        </div>
-        <div th:if="${tongDoanhThuKhoang}" class="alert alert-success">
-            💵 Doanh thu từ [[${tuNgay}]] đến [[${denNgay}]]: <strong>[[${tongDoanhThuKhoang}]] VNĐ</strong>
-        </div>
+    <!-- ✅ Doanh thu -->
+    <div th:if="${doanhThu != null}">
+        <p>💰 Doanh thu ngày [[${searchDate}]]: <strong>[[${doanhThu}]] đ</strong></p>
+    </div>
+    <div th:if="${tongDoanhThuKhoang != null}">
+        <p>💰 Doanh thu từ [[${tuNgay}]] đến [[${denNgay}]]: <strong>[[${tongDoanhThuKhoang}]] đ</strong></p>
     </div>
 
-    <!-- Bảng hóa đơn -->
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>Mã HĐ</th>
-                <th>Mã NV</th>
-                <th>Mã KH</th>
-                <th>Ngày lập</th>
-                <th>Tổng tiền</th>
-                <th>Hành động</th>
-            </tr>
+    <!-- ✅ Form Thêm/Sửa Hóa Đơn -->
+    <h2 th:text="${hoaDon.maHoaDon} > 0 ? '✏️ Sửa hóa đơn' : '➕ Thêm hóa đơn mới'"></h2>
+    <form th:action="@{${hoaDon.maHoaDon} > 0 ? '/hoadon/update' : '/hoadon/add'}"
+          method="post"
+          th:object="${hoaDon}"
+          class="form-inline"
+          style="margin-bottom: 1em; gap: 1em; flex-wrap: wrap">
+
+        <input type="hidden" th:field="*{maHoaDon}">
+
+        <label>Mã NV:</label>
+        <input type="number" th:field="*{maNhanVien}" placeholder="Mã NV" required>
+
+        <label>Mã KH:</label>
+        <input type="number" th:field="*{maKhachHang}" placeholder="Mã KH" required>
+
+        <label>Tổng tiền:</label>
+        <input type="number" step="0.01" th:field="*{tongTien}" placeholder="Tổng tiền" required>
+
+        <!-- ✅ Không cần nhập NgayLap vì đã cập nhật tự động từ Vé -->
+        <button type="submit" th:text="${hoaDon.maHoaDon} > 0 ? '💾 Cập nhật' : '➕ Thêm mới'"></button>
+    </form>
+
+    <!-- ✅ Danh sách Hóa đơn -->
+    <h2>📋 Danh sách Hóa Đơn</h2>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: #f2f2f2;">
+        <tr>
+            <th>ID</th>
+            <th>Mã NV</th>
+            <th>Mã KH</th>
+            <th>Ngày lập</th>
+            <th>Tổng tiền</th>
+            <th>Hành động</th>
+        </tr>
         </thead>
         <tbody>
-        <tr th:each="hd, iterStat : ${hoaDonList}">
-            <td th:text="${iterStat.count}"></td>
+        <tr th:each="hd : ${hoaDonList}">
             <td th:text="${hd.maHoaDon}"></td>
-            <td th:text="${hd.maNhanVien} ?: '-'"></td>
-            <td th:text="${hd.maKhachHang} ?: '-'"></td>
+            <td th:text="${hd.maNhanVien}"></td>
+            <td th:text="${hd.maKhachHang}"></td>
             <td th:text="${hd.ngayLap}"></td>
-            <td th:text="${hd.tongTien} + ' VNĐ'"></td>
+            <td th:text="${#numbers.formatDecimal(hd.tongTien, 1, 'COMMA', 2, 'POINT')} + ' đ'"></td>
             <td>
-                <a th:href="@{'/hoadon/edit/' + ${hd.maHoaDon}}" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                <a th:href="@{'/hoadon/edit/' + ${hd.maHoaDon}}">✏️</a>
                 <form th:action="@{/hoadon/delete}" method="post" style="display:inline;">
-                    <input type="hidden" name="maHoaDon" th:value="${hd.maHoaDon}" />
-                    <button type="submit" class="btn btn-sm btn-danger"
-                            onclick="return confirm('Bạn chắc chắn muốn xoá?')">🗑️ Xoá</button>
+                    <input type="hidden" name="maHoaDon" th:value="${hd.maHoaDon}">
+                    <button type="submit" onclick="return confirm('Bạn chắc chắn muốn xóa?')">🗑️</button>
                 </form>
             </td>
         </tr>
+        <tr th:if="${hoaDonList.empty}">
+            <td colspan="6" style="text-align: center;">Không có hóa đơn nào.</td>
+        </tr>
         </tbody>
     </table>
-
-    <!-- Form thêm/sửa hóa đơn -->
-    <h3 class="mt-5" th:text="${hoaDon.maHoaDon} != null ? '✏️ Sửa Hóa Đơn' : '➕ Thêm Hóa Đơn'"></h3>
-
-    <form th:action="@{${hoaDon.maHoaDon} != null ? '/hoadon/update' : '/hoadon/add'}"
-          th:object="${hoaDon}" method="post" class="row g-3">
-
-        <input type="hidden" th:field="*{maHoaDon}"/>
-
-        <div class="col-md-4">
-            <label>Mã nhân viên</label>
-            <input type="number" th:field="*{maNhanVien}" class="form-control" placeholder="Có thể bỏ trống">
-        </div>
-        <div class="col-md-4">
-            <label>Mã khách hàng</label>
-            <input type="number" th:field="*{maKhachHang}" class="form-control" required>
-        </div>
-        <div class="col-md-4">
-            <label>Tổng tiền</label>
-            <input type="number" step="0.01" min="0" th:field="*{tongTien}" class="form-control" required>
-        </div>
-
-        <div class="col-12">
-            <button type="submit" class="btn btn-success">💾 Lưu</button>
-            <a href="/hoadon" class="btn btn-secondary">❌ Hủy</a>
-        </div>
-    </form>
-
+</div>
 </body>
 </html>

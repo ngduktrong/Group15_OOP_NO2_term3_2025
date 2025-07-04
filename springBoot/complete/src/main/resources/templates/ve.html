@@ -1,118 +1,179 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Quản lý Vé</title>
     <meta charset="UTF-8">
+    <title>Quản Lý Vé</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <style>
-        body { font-family: Arial; margin: 30px; background-color: #f5f5f5; }
-        h1 { color: #2c3e50; }
-        .container { max-width: 1000px; margin: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; border: 1px solid #ccc; text-align: center; }
-        .form-group { margin: 10px 0; }
-        input, select { padding: 5px; width: 100%; }
-        .actions { display: flex; gap: 10px; justify-content: center; }
-        .message { margin: 10px 0; font-weight: bold; }
-        .success { color: green; }
-        .error { color: red; }
-        .btn { padding: 6px 12px; border: none; cursor: pointer; border-radius: 5px; }
-        .btn-edit { background-color: #3498db; color: white; }
-        .btn-delete { background-color: #e74c3c; color: white; }
-        .btn-submit { background-color: #2ecc71; color: white; }
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .message.success {
+            color: green;
+        }
+
+        .message.error {
+            color: red;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        .form-container {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            max-width: 500px;
+        }
+
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            margin: 2px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #b02a37;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🎫 Quản lý Vé</h1>
+    <h1>🎟️ Quản Lý Vé</h1>
 
-    <div th:if="${message}" class="message" th:classappend="${message.startsWith('✅')} ? ' success' : ' error'">
-        <span th:text="${message}"></span>
+    <div th:if="${message}" 
+         th:class="'message ' + (${message.contains('✅')} ? 'success' : 'error')" 
+         th:text="${message}">
     </div>
 
-    <!-- Form Thêm hoặc Sửa -->
-    <form th:action="@{${editMode} ? '/ve/edit' : '/ve/add'}" method="post">
-        <input type="hidden" th:if="${editMode}" th:field="*{ve.maVe}"/>
+    <div class="form-container">
+        <h2 th:text="${editMode} ? '🛠️ Cập nhật Vé' : '➕ Thêm Vé mới'"></h2>
+        <form th:action="${editMode} ? @{/ve/edit} : @{/ve/add}" method="post" th:object="${ve}">
+            <input type="hidden" th:field="*{maVe}" />
 
-        <div class="form-group">
             <label>Mã Suất Chiếu:</label>
-            <input type="number" th:field="*{ve.maSuatChieu}" th:readonly="${editMode}" required />
-        </div>
+            <input type="number" th:field="*{maSuatChieu}" required />
 
-        <div class="form-group">
             <label>Mã Phòng:</label>
-            <input type="number" th:field="*{ve.maPhong}" required />
-        </div>
+            <input type="number" th:field="*{maPhong}" required />
 
-        <div class="form-group">
             <label>Số Ghế:</label>
-            <input type="text" th:field="*{ve.soGhe}" th:readonly="${editMode and ve.trangThai != 'Chưa thanh toán'}" required />
-        </div>
+            <input type="text" th:field="*{soGhe}" required />
 
-        <div class="form-group">
             <label>Mã Hóa Đơn:</label>
-            <input type="number" th:field="*{ve.maHoaDon}" required />
-        </div>
+            <input type="number" th:field="*{maHoaDon}" required />
 
-        <div class="form-group">
             <label>Giá Vé:</label>
-            <input type="number" step="0.01" th:field="*{ve.giaVe}" required />
-        </div>
+            <input type="number" step="0.01" th:field="*{giaVe}" required />
 
-        <div class="form-group">
             <label>Trạng Thái:</label>
-            <select th:field="*{ve.trangThai}">
+            <select th:field="*{trangThai}">
                 <option value="Chưa thanh toán">Chưa thanh toán</option>
-                <option value="Đã thanh toán">Đã thanh toán</option>
+                <option value="paid">Đã thanh toán</option>
             </select>
-        </div>
 
-        <!-- ✅ Đã đổi sang datetime-local -->
-        <div class="form-group">
-            <label>Ngày Đặt:</label>
-            <input type="datetime-local" th:field="*{ve.ngayDat}" required />
-        </div>
+            <label>Ngày Đặt (Tùy chọn):</label>
+            <input type="text" th:field="*{ngayDat}" placeholder="yyyy-MM-dd HH:mm:ss" />
 
-        <button type="submit" class="btn btn-submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
-        <a th:if="${editMode}" th:href="@{/ve}" class="btn">Hủy</a>
-    </form>
+            <button type="submit" class="btn" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
+            <a th:href="@{/ve}" class="btn">↩️ Làm mới</a>
+        </form>
+    </div>
 
-    <!-- Danh sách vé -->
-    <table>
-        <thead>
-        <tr>
-            <th>Mã Vé</th>
-            <th>Mã Suất Chiếu</th>
-            <th>Mã Phòng</th>
-            <th>Số Ghế</th>
-            <th>Mã Hóa Đơn</th>
-            <th>Giá Vé</th>
-            <th>Trạng Thái</th>
-            <th>Ngày Đặt</th>
-            <th>Thao tác</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="ve : ${veList}">
-            <td th:text="${ve.maVe}">1</td>
-            <td th:text="${ve.maSuatChieu}">101</td>
-            <td th:text="${ve.maPhong}">5</td>
-            <td th:text="${ve.soGhe}">A1</td>
-            <td th:text="${ve.maHoaDon}">202</td>
-            <td th:text="${ve.giaVe}">75000</td>
-            <td th:text="${ve.trangThai}">Chưa thanh toán</td>
-            <td th:text="${ve.ngayDat}">2025-07-01T10:30</td>
-            <td class="actions">
-                <form th:action="@{/ve/edit/{id}(id=${ve.maVe})}" method="get" th:if="${ve.trangThai == 'Chưa thanh toán'}">
-                    <button type="submit" class="btn btn-edit">✏️</button>
-                </form>
-                <form th:action="@{/ve/delete/{id}(id=${ve.maVe})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xoá vé này?');">
-                    <button type="submit" class="btn btn-delete">🗑️</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+    <div style="margin-top: 40px;">
+        <h2>📋 Danh Sách Vé</h2>
+        <p><strong>Tổng số vé đã thanh toán:</strong> <span th:text="${tongVeDaBan}"></span></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã Vé</th>
+                    <th>Mã Suất</th>
+                    <th>Mã Phòng</th>
+                    <th>Số Ghế</th>
+                    <th>Mã HĐ</th>
+                    <th>Giá Vé</th>
+                    <th>Trạng Thái</th>
+                    <th>Ngày Đặt</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ve : ${veList}">
+                    <td th:text="${ve.maVe}"></td>
+                    <td th:text="${ve.maSuatChieu}"></td>
+                    <td th:text="${ve.maPhong}"></td>
+                    <td th:text="${ve.soGhe}"></td>
+                    <td th:text="${ve.maHoaDon}"></td>
+                    <td th:text="${ve.giaVe}"></td>
+                    <td th:text="${ve.trangThai}"></td>
+                    <td th:text="${ve.ngayDat}"></td>
+                    <td>
+                        <a th:href="@{'/ve/edit/' + ${ve.maVe}}" class="btn">✏️</a>
+
+                        <form th:action="@{'/ve/delete/' + ${ve.maVe}}" method="post" style="display:inline;">
+                            <button class="btn btn-danger" type="submit">🗑️</button>
+                        </form>
+
+                        <form th:if="${ve.trangThai != 'paid'}" th:action="@{/ve/pay}" method="post" style="display:inline;">
+                            <input type="hidden" name="maVe" th:value="${ve.maVe}" />
+                            <button class="btn btn-success" type="submit">💰</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

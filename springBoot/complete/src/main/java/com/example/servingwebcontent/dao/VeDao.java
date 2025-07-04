@@ -1,4 +1,3 @@
-// VeDao.java (updated with getVeByMaHoaDon)
 package com.example.servingwebcontent.dao;
 
 import com.example.servingwebcontent.database.AivenConnection;
@@ -18,7 +17,6 @@ public class VeDao {
         try (Connection conn = AivenConnection.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 list.add(mapRow(rs));
             }
@@ -44,37 +42,36 @@ public class VeDao {
     }
 
     public void create(Ve ve) {
-    String sql = "INSERT INTO Ve (MaSuatChieu, MaPhong, SoGhe, MaHoaDon, GiaVe, TrangThai, NgayDat) " +
-                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-    try (Connection conn = AivenConnection.getConnection();
-         PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "INSERT INTO Ve (MaSuatChieu, MaPhong, SoGhe, MaHoaDon, GiaVe, TrangThai, NgayDat) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        conn.setAutoCommit(true); // <<< THÊM DÒNG NÀY
+            conn.setAutoCommit(true);
 
-        pst.setInt(1, ve.getMaSuatChieu());
-        pst.setInt(2, ve.getMaPhong());
-        pst.setString(3, ve.getSoGhe());
-        pst.setInt(4, ve.getMaHoaDon());
-        pst.setDouble(5, ve.getGiaVe());
-        pst.setString(6, ve.getTrangThai());
-        pst.setString(7, ve.getNgayDat());
+            pst.setInt(1, ve.getMaSuatChieu());
+            pst.setInt(2, ve.getMaPhong());
+            pst.setString(3, ve.getSoGhe());
+            pst.setInt(4, ve.getMaHoaDon());
+            pst.setDouble(5, ve.getGiaVe());
+            pst.setString(6, ve.getTrangThai());
+            pst.setString(7, ve.getNgayDat());
 
-        int affected = pst.executeUpdate();
-        if (affected == 0) {
-            System.out.println("⚠️ Không insert được vé vào DB.");
-        }
-
-        try (ResultSet keys = pst.getGeneratedKeys()) {
-            if (keys.next()) {
-                ve.setMaVe(keys.getInt(1));
-                System.out.println("✅ Đã tạo vé mới: " + ve.getMaVe());
+            int affected = pst.executeUpdate();
+            if (affected == 0) {
+                System.out.println("⚠️ Không insert được vé vào DB.");
             }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 
+            try (ResultSet keys = pst.getGeneratedKeys()) {
+                if (keys.next()) {
+                    ve.setMaVe(keys.getInt(1));
+                    System.out.println("✅ Đã tạo vé mới: " + ve.getMaVe());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void update(Ve ve) {
         String sql = "UPDATE Ve SET MaSuatChieu=?, MaPhong=?, SoGhe=?, MaHoaDon=?, GiaVe=?, TrangThai=?, NgayDat=? WHERE MaVe=?";
@@ -135,7 +132,7 @@ public class VeDao {
     }
 
     /**
-     * Lấy vé theo mã hóa đơn
+     * ✅ Lấy vé theo mã hóa đơn
      */
     public List<Ve> getVeByMaHoaDon(int maHoaDon) {
         List<Ve> list = new ArrayList<>();
@@ -154,6 +151,24 @@ public class VeDao {
         return list;
     }
 
+    /**
+     * ✅ Tính tổng số vé đã thanh toán (TrangThai = 'paid')
+     */
+    public int getSoVeDaThanhToan() {
+        String sql = "SELECT COUNT(*) AS SoLuong FROM Ve WHERE TrangThai = 'paid'";
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("SoLuong");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     private Ve mapRow(ResultSet rs) throws SQLException {
         return new Ve(
                 rs.getInt("MaVe"),
@@ -166,4 +181,53 @@ public class VeDao {
                 rs.getString("NgayDat")
         );
     }
+    public boolean updateTrangThaiVeToPaid(int maVe) {
+    try (Connection conn = AivenConnection.getConnection()) {
+        conn.setAutoCommit(false); // Đảm bảo tất cả cùng commit hoặc rollback
+
+        // 1. Lấy timestamp tại đây trước
+        Timestamp ngayDat = new Timestamp(System.currentTimeMillis());
+
+        // 2. Cập nhật trạng thái và thời gian đặt vé
+        String updateVeSql = "UPDATE Ve SET TrangThai = 'paid', NgayDat = ? WHERE MaVe = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(updateVeSql)) {
+            stmt.setTimestamp(1, ngayDat);
+            stmt.setInt(2, maVe);
+            int updated = stmt.executeUpdate();
+            if (updated == 0) {
+                conn.rollback();
+                return false;
+            }
+        }
+
+        // 3. Lấy MaHoaDon từ vé vừa thanh toán
+        int maHoaDon = -1;
+        String getHoaDonSql = "SELECT MaHoaDon FROM Ve WHERE MaVe = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(getHoaDonSql)) {
+            stmt.setInt(1, maVe);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                maHoaDon = rs.getInt("MaHoaDon");
+            }
+        }
+
+        // 4. Cập nhật NgayLap cho hóa đơn
+        if (maHoaDon > 0) {
+            String updateHoaDonSql = "UPDATE HoaDon SET NgayLap = ? WHERE MaHoaDon = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateHoaDonSql)) {
+                stmt.setTimestamp(1, ngayDat);
+                stmt.setInt(2, maHoaDon);
+                stmt.executeUpdate();
+            }
+        }
+
+        conn.commit();
+        return true;
+
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+        return false;
+    }
+    }
+
 }

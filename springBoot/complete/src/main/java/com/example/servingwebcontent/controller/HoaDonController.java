@@ -17,13 +17,7 @@ public class HoaDonController {
     @Autowired
     private HoaDonService hoaDonService;
 
-    /**
-     * Hiển thị danh sách hóa đơn với các chức năng tìm kiếm:
-     * - Theo khoảng ngày (từ ngày - đến ngày)
-     * - Theo ngày lập
-     * - Theo mã khách hàng
-     * Mỗi điều kiện hoạt động riêng biệt (chỉ cần thỏa 1 là được)
-     */
+    // ✅ Hiển thị danh sách + tìm kiếm hóa đơn
     @GetMapping
     public String listHoaDon(
             @RequestParam(value = "ngay", required = false) String ngayLap,
@@ -61,12 +55,11 @@ public class HoaDonController {
         return "hoadon";
     }
 
-    /**
-     * Thêm hóa đơn mới
-     */
+    // ✅ Thêm hóa đơn mới + cập nhật NgayLap
     @PostMapping("/add")
     public String addHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
         boolean success = hoaDonService.createHoaDon(hoaDon);
+
         String message = success ? "✅ Thêm hóa đơn thành công!" : "❌ Thêm hóa đơn thất bại!";
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
@@ -74,12 +67,11 @@ public class HoaDonController {
         return "hoadon";
     }
 
-    /**
-     * Cập nhật hóa đơn
-     */
+    // ✅ Cập nhật hóa đơn + cập nhật NgayLap
     @PostMapping("/update")
     public String updateHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
         boolean success = hoaDonService.updateHoaDon(hoaDon);
+
         String message = success ? "✅ Cập nhật hóa đơn thành công!" : "❌ Cập nhật hóa đơn thất bại!";
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
@@ -87,12 +79,11 @@ public class HoaDonController {
         return "hoadon";
     }
 
-    /**
-     * Xóa hóa đơn
-     */
+    // ✅ Xóa hóa đơn
     @PostMapping("/delete")
     public String deleteHoaDon(@RequestParam("maHoaDon") int id, Model model) {
         boolean success = hoaDonService.deleteHoaDon(id);
+
         String message = success ? "✅ Xóa hóa đơn thành công!" : "❌ Xóa hóa đơn thất bại!";
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
@@ -100,9 +91,7 @@ public class HoaDonController {
         return "hoadon";
     }
 
-    /**
-     * Hiển thị form sửa hóa đơn
-     */
+    // ✅ Hiển thị form sửa hóa đơn
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         HoaDon hd = hoaDonService.getHoaDonById(id);

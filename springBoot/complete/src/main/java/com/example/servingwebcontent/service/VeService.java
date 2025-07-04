@@ -39,36 +39,31 @@ public class VeService {
     }
 
     public boolean createVe(Ve ve) {
-        // ✅ Kiểm tra mã suất chiếu
         if (suatChieuDao.getById(ve.getMaSuatChieu()) == null) {
             System.out.println("❌ Mã suất chiếu không tồn tại!");
             return false;
         }
 
-        // ✅ Kiểm tra mã phòng
         if (phongChieuDao.getById(ve.getMaPhong()) == null) {
             System.out.println("❌ Mã phòng chiếu không tồn tại!");
             return false;
         }
 
-        // ✅ Kiểm tra mã hóa đơn
         if (hoaDonDao.getById(ve.getMaHoaDon()) == null) {
             System.out.println("❌ Mã hóa đơn không tồn tại!");
             return false;
         }
 
-        // ✅ Kiểm tra ghế có bị trùng không trong suất chiếu/phòng
         List<Ve> existing = veDao.getAll();
         for (Ve v : existing) {
             if (v.getMaSuatChieu() == ve.getMaSuatChieu()
-                && v.getMaPhong() == ve.getMaPhong()
-                && v.getSoGhe().equalsIgnoreCase(ve.getSoGhe())) {
+                    && v.getMaPhong() == ve.getMaPhong()
+                    && v.getSoGhe().equalsIgnoreCase(ve.getSoGhe())) {
                 System.out.println("❌ Ghế này đã được đặt trong suất chiếu/phòng tương ứng.");
                 return false;
             }
         }
 
-        // ✅ Thêm vé
         veDao.create(ve);
         System.out.println("✅ Thêm vé thành công!");
         return true;
@@ -82,20 +77,17 @@ public class VeService {
             return false;
         }
 
-        // ❌ Không cho sửa mã suất chiếu
         if (veMoi.getMaSuatChieu() != veCu.getMaSuatChieu()) {
             System.out.println("❌ Không được phép sửa mã suất chiếu. Vui lòng hủy và tạo vé mới.");
             return false;
         }
 
-        // ❌ Không được đổi ghế nếu đã thanh toán
         if (!veCu.getSoGhe().equalsIgnoreCase(veMoi.getSoGhe())
-            && !"Chưa thanh toán".equalsIgnoreCase(veCu.getTrangThai())) {
+                && !"Chưa thanh toán".equalsIgnoreCase(veCu.getTrangThai())) {
             System.out.println("❌ Không thể đổi ghế vì vé đã thanh toán.");
             return false;
         }
 
-        // ✅ Cho phép đổi trạng thái, có log
         if (!veCu.getTrangThai().equalsIgnoreCase(veMoi.getTrangThai())) {
             System.out.printf("📘 Trạng thái vé [%d] thay đổi: '%s' → '%s'%n",
                     veMoi.getMaVe(), veCu.getTrangThai(), veMoi.getTrangThai());
@@ -115,5 +107,23 @@ public class VeService {
             System.out.println("❌ Không tìm thấy vé để xoá!");
             return false;
         }
+    }
+
+    public int getSoVeDaThanhToan() {
+        return veDao.getSoVeDaThanhToan();
+    }
+
+    public boolean markVeAsPaid(int maVe) {
+        boolean success = veDao.updateTrangThaiVeToPaid(maVe);
+        if (success) {
+            Ve ve = veDao.getById(maVe);
+            if (ve != null && ve.getMaHoaDon() > 0) {
+                hoaDonDao.capNhatNgayLapTuVe(ve.getMaHoaDon());
+                System.out.println("✅ Đã cập nhật NgayLap cho hóa đơn: " + ve.getMaHoaDon());
+            }
+        } else {
+            System.out.println("❌ Thanh toán thất bại!");
+        }
+        return success;
     }
 }

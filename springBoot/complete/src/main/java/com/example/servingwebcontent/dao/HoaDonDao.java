@@ -206,4 +206,28 @@ public class HoaDonDao {
         hd.setTongTien(rs.getDouble("TongTien"));
         return hd;
     }
+    // ✅ Cập nhật NgayLap của HoaDon từ thời gian đặt vé mới nhất
+    public void capNhatNgayLapTuVe(int maHoaDon) {
+    String sql = """
+        UPDATE HoaDon
+        SET NgayLap = (
+            SELECT MAX(NgayDat)
+            FROM Ve
+            WHERE MaHoaDon = ?
+              AND TrangThai = 'paid'
+        )
+        WHERE MaHoaDon = ?
+    """;
+
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+
+        pst.setInt(1, maHoaDon);
+        pst.setInt(2, maHoaDon);
+        pst.executeUpdate();
+
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+    }
 }

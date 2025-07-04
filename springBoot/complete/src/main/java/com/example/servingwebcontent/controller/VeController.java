@@ -11,25 +11,40 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ve")
 public class VeController {
 
-    private final VeService veService;
-
     @Autowired
-    public VeController(VeService veService) {
-        this.veService = veService;
-    }
+    private VeService veService;
 
-    // ✅ Hiển thị danh sách vé và form thêm mới
-    @GetMapping({"", "/", "/view"})
-    public String viewVe(Model model,
-                         @RequestParam(value = "message", required = false, defaultValue = "") String message) {
+    // ✅ Hiển thị danh sách + form thêm
+    @GetMapping
+    public String viewVe(Model model) {
         model.addAttribute("veList", veService.getAllVe());
         model.addAttribute("ve", new Ve());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", message);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
         return "ve";
     }
 
-    // ✅ Hiển thị form sửa vé
+    // ✅ Thêm vé mới
+    @PostMapping("/add")
+    public String addVe(@ModelAttribute Ve ve, Model model) {
+        if (ve.getTrangThai() == null || ve.getTrangThai().isEmpty()) {
+            ve.setTrangThai("Chưa thanh toán");
+        }
+
+        boolean success = veService.createVe(ve);
+        String message = success
+                ? "✅ Thêm vé thành công!"
+                : "❌ Không thể thêm vé: Ghế đã được đặt hoặc mã không hợp lệ!";
+
+        model.addAttribute("message", message);
+        model.addAttribute("veList", veService.getAllVe());
+        model.addAttribute("ve", new Ve());
+        model.addAttribute("editMode", false);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
+        return "ve";
+    }
+
+    // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
     public String editVe(@PathVariable("id") int maVe, Model model) {
         Ve ve = veService.getVeById(maVe);
@@ -40,31 +55,11 @@ public class VeController {
             ve = new Ve();
         }
 
-        model.addAttribute("veList", veService.getAllVe());
+        model.addAttribute("message", message);
         model.addAttribute("ve", ve);
-        model.addAttribute("editMode", true);
-        model.addAttribute("message", message);
-        return "ve";
-    }
-
-    // ✅ Thêm vé mới (kiểm tra hợp lệ + trùng ghế)
-    @PostMapping("/add")
-    public String addVe(@ModelAttribute Ve ve, Model model) {
-        boolean success = veService.createVe(ve);
-        String message;
-
-        if (success) {
-            message = "✅ Thêm vé thành công!";
-            model.addAttribute("ve", new Ve()); // reset form
-        } else {
-            // Trường hợp thất bại sẽ tự log bên service → thông báo chung
-            message = "❌ Không thể thêm vé: Ghế đã được đặt hoặc mã không hợp lệ!";
-            model.addAttribute("ve", ve); // giữ lại dữ liệu người dùng
-        }
-
         model.addAttribute("veList", veService.getAllVe());
-        model.addAttribute("editMode", false);
-        model.addAttribute("message", message);
+        model.addAttribute("editMode", true);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
         return "ve";
     }
 
@@ -72,19 +67,15 @@ public class VeController {
     @PostMapping("/edit")
     public String updateVe(@ModelAttribute Ve ve, Model model) {
         boolean success = veService.updateVe(ve);
-        String message;
+        String message = success
+                ? "✅ Cập nhật vé thành công!"
+                : "❌ Không thể cập nhật vé: Không được sửa mã suất chiếu hoặc vé đã thanh toán!";
 
-        if (success) {
-            message = "✅ Cập nhật vé thành công!";
-            model.addAttribute("ve", new Ve());
-        } else {
-            message = "❌ Không thể cập nhật vé: Không được sửa mã suất chiếu hoặc vé đã thanh toán!";
-            model.addAttribute("ve", ve);
-        }
-
+        model.addAttribute("message", message);
+        model.addAttribute("ve", new Ve());
         model.addAttribute("veList", veService.getAllVe());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", message);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
         return "ve";
     }
 
@@ -96,10 +87,27 @@ public class VeController {
                 ? "✅ Xoá vé thành công!"
                 : "❌ Không thể xoá vé: Mã vé không tồn tại!";
 
-        model.addAttribute("veList", veService.getAllVe());
-        model.addAttribute("ve", new Ve());
-        model.addAttribute("editMode", false);
         model.addAttribute("message", message);
+        model.addAttribute("ve", new Ve());
+        model.addAttribute("veList", veService.getAllVe());
+        model.addAttribute("editMode", false);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
+        return "ve";
+    }
+
+    // ✅ Thanh toán vé
+    @PostMapping("/pay")
+    public String payVe(@RequestParam("maVe") int maVe, Model model) {
+        boolean success = veService.markVeAsPaid(maVe);
+        String message = success
+                ? "✅ Thanh toán vé thành công! Ngày đặt và hóa đơn đã được cập nhật."
+                : "❌ Thanh toán thất bại: Không tìm thấy vé hoặc lỗi hệ thống!";
+
+        model.addAttribute("message", message);
+        model.addAttribute("ve", new Ve());
+        model.addAttribute("veList", veService.getAllVe());
+        model.addAttribute("editMode", false);
+        model.addAttribute("tongVeDaBan", veService.getSoVeDaThanhToan());
         return "ve";
     }
 }
