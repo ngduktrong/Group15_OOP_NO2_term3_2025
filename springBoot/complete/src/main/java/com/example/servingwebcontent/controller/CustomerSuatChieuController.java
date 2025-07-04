@@ -31,14 +31,18 @@ public String showSeatSelection(
     
     // Kiểm tra đăng nhập
     if (session.getAttribute("maKhachHang") == null) {
-        return "redirect:/login";
+        return "login";
     }
 
     // Lấy thông tin suất chiếu
     SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
     if (suatChieu == null) {
-        return "redirect:/customer/movies";
+        return "customer/movies";
     }
+
+    // Lưu mã suất chiếu và mã phòng vào session
+    session.setAttribute("maSuatChieu", maSuatChieu); // Thêm dòng này
+    session.setAttribute("maPhong", suatChieu.getMaPhong()); // Thêm dòng này
 
     // Lấy danh sách ghế theo phòng
     List<Ghe> listGhe = gheService.getByMaPhong(suatChieu.getMaPhong());

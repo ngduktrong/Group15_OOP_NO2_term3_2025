@@ -1,0 +1,2 @@
+Ve{MaVe=3402, MaSuatChieu=4, MaPhong=2, SoGhe='A01', MaHoaDon=636675, GiaVe=50000.0, TrangThai='paid', NgayDat='2025-07-05 00:39:25.4929381', NgayGioChieu=null}
+Ve{MaVe=5688, MaSuatChieu=4, MaPhong=2, SoGhe='A02', MaHoaDon=636675, GiaVe=50000.0, TrangThai='paid', NgayDat='2025-07-05 00:39:25.4929381', NgayGioChieu=null}

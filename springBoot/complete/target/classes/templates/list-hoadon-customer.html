@@ -1,64 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Thanh Toán Hóa Đơn</title>
-  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <meta charset="UTF-8">
+    <title>Hóa đơn</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .invoice-container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-detail {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h2>THANH TOÁN HÓA ĐƠN</h2>
-  
-  <form th:action="@{/customer/hoadon/thanhtoan}" method="post">
-    <!-- Thông tin hóa đơn -->
-    <div class="form-group">
-      <label>Mã nhân viên:</label>
-      <input type="text" class="form-control" th:value="6" readonly>
+    <div class="container">
+        <div class="invoice-container">
+            <div class="invoice-header">
+                <h2>HÓA ĐƠN THANH TOÁN</h2>
+            </div>
+            
+            <form th:action="@{/customer/hoadon/thanh-toan}" method="post">
+                <!-- Các thông tin ẩn để gửi đi -->
+                <input type="hidden" name="maSuatChieu" th:value="${suatChieu.maSuatChieu}">
+                <input type="hidden" name="maPhong" th:value="${maPhong}">
+                <input type="hidden" name="tongTien" th:value="${tongTien}">
+                <input type="hidden" th:each="seat : ${selectedSeats}" th:name="selectedSeats" th:value="${seat}">
+                
+                <!-- Hiển thị thông tin hóa đơn -->
+                <div class="invoice-detail">
+                    <label class="font-weight-bold">Mã khách hàng:</label>
+                    <span th:text="${hoaDon.maKhachHang}"></span>
+                </div>
+                
+                <div class="invoice-detail">
+                    <label class="font-weight-bold">Mã nhân viên:</label>
+                    <span>6</span>
+                </div>
+                
+                <div class="invoice-detail">
+                    <label class="font-weight-bold">Tổng tiền:</label>
+                    <span th:text="${tongTien} + ' VND'"></span>
+                </div>
+                
+                <div class="invoice-detail">
+                    <label class="font-weight-bold">Ngày lập:</label>
+                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}"></span>
+                </div>
+                
+                <div class="invoice-detail">
+                    <label class="font-weight-bold">Ghế đã chọn:</label>
+                    <span th:each="seat, iterStat : ${selectedSeats}" 
+                          th:text="${seat} + (${iterStat.last} ? '' : ', ')"></span>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Thanh toán</button>
+                </div>
+            </form>
+        </div>
     </div>
-    
-    <div class="form-group">
-      <label>Mã khách hàng:</label>
-      <input type="text" class="form-control" th:value="${hoaDon.maKhachHang}" readonly>
-    </div>
-    
-    <!-- Thông tin phim và suất chiếu -->
-    <div class="form-group">
-      <label>Phim:</label>
-      <input type="text" class="form-control" th:value="${phim.tenPhim}" readonly>
-    </div>
-    
-    <div class="form-group">
-      <label>Suất chiếu:</label>
-      <input type="text" class="form-control" 
-             th:value="${suatChieu.ngayChieu} - ${suatChieu.gioChieu}" readonly>
-    </div>
-    
-    <div class="form-group">
-      <label>Phòng:</label>
-      <input type="text" class="form-control" th:value="${maPhong}" readonly>
-    </div>
-    
-    <div class="form-group">
-      <label>Ghế đã chọn:</label>
-      <input type="text" class="form-control" 
-             th:value="${#strings.join(selectedSeats, ', ')}" readonly>
-    </div>
-    
-    <div class="form-group">
-      <label>Tổng tiền:</label>
-      <input type="text" class="form-control" th:value="${tongTien} VND" readonly>
-    </div>
-    
-    <!-- Các trường ẩn để gửi dữ liệu -->
-    <input type="hidden" name="soGhe" th:value="${#strings.join(selectedSeats, ',')}">
-    <input type="hidden" name="maSuatChieu" th:value="${suatChieu.maSuatChieu}">
-    <input type="hidden" name="maPhong" th:value="${maPhong}">
-    <input type="hidden" th:field="*{hoaDon.maKhachHang}">
-    <input type="hidden" th:field="*{hoaDon.tongTien}">
-    <input type="hidden" th:field="*{hoaDon.maNhanVien}" value="6">
-    
-    <button type="submit" class="btn btn-primary">Thanh toán</button>
-  </form>
-</div>
 </body>
 </html>

@@ -87,6 +87,8 @@ public class CustomerGheController {
     model.addAttribute("maPhong", maPhong);
     model.addAttribute("tongTien", tongTien);
     
+    
+    
     return "list-hoadon-customer"; // Trả về trực tiếp view hóa đơn
 }
 }

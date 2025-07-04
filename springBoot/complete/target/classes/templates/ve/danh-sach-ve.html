@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách vé</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h3>Danh sách vé đã lưu</h3>
+            </div>
+            <div class="card-body">
+                <p class="alert alert-success">
+                    Thông tin vé đã được lưu thành công vào file: 
+                    <strong>danh-sach-ve-customer.txt</strong>
+                </p>
+                <p>Bạn có thể mở file này để xem chi tiết các vé đã đặt.</p>
+                <a th:href="@{/customer/movies}" class="btn btn-primary">Quay lại trang chủ</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
