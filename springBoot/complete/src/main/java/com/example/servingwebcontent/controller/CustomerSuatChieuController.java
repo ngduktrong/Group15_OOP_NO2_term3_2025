@@ -40,9 +40,10 @@ public String showSeatSelection(
         return "customer/movies";
     }
 
-    // Lưu mã suất chiếu và mã phòng vào session
-    session.setAttribute("maSuatChieu", maSuatChieu); // Thêm dòng này
-    session.setAttribute("maPhong", suatChieu.getMaPhong()); // Thêm dòng này
+    // Lưu mã suất chiếu, mã phòng và mã phim vào session
+    session.setAttribute("maSuatChieu", maSuatChieu);
+    session.setAttribute("maPhong", suatChieu.getMaPhong());
+    session.setAttribute("maPhim", suatChieu.getMaPhim()); // Thêm dòng này
 
     // Lấy danh sách ghế theo phòng
     List<Ghe> listGhe = gheService.getByMaPhong(suatChieu.getMaPhong());

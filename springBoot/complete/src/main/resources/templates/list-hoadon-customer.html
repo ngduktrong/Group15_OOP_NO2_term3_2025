@@ -3,34 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Hóa đơn</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-    <style>
-        .invoice-container {
-            max-width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .invoice-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .invoice-detail {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/customer-hoadon.css}">
 </head>
 <body>
-    <div class="container">
-        <div class="invoice-container">
-            <div class="invoice-header">
-                <h2>HÓA ĐƠN THANH TOÁN</h2>
-            </div>
-            
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h2><i class="fas fa-receipt me-2"></i>HÓA ĐƠN THANH TOÁN</h2>
+        </div>
+        
+        <div class="invoice-body">
             <form th:action="@{/customer/hoadon/thanh-toan}" method="post">
                 <!-- Các thông tin ẩn để gửi đi -->
                 <input type="hidden" name="maSuatChieu" th:value="${suatChieu.maSuatChieu}">
@@ -40,36 +23,62 @@
                 
                 <!-- Hiển thị thông tin hóa đơn -->
                 <div class="invoice-detail">
-                    <label class="font-weight-bold">Mã khách hàng:</label>
-                    <span th:text="${hoaDon.maKhachHang}"></span>
+                    <div class="invoice-label">
+                        <i class="fas fa-user-tag"></i>
+                        <span>Mã khách hàng:</span>
+                    </div>
+                    <div class="invoice-value" th:text="${hoaDon.maKhachHang}"></div>
                 </div>
                 
                 <div class="invoice-detail">
-                    <label class="font-weight-bold">Mã nhân viên:</label>
-                    <span>6</span>
+                    <div class="invoice-label">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Mã nhân viên:</span>
+                    </div>
+                    <div class="invoice-value">6</div>
                 </div>
                 
                 <div class="invoice-detail">
-                    <label class="font-weight-bold">Tổng tiền:</label>
-                    <span th:text="${tongTien} + ' VND'"></span>
+                    <div class="invoice-label">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Tổng tiền:</span>
+                    </div>
+                    <div class="invoice-value price-tag">
+                        <span class="price-value" th:text="${tongTien} + ' VND'"></span>
+                    </div>
                 </div>
                 
                 <div class="invoice-detail">
-                    <label class="font-weight-bold">Ngày lập:</label>
-                    <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}"></span>
+                    <div class="invoice-label">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Ngày lập:</span>
+                    </div>
+                    <div class="invoice-value" th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}"></div>
                 </div>
                 
                 <div class="invoice-detail">
-                    <label class="font-weight-bold">Ghế đã chọn:</label>
-                    <span th:each="seat, iterStat : ${selectedSeats}" 
-                          th:text="${seat} + (${iterStat.last} ? '' : ', ')"></span>
+                    <div class="invoice-label">
+                        <i class="fas fa-couch"></i>
+                        <span>Ghế đã chọn:</span>
+                    </div>
+                    <div class="invoice-value seats-value">
+                        <span th:each="seat, iterStat : ${selectedSeats}" 
+                              class="seat-tag"
+                              th:text="${seat}"></span>
+                    </div>
                 </div>
                 
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Thanh toán</button>
-                </div>
+                <button type="submit" class="btn btn-payment">
+                    <i class="fas fa-credit-card me-2"></i> Thanh toán
+                </button>
             </form>
         </div>
+        
+        <div class="invoice-footer">
+            <p>Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!</p>
+        </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

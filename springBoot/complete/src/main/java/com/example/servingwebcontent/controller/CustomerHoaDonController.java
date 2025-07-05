@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+// Thêm các import sau
+import com.example.servingwebcontent.models.SuatChieu;
+import com.example.servingwebcontent.models.Phim;
+import com.example.servingwebcontent.service.SuatChieuService;
+import com.example.servingwebcontent.service.PhimService;
+
 @Controller
 @RequestMapping("/customer/hoadon")
 public class CustomerHoaDonController {
@@ -27,6 +33,13 @@ public class CustomerHoaDonController {
 
     @Autowired
     private VeService veService;
+    
+    // Thêm 2 service mới
+    @Autowired
+    private SuatChieuService suatChieuService;
+    
+    @Autowired
+    private PhimService phimService;
 
     @PostMapping("/thanh-toan")
     public String thanhToanHoaDon(
@@ -83,9 +96,22 @@ public class CustomerHoaDonController {
             listVe.add(ve);
         }
         
+        // Lấy thông tin suất chiếu để lấy mã phim
+        SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
+        String tenPhim = "Không rõ";
+        if (suatChieu != null) {
+            // Lấy thông tin phim
+            Phim phim = phimService.getPhimById(suatChieu.getMaPhim());
+            if (phim != null) {
+                tenPhim = phim.getTenPhim();
+            }
+        }
+        
         // Thêm dữ liệu vào model để hiển thị trang vé
         model.addAttribute("listVe", listVe);
         model.addAttribute("hoaDon", hoaDon);
+        model.addAttribute("tenPhim", tenPhim); // Thêm tên phim
+        
         return "list-ve-customer";
     }
 }

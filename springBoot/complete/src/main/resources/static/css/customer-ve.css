@@ -1,0 +1,319 @@
+ /* ===== BASE STYLES ===== */
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f8f9fa;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        .ticket-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .ticket-header h2 {
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .ticket-header h2:after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff9a8b, #ff6a88);
+            border-radius: 2px;
+        }
+        
+        /* ===== INVOICE CONTAINER ===== */
+        .ticket-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ticket-container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+        
+        /* ===== INVOICE DETAILS ===== */
+        .invoice-details {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .invoice-details h4 {
+            font-weight: 700;
+            color: #ff9a8b;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .invoice-details h4:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff9a8b, #ff6a88);
+            border-radius: 2px;
+        }
+        
+        .invoice-row {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .invoice-label {
+            width: 40%;
+            font-weight: 600;
+            color: #a1c4fd;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .invoice-value {
+            width: 60%;
+            font-weight: 500;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        .price-value {
+            color: #96c93d;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+        
+        /* ===== TICKET CARD ===== */
+        .ticket-list-title {
+            font-weight: 700;
+            color: #ff9a8b;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .ticket-list-title:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, #00b09b, #96c93d);
+            border-radius: 2px;
+        }
+        
+        .ticket-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.2);
+        }
+        
+        .ticket-header {
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #96c93d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ticket-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .ticket-label {
+            width: 40%;
+            font-weight: 600;
+            color: #a1c4fd;
+        }
+        
+        .ticket-value {
+            width: 60%;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+        }
+        
+        /* ===== BUTTON STYLES ===== */
+        .btn-complete {
+            background: linear-gradient(45deg, #ff9a8b, #ff6a88);
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            margin: 40px auto 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 20px rgba(255, 106, 136, 0.3);
+        }
+        
+        .btn-complete::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff6a88, #ff9a8b);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn-complete:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(255, 106, 136, 0.5);
+        }
+        
+        .btn-complete:hover::before {
+            left: 0;
+        }
+        
+        /* ===== FOOTER STYLES ===== */
+        .ticket-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .invoice-details, .ticket-list-title {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .ticket-card {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .ticket-card:nth-child(1) { animation-delay: 0.2s; }
+        .ticket-card:nth-child(2) { animation-delay: 0.3s; }
+        .ticket-card:nth-child(3) { animation-delay: 0.4s; }
+        .ticket-card:nth-child(4) { animation-delay: 0.5s; }
+        .ticket-card:nth-child(5) { animation-delay: 0.6s; }
+        .btn-complete { animation: fadeIn 0.7s ease forwards; }
+        
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            .ticket-container {
+                padding: 25px;
+            }
+            
+            .ticket-header h2 {
+                font-size: 2rem;
+            }
+            
+            .invoice-row, .ticket-row {
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .invoice-label, .invoice-value,
+            .ticket-label, .ticket-value {
+                width: 100%;
+            }
+            
+            .invoice-details h4 {
+                font-size: 1.5rem;
+            }
+            
+            .ticket-list-title {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .ticket-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .invoice-details {
+                padding: 20px;
+            }
+            
+            .ticket-card {
+                padding: 20px;
+            }
+            
+            .btn-complete {
+                font-size: 1.1rem;
+                padding: 12px 30px;
+            }
+        }

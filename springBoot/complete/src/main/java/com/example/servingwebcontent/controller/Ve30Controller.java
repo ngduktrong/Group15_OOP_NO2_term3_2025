@@ -96,7 +96,7 @@ public class Ve30Controller {
         for (Ve ve : veSapChieu) {
             System.out.println("🎯 Gửi thông báo đến khách có vé mã: " + ve.getMaVe());
             System.out.println("""
-🎬 [TrọMạKaa Cinema] - Thông Báo Dễ Thương 🍿
+🎬 [T&M Cinema] - Thông Báo Dễ Thương 🍿
 Xin chào bạn iu 💌
 
 ⏰ Bing bong~ Chiếc vé xem phim xinh xắn của bạn sắp tới giờ chiếu rồi đó nha!

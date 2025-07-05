@@ -65,6 +65,13 @@
 <body>
 
 <h1>🎬 Kiểm Tra Vé Sắp Chiếu Trong 30 Phút</h1>
+<div class="back-container">
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
+        </button>
+    </a>
+</div>
 
 <!-- ✅ Thông báo nếu có -->
 <div th:if="${message}" class="message success">

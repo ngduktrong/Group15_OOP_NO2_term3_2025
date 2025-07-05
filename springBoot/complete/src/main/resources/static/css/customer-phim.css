@@ -1,103 +1,284 @@
-/* customer-phim.css */
-
-body {
-  background: url('/image/background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-  max-width: 1000px;
-  margin: 20px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-}
-
-.tieude {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2c3e50;
-}
-
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.movie-card {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 0 6px rgba(0,0,0,0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.poster-wrapper {
-  width: 100%;
-  height: 300px;
-  background: #eaeaea;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.poster-wrapper img.poster {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: cover;
-}
-
-.no-poster {
-  color: #666;
-  font-style: italic;
-}
-
-.movie-card h3 {
-  margin: 10px;
-  font-size: 18px;
-  color: #333;
-}
-
-.movie-card p {
-  margin: 5px 10px;
-  font-size: 14px;
-}
-
-.btn.book-ticket {
-  display: block;
-  margin: 15px 10px;
-  padding: 8px;
-  text-align: center;
-  background-color: #28a745;
-  color: white;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.btn.book-ticket:hover {
-  background-color: #218838;
-}
-
-.empty-message {
-  text-align: center;
-  margin-top: 20px;
-  color: #666;
-  font-style: italic;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .movie-card {
-    height: auto;
-  }
-  .poster-wrapper {
-    height: 200px;
-  }
-}
+ /* CSS hoàn chỉnh cho giao diện phim */
+    /* Font chữ mới */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    /* Reset và base styles */
+    body {
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+        background-attachment: fixed;
+        font-family: 'Montserrat', sans-serif;
+        color: #f8f9fa;
+        min-height: 100vh;
+    }
+    a {
+        text-decoration: none;
+        
+    }
+    /* Navbar cải tiến */
+    .navbar {
+        background: linear-gradient(90deg, #0f0c29, #302b63, #24243e) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        padding: 12px 0;
+    }
+    
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 1.8rem;
+        letter-spacing: 1.5px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    
+    .navbar-text {
+        font-size: 1.1rem;
+    }
+    
+    /* CSS cho user info */
+    .user-info-wrapper {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+    }
+    
+    .user-detail {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-right: 15px;
+    }
+    
+    .logout-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    /* CSS cho tiêu đề */
+    .title-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin: 2rem 0;
+    }
+    
+    .title-wrapper h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        position: relative;
+        padding-bottom: 15px;
+        text-align: center;
+    }
+    
+    .title-divider {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4px;
+        background: linear-gradient(90deg, #ff416c, #ff4b2b);
+        border-radius: 2px;
+    }
+    
+    /* Card phim */
+    .card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        color: #e9ecef;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.12);
+    }
+    
+    .poster-wrapper {
+        border-radius: 15px 15px 0 0;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .poster {
+        transition: transform 0.5s ease;
+    }
+    
+    .card:hover .poster {
+        transform: scale(1.05);
+    }
+    
+    .no-poster {
+        background: linear-gradient(45deg, #4A00E0, #8E2DE2);
+        color: white;
+        font-weight: 500;
+    }
+    
+    /* Card body */
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .card-title {
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .card-text p {
+        margin-bottom: 0.7rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-text i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+        color: #ff4b2b;
+        min-width: 24px;
+        text-align: center;
+    }
+    
+    /* Nút đặt vé */
+    .book-ticket {
+        background: linear-gradient(45deg, #FF416C, #FF4B2B);
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        padding: 10px 0;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .book-ticket:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #FF4B2B, #FF416C);
+        transition: all 0.6s ease;
+        z-index: -1;
+    }
+    
+    .book-ticket:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 15px rgba(255, 75, 43, 0.4);
+    }
+    
+    .book-ticket:hover:before {
+        left: 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+        
+        .user-info-wrapper {
+            flex-direction: column;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+        
+        .user-detail {
+            align-items: flex-end;
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+        
+        .title-wrapper h1 {
+            font-size: 2rem;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+    }
+    
+    /* Footer */
+    .footer {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 30px 0;
+        margin-top: 50px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .footer h5 {
+        color: #ff4b2b;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    
+    .footer p, .footer a {
+        color: #ddd;
+        transition: all 0.3s;
+    }
+    
+    .footer a:hover {
+        color: #ff4b2b;
+        text-decoration: none;
+    }
+    
+    .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .social-icons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+    
+    .social-icons a:hover {
+        background: #ff4b2b;
+        transform: translateY(-3px);
+    }
+    
+    .copyright {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        margin-top: 30px;
+        color: #aaa;
+    }
+    
+    /* Alert thông báo */
+    .alert-info {
+        background: rgba(23, 162, 184, 0.2);
+        border: 1px solid rgba(23, 162, 184, 0.3);
+        color: #e9ecef;
+    }

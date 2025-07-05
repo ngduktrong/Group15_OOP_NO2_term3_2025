@@ -24,6 +24,7 @@ public class GheService {
     public List<Ghe> getAllGhe() {
         return gheDao.getAll();
     }
+    
 
     public Ghe getGheById(String soGhe, int maPhong) {
         return gheDao.getById(soGhe, maPhong);
@@ -84,4 +85,16 @@ public class GheService {
     public List<Ghe> getByMaPhong(int maPhong) {
         return gheDao.getByMaPhong(maPhong);
     }
+    public void delete(String soGhe) {
+       
+        Ghe ghe = gheDao.getById(soGhe, 0); 
+        if (ghe != null) {
+            gheDao.delete(soGhe, ghe.getMaPhong());
+            System.out.println("✅ Xoá ghế thành công: " + soGhe);
+        } else {
+            System.err.println("❌ Không tìm thấy ghế để xoá: " + soGhe);
+        }
+    }
+
+    
 }

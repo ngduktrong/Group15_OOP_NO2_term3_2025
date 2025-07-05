@@ -342,7 +342,11 @@
         <input type="email" th:field="*{email}" required />
 
         <label>Loại người dùng:</label>
-        <input type="text" th:field="*{loaiNguoiDung}" required />
+        <select th:field="*{loaiNguoiDung}" class="form-control" required>
+            <option value="" disabled selected>-- Chọn loại người dùng --</option>
+            <option value="NhanVien">Nhân viên</option>
+            <option value="KhachHang">Khách hàng</option>
+        </select>
 
         <button type="submit" th:text="*{maNguoiDung} == 0 ? 'Thêm mới' : 'Cập nhật'"></button>
         <a th:href="@{/nguoidung}"><button type="button">Huỷ</button></a>

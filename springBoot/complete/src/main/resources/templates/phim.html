@@ -22,8 +22,16 @@
   </style>
 </head>
 <body>
+  
 
 <h1>🎬 Quản lý phim</h1>
+<div class="back-container">
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
+        </button>
+    </a>
+</div>
 
 <!-- ✅ Thông báo -->
 <div th:if="${message}" class="message" th:text="${message}"></div>

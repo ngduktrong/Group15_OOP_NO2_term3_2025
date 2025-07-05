@@ -16,13 +16,10 @@ public class GheApiController {
 
     @GetMapping
     public List<Ghe> getAllGhes() {
-        return gheService.getAll();
+        return gheService.getAllGhe();
     }
 
-    @GetMapping("/{soGhe}")
-    public Ghe getGheBySoGhe(@PathVariable String soGhe) {
-        return gheService.getBySoGhe(soGhe);
-    }
+    
 
     @GetMapping("/phong/{maPhong}")
     public List<Ghe> getGheByMaPhong(@PathVariable int maPhong) {
@@ -31,17 +28,17 @@ public class GheApiController {
 
     @PostMapping
     public void createGhe(@RequestBody Ghe ghe) {
-        gheService.create(ghe);
+        gheService.createGhe(ghe);
     }
 
     @PutMapping("/{soGhe}")
     public void updateGhe(@PathVariable String soGhe, @RequestBody Ghe ghe) {
         ghe.setSoGhe(soGhe); // Đảm bảo số ghế được set đúng
-        gheService.update(ghe);
+        gheService.updateGhe(ghe);
     }
 
     @DeleteMapping("/{soGhe}")
-    public void deleteGhe(@PathVariable String soGhe) {
+    public void deleteGhe(@PathVariable String soGhe, @RequestParam int maPhong) {
         gheService.delete(soGhe);
     }
 }

@@ -8,6 +8,13 @@
 <body>
 <div class="container">
     <h1>📄 Quản lý Hóa Đơn</h1>
+    <div class="back-container">
+    <a th:href="@{/admin/dashboard}">
+        <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
+        </button>
+    </a>
+</div>
 
     <!-- ✅ Thông báo -->
     <p th:if="${message}" th:text="${message}" class="message" style="color: green;"></p>
