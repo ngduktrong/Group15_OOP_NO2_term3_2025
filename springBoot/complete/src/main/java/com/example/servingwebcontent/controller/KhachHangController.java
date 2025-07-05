@@ -16,7 +16,7 @@ public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
 
-    // Hiển thị danh sách và form thêm
+    // ✅ Hiển thị danh sách và form thêm
     @GetMapping({"", "/", "/view"})
     public String viewKhachHang(Model model) {
         List<KhachHang> list = khachHangService.getAllKhachHang();
@@ -27,7 +27,7 @@ public class KhachHangController {
         return "khachhang";
     }
 
-    // Hiển thị form sửa
+    // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
     public String editKhachHang(@PathVariable int id, Model model) {
         KhachHang kh = khachHangService.getKhachHangById(id);
@@ -38,11 +38,20 @@ public class KhachHangController {
         return "khachhang";
     }
 
-    // Thêm khách hàng
+    // ✅ Thêm khách hàng (có xử lý lỗi nếu không đúng vai trò)
     @PostMapping("/add")
     public String addKhachHang(@ModelAttribute("khachHang") KhachHang khachHang, Model model) {
-        boolean success = khachHangService.createKhachHang(khachHang);
-        String message = success ? "✅ Thêm khách hàng thành công!" : "❌ Không thể thêm khách hàng!";
+        String message;
+
+        try {
+            boolean success = khachHangService.createKhachHang(khachHang);
+            message = success ? "✅ Thêm khách hàng thành công!" : "❌ Không thể thêm khách hàng!";
+        } catch (IllegalArgumentException e) {
+            message = "❌ " + e.getMessage();  // ví dụ: "Người dùng không có vai trò KhachHang"
+        } catch (Exception e) {
+            message = "❌ Lỗi không xác định khi thêm khách hàng!";
+        }
+
         model.addAttribute("listKhachHang", khachHangService.getAllKhachHang());
         model.addAttribute("khachHang", new KhachHang());
         model.addAttribute("editMode", false);
@@ -50,7 +59,7 @@ public class KhachHangController {
         return "khachhang";
     }
 
-    // Cập nhật khách hàng
+    // ✅ Cập nhật khách hàng
     @PostMapping("/update")
     public String updateKhachHang(@ModelAttribute("khachHang") KhachHang khachHang, Model model) {
         boolean success = khachHangService.updateKhachHang(khachHang);
@@ -62,7 +71,7 @@ public class KhachHangController {
         return "khachhang";
     }
 
-    // Xoá khách hàng
+    // ✅ Xoá khách hàng
     @PostMapping("/delete/{id}")
     public String deleteKhachHang(@PathVariable int id, Model model) {
         boolean success = khachHangService.deleteKhachHang(id);

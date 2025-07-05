@@ -11,28 +11,52 @@ import java.util.List;
 @Repository
 public class KhachHangDao {
 
+    // ✅ Thêm khách hàng chỉ khi Người Dùng có vai trò là 'KhachHang'
     public void create(KhachHang kh) {
-    String sql = "INSERT INTO KhachHang (MaNguoiDung, DiemTichLuy) VALUES (?, ?)";
+        if (!isKhachHangRole(kh.getMaNguoiDung())) {
+            throw new IllegalArgumentException("❌ Người dùng không có vai trò là KhachHang, không thể thêm vào bảng KhachHang.");
+        }
 
-    try (Connection c = AivenConnection.getConnection();
-         PreparedStatement ps = c.prepareStatement(sql)) {
+        String sql = "INSERT INTO KhachHang (MaNguoiDung, DiemTichLuy) VALUES (?, ?)";
 
-        ps.setInt(1, kh.getMaNguoiDung());
-        ps.setInt(2, kh.getDiemTichLuy());
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-        ps.executeUpdate();
-        System.out.println("✅ Thêm khách hàng thành công: " + kh.getMaNguoiDung());
+            ps.setInt(1, kh.getMaNguoiDung());
+            ps.setInt(2, kh.getDiemTichLuy());
 
-    } catch (SQLIntegrityConstraintViolationException ex) {
-        System.err.println("❌ Lỗi ràng buộc (trùng khóa chính hoặc khóa ngoại): " + ex.getMessage());
-        throw new RuntimeException("Ràng buộc bị vi phạm khi thêm khách hàng.", ex);
+            ps.executeUpdate();
+            System.out.println("✅ Thêm khách hàng thành công: " + kh.getMaNguoiDung());
 
-    } catch (SQLException | ClassNotFoundException e) {
-        System.err.println("❌ Lỗi SQL khác khi thêm khách hàng: " + e.getMessage());
-        throw new RuntimeException("Lỗi không xác định khi thêm khách hàng.", e);
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            System.err.println("❌ Lỗi ràng buộc (trùng khóa chính hoặc khóa ngoại): " + ex.getMessage());
+            throw new RuntimeException("Ràng buộc bị vi phạm khi thêm khách hàng.", ex);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("❌ Lỗi SQL khác khi thêm khách hàng: " + e.getMessage());
+            throw new RuntimeException("Lỗi không xác định khi thêm khách hàng.", e);
+        }
     }
-}
 
+    // ✅ Kiểm tra vai trò người dùng có phải là KhachHang không
+    private boolean isKhachHangRole(int maNguoiDung) {
+        String sql = "SELECT LoaiNguoiDung FROM NguoiDung WHERE MaNguoiDung = ?";
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, maNguoiDung);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String loai = rs.getString("LoaiNguoiDung");
+                return "KhachHang".equalsIgnoreCase(loai);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public KhachHang getByID(int id) {
         String sql = "SELECT * FROM KhachHang WHERE MaNguoiDung = ?";
@@ -61,7 +85,8 @@ public class KhachHangDao {
             ps.setInt(1, kh.getDiemTichLuy());
             ps.setInt(2, kh.getMaNguoiDung());
             ps.executeUpdate();
-            System.out.println("Cập nhật khách hàng: " + kh.getMaNguoiDung());
+            System.out.println("✅ Cập nhật khách hàng: " + kh.getMaNguoiDung());
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -93,7 +118,8 @@ public class KhachHangDao {
 
             ps.setInt(1, id);
             ps.executeUpdate();
-            System.out.println("Xóa khách hàng: " + id);
+            System.out.println("✅ Xóa khách hàng: " + id);
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
