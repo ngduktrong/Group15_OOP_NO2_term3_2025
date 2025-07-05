@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>🎫 Kiểm Tra Vé Sắp Chiếu</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        h1, h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        button {
+            padding: 8px 14px;
+            font-size: 14px;
+            margin: 5px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-size: 14px;
+        }
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f0f8ff;
+        }
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎬 Kiểm Tra Vé Sắp Chiếu Trong 30 Phút</h1>
+
+<!-- ✅ Thông báo nếu có -->
+<div th:if="${message}" class="message success">
+    <span th:text="${message}"></span>
+</div>
+
+<!-- ✅ Các nút thao tác -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <a th:href="@{/ve30/all}">
+        <button type="button">📋 Xem tất cả vé sắp chiếu</button>
+    </a>
+    <form th:action="@{/ve30/thongbao}" method="post" style="display: inline;">
+        <button type="submit">📨 Thông báo đến khách hàng</button>
+    </form>
+</div>
+
+<!-- ✅ Hiển thị bảng nếu có dữ liệu -->
+<div th:if="${veSapChieu != null}">
+    <h3 th:if="${maKhachHang == -1}">
+        ✅ Tất cả vé sắp chiếu trong hệ thống
+    </h3>
+
+    <table th:if="${veSapChieu.size() > 0}">
+        <thead>
+        <tr>
+            <th>Mã Vé</th>
+            <th>Mã Suất Chiếu</th>
+            <th>Mã Phòng</th>
+            <th>Số Ghế</th>
+            <th>Giá Vé</th>
+            <th>Trạng Thái</th>
+            <th>Ngày Đặt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ve : ${veSapChieu}">
+            <td th:text="${ve.maVe}"></td>
+            <td th:text="${ve.maSuatChieu}"></td>
+            <td th:text="${ve.maPhong}"></td>
+            <td th:text="${ve.soGhe}"></td>
+            <td th:text="${ve.giaVe} + ' đ'"></td>
+            <td th:text="${ve.trangThai}"></td>
+            <td th:text="${ve.ngayDat}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- ❌ Không có vé -->
+    <div th:if="${veSapChieu.size() == 0}" class="message" style="color: red;">
+        ❌ Không có vé nào sắp chiếu trong 30 phút tới.
+    </div>
+</div>
+
+</body>
+</html>

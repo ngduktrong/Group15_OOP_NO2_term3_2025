@@ -229,5 +229,41 @@ public class VeDao {
         return false;
     }
     }
+    public List<Ve> getVeByMaKhachHang(int maKhachHang) {
+    List<Ve> list = new ArrayList<>();
+    String sql = "SELECT v.* FROM Ve v JOIN HoaDon h ON v.MaHoaDon = h.MaHoaDon WHERE h.MaKhachHang = ?";
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+        pst.setInt(1, maKhachHang);
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            list.add(mapRow(rs));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+}
+    public List<Integer> getMaKhachHangCuaVeSapChieuTrong30Phut() {
+    List<Integer> result = new ArrayList<>();
+    String sql = "SELECT DISTINCT hd.MaKhachHang " +
+                 "FROM Ve v " +
+                 "JOIN SuatChieu sc ON v.MaSuatChieu = sc.MaSuatChieu " +
+                 "JOIN HoaDon hd ON v.MaHoaDon = hd.MaHoaDon " +
+                 "WHERE v.TrangThai = 'paid' " +
+                 "AND sc.NgayGioChieu BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 30 MINUTE)";
 
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement pst = conn.prepareStatement(sql);
+         ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+            result.add(rs.getInt("MaKhachHang"));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return result;
+    }
+    
 }

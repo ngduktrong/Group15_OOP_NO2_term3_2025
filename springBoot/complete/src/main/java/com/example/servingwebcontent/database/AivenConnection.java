@@ -7,7 +7,7 @@ public class AivenConnection {
 
     
         // ...existing code...
-    private static final String URL = "jdbc:mysql://ngduktrong-oop-duktrong-oop.b.aivencloud.com:26340/quanlyrcp?ssl-mode=REQUIRED";
+    private static final String URL = "jdbc:mysql://ngduktrong-oop-duktrong-oop.b.aivencloud.com:26340/quanlyrcp?ssl-mode=REQUIRED&serverTimezone=Asia/Ho_Chi_Minh";
     private static final String USER = "avnadmin";
     private static final String PASSWORD = "AVNS_sZ26Imppg25oMKu9vG1";
     // ...existing code...
