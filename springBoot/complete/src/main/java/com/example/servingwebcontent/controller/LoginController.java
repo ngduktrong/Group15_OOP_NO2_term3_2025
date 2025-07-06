@@ -50,7 +50,6 @@ public class LoginController {
                         HttpSession session,
                         Model model) {
 
-        // Đảm bảo luôn có port
         model.addAttribute("port", serverPort);
 
         if (username.isEmpty() || password.isEmpty()) {
@@ -63,14 +62,16 @@ public class LoginController {
         TaiKhoan tk = taiKhoanService.getByUsername(username);
         if (tk != null && tk.getMatKhau().equals(password)) {
             String loai = tk.getLoaiTaiKhoanAsString();
+
             if ("admin".equalsIgnoreCase(loai) && "admin".equalsIgnoreCase(role)) {
+                session.setAttribute("username", username);
+                session.setAttribute("role", "admin");
                 return "admin-dashboard";
             } else if ("user".equalsIgnoreCase(loai) && "user".equalsIgnoreCase(role)) {
-                // Lưu session
                 session.setAttribute("username", username);
+                session.setAttribute("role", "user");
                 session.setAttribute("maKhachHang", tk.getMaNguoiDung());
 
-                // Đẩy dữ liệu xuống view
                 List<Phim> phims = phimService.getAllPhim();
                 model.addAttribute("phims", phims);
                 model.addAttribute("username", username);
@@ -95,64 +96,64 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-public String register(@RequestParam String username,
-                       @RequestParam String password,
-                       @RequestParam String confirmPassword,
-                       Model model) {
+    public String register(@RequestParam String username,
+                           @RequestParam String password,
+                           @RequestParam String confirmPassword,
+                           @RequestParam String phone,
+                           Model model) {
 
-    model.addAttribute("port", serverPort);
+        model.addAttribute("port", serverPort);
 
-    if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-        model.addAttribute("error", "Vui lòng điền đầy đủ thông tin");
-        return "register";
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || phone.isEmpty()) {
+            model.addAttribute("error", "Vui lòng điền đầy đủ thông tin");
+            return "register";
+        }
+
+        if (!password.equals(confirmPassword)) {
+            model.addAttribute("error", "Mật khẩu xác nhận không khớp");
+            return "register";
+        }
+
+        if (password.length() < 6) {
+            model.addAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự");
+            return "register";
+        }
+
+        if ("admin".equalsIgnoreCase(username)) {
+            model.addAttribute("error", "Tên đăng nhập 'admin' đã được sử dụng");
+            return "register";
+        }
+
+        if (taiKhoanService.getByUsername(username) != null) {
+            model.addAttribute("error", "Tên đăng nhập đã tồn tại");
+            return "register";
+        }
+
+        // ✅ Thêm người dùng mới
+        int maNguoiDungMoi = taiKhoanService.createNguoiDungMacDinh(username, phone);
+
+        if (maNguoiDungMoi == -1) {
+            model.addAttribute("error", "Không thể tạo người dùng.");
+            return "register";
+        }
+
+        // ✅ Tạo tài khoản
+        TaiKhoan newUser = new TaiKhoan();
+        newUser.setTenDangNhap(username);
+        newUser.setMatKhau(password);
+        newUser.setLoaiTaiKhoan("user");
+        newUser.setMaNguoiDung(maNguoiDungMoi);
+
+        if (taiKhoanService.createTaiKhoan(newUser)) {
+            model.addAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
+            model.addAttribute("usernameInput", username);
+            model.addAttribute("roleInput", "user");
+            return "login";
+        } else {
+            model.addAttribute("error", "Không thể đăng ký. Vui lòng thử lại.");
+            return "register";
+        }
     }
-
-    if (!password.equals(confirmPassword)) {
-        model.addAttribute("error", "Mật khẩu xác nhận không khớp");
-        return "register";
-    }
-
-    if (password.length() < 6) {
-        model.addAttribute("error", "Mật khẩu phải có ít nhất 6 ký tự");
-        return "register";
-    }
-
-    if ("admin".equalsIgnoreCase(username)) {
-        model.addAttribute("error", "Tên đăng nhập 'admin' đã được sử dụng");
-        return "register";
-    }
-
-    if (taiKhoanService.getByUsername(username) != null) {
-        model.addAttribute("error", "Tên đăng nhập đã tồn tại");
-        return "register";
-    }
-
-    // ✅ 1. Thêm NguoiDung mới vào bảng NguoiDung
-    int maNguoiDungMoi = taiKhoanService.createNguoiDungMacDinh(username);
-
-    if (maNguoiDungMoi == -1) {
-        model.addAttribute("error", "Không thể tạo người dùng.");
-        return "register";
-    }
-
-    // ✅ 2. Tạo tài khoản liên kết MaNguoiDung
-    TaiKhoan newUser = new TaiKhoan();
-    newUser.setTenDangNhap(username);
-    newUser.setMatKhau(password);
-    newUser.setLoaiTaiKhoan("user");
-    newUser.setMaNguoiDung(maNguoiDungMoi);
-
-    if (taiKhoanService.createTaiKhoan(newUser)) {
-        model.addAttribute("success", "Đăng ký thành công! Mời đăng nhập.");
-        model.addAttribute("usernameInput", username);
-        model.addAttribute("roleInput", "user");
-        return "login";
-    } else {
-        model.addAttribute("error", "Không thể đăng ký. Vui lòng thử lại.");
-        return "register";
-    }
-    }
-
 
     @GetMapping("/admin/dashboard")
     public String adminDashboard(Model model) {

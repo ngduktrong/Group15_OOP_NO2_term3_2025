@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public class TaiKhoanDao {
 
+    // Lấy tất cả tài khoản
     public List<TaiKhoan> getAll() {
         List<TaiKhoan> list = new ArrayList<>();
         String sql = "SELECT * FROM TaiKhoan";
@@ -38,6 +39,7 @@ public class TaiKhoanDao {
         return list;
     }
 
+    // Thêm tài khoản mới
     public boolean insert(TaiKhoan tk) {
         String sql = "INSERT INTO TaiKhoan (TenDangNhap, MatKhau, LoaiTaiKhoan, MaNguoiDung) VALUES (?, ?, ?, ?)";
         try (Connection conn = AivenConnection.getConnection();
@@ -60,6 +62,7 @@ public class TaiKhoanDao {
         return false;
     }
 
+    // Cập nhật tài khoản
     public boolean update(TaiKhoan tk) {
         String sql = "UPDATE TaiKhoan SET MatKhau=?, LoaiTaiKhoan=?, MaNguoiDung=? WHERE TenDangNhap=?";
         try (Connection conn = AivenConnection.getConnection();
@@ -82,6 +85,7 @@ public class TaiKhoanDao {
         return false;
     }
 
+    // Xóa tài khoản theo tên đăng nhập
     public boolean delete(String tenDangNhap) {
         String sql = "DELETE FROM TaiKhoan WHERE TenDangNhap = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -100,6 +104,7 @@ public class TaiKhoanDao {
         return false;
     }
 
+    // Tìm tài khoản theo tên đăng nhập
     public TaiKhoan getByUsername(String tenDangNhap) {
         String sql = "SELECT * FROM TaiKhoan WHERE TenDangNhap = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -125,6 +130,7 @@ public class TaiKhoanDao {
         return null;
     }
 
+    // Xóa tài khoản theo mã người dùng
     public void deleteByMaNguoiDung(int maNguoiDung) {
         String sql = "DELETE FROM TaiKhoan WHERE MaNguoiDung = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -138,30 +144,38 @@ public class TaiKhoanDao {
             e.printStackTrace();
         }
     }
-    public int insertNguoiDungMacDinh(String hoTen) {
-    int maNguoiDungMoi = -1;
-    String sql = "INSERT INTO NguoiDung (HoTen, SoDienThoai, Email, LoaiNguoiDung) VALUES (?, ?, ?, 'KhachHang')";
 
-    try (Connection conn = AivenConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    // ✅ Thêm người dùng mới vào bảng NguoiDung (với thông tin từ form đăng ký)
+    public int insertNguoiDungMacDinh(String hoTen, String soDienThoai) {
+        int maNguoiDungMoi = -1;
+        String sql = "INSERT INTO NguoiDung (HoTen, SoDienThoai, Email, LoaiNguoiDung) VALUES (?, ?, ?, 'KhachHang')";
 
-        stmt.setString(1, hoTen);
-        stmt.setString(2, ""); // placeholder SĐT
-        stmt.setString(3, hoTen.toLowerCase().replaceAll("\\s+", "") + "@example.com"); // placeholder email
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        int rows = stmt.executeUpdate();
-        if (rows > 0) {
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    maNguoiDungMoi = rs.getInt(1);
+            String email = hoTen.toLowerCase().replaceAll("\\s+", "") + "@example.com";
+
+            stmt.setString(1, hoTen);
+            stmt.setString(2, soDienThoai);
+            stmt.setString(3, email);
+
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        maNguoiDungMoi = rs.getInt(1);
+                        System.out.println("✅ Thêm người dùng thành công: " + hoTen + " (ID = " + maNguoiDungMoi + ")");
+                    }
                 }
             }
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            System.out.println("⚠️ Số điện thoại đã tồn tại: " + soDienThoai);
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("❌ Lỗi khi thêm người dùng mặc định:");
+            e.printStackTrace();
         }
-    } catch (SQLException | ClassNotFoundException e) {
-        e.printStackTrace();
-    }
 
-    return maNguoiDungMoi;
+        return maNguoiDungMoi;
     }
-
 }

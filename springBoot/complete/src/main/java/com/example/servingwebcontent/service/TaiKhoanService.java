@@ -37,8 +37,8 @@ public class TaiKhoanService {
         return taiKhoanDao.getByUsername(tenDangNhap);
     }
 
-    // ✅ Hàm thêm người dùng mặc định (loại KhachHang) và trả về MaNguoiDung
-    public int createNguoiDungMacDinh(String hoTen) {
-        return taiKhoanDao.insertNguoiDungMacDinh(hoTen);
+    // ✅ Hàm thêm người dùng mặc định (KhachHang) với số điện thoại
+    public int createNguoiDungMacDinh(String hoTen, String soDienThoai) {
+        return taiKhoanDao.insertNguoiDungMacDinh(hoTen, soDienThoai);
     }
 }
