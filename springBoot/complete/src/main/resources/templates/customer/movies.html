@@ -5,24 +5,542 @@
   <title>🎬 Phim Đang Chiếu | Rạp T&M</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <!-- Thêm Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" th:href="@{/css/customer-phim.css}" />
+  <style>
+    /* CSS hoàn chỉnh cho giao diện phim */
+    /* Font chữ mới */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    /* Reset và base styles */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #1a2a6c, #b21f1f);
+      --secondary-gradient: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+      --accent-color: #ff4b2b;
+      --card-bg: rgba(30, 30, 46, 0.8);
+      --text-color: #f8f9fa;
+    }
+    
+    body {
+      background: var(--primary-gradient);
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    /* Navbar cải tiến */
+    .navbar {
+      background: var(--secondary-gradient) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      padding: 12px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      color: var(--accent-color);
+      font-size: 1.5em;
+    }
+    
+    .navbar-text {
+      font-size: 1.1rem;
+    }
+    
+    /* CSS cho user info */
+    .user-info-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-detail {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.5) !important;
+      border-radius: 8px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    /* CSS cho tiêu đề */
+    .title-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin: 2rem 0;
+    }
+    
+    .title-wrapper {
+      position: relative;
+      text-align: center;
+      padding: 0 20px;
+    }
+    
+    .title-wrapper h1 {
+      font-weight: 700;
+      font-size: 2.8rem;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(to right, #ff8a00, #da1b60);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    
+    .title-wrapper::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff416c, #ff4b2b);
+      border-radius: 2px;
+    }
+    
+    /* Card phim */
+    .movie-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      color: #e9ecef;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transform: translateY(0);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 75, 43, 0.2);
+      background: rgba(40, 40, 60, 0.9);
+      border-color: rgba(255, 75, 43, 0.3);
+    }
+    
+    .poster-container {
+      position: relative;
+      overflow: hidden;
+      height: 300px;
+    }
+    
+    .poster-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    .poster {
+      transition: transform 0.5s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .card:hover .poster {
+      transform: scale(1.05);
+    }
+    
+    .no-poster {
+      background: linear-gradient(45deg, #4A00E0, #8E2DE2);
+      color: white;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .movie-rating {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffd700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      z-index: 2;
+    }
+    
+    .movie-rating i {
+      color: #ffd700;
+    }
+    
+    /* Card body */
+    .card-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .card-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+      min-height: auto;
+      color: white;
+    }
+    
+    .movie-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .info-badge {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      backdrop-filter: blur(5px);
+    }
+    
+    .info-badge i {
+      color: var(--accent-color);
+    }
+    
+    .movie-description {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #d1d1d1;
+      margin-bottom: 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Nút đặt vé */
+    .book-ticket {
+      background: linear-gradient(45deg, #FF416C, #FF4B2B);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 12px 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      font-size: 1rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .book-ticket::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #FF4B2B, #FF416C);
+      transition: all 0.6s ease;
+      z-index: -1;
+    }
+    
+    .book-ticket:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(255, 75, 43, 0.4);
+    }
+    
+    .book-ticket:hover::before {
+      left: 0;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .movie-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.5rem;
+      }
+      
+      .user-info-wrapper {
+        flex-wrap: wrap;
+      }
+      
+      .logout-btn {
+        margin-top: 10px;
+      }
+      
+      .title-wrapper h1 {
+        font-size: 2.2rem;
+      }
+      
+      .card-title {
+        font-size: 1.4rem;
+      }
+      
+      .container {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .movie-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .title-wrapper h1 {
+        font-size: 2rem;
+      }
+      
+      .card-title {
+        font-size: 1.3rem;
+      }
+      
+      .poster-container {
+        height: 250px;
+      }
+    }
+    
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px 0 20px;
+      margin-top: 60px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .footer h5 {
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer h5::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--accent-color);
+    }
+    
+    .footer p, .footer a {
+      color: #ddd;
+      transition: all 0.3s;
+      margin-bottom: 8px;
+    }
+    
+    .footer a:hover {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+    
+    .social-icons a:hover {
+      background: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    /* Alert thông báo */
+    .alert-info {
+      background: rgba(23, 162, 184, 0.2);
+      border: 1px solid rgba(23, 162, 184, 0.3);
+      color: #e9ecef;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card {
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+    
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+    .card:nth-child(5) { animation-delay: 0.4s; }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 75, 43, 0.5);
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-color);
+    }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .back-to-top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 sticky-top">
     <div class="container">
-      <a class="navbar-brand" th:href="@{/customer/movies}">RẠP PHIM T&M</a>
-      
-      <!-- User info -->
-      <div class="user-info-wrapper">
-        <div class="navbar-text text-light">
-          <div class="user-detail">
-            <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
-            <span th:if="${maKhachHang}" class="ms-3 badge bg-light text-dark" 
-                  th:text="'Mã KH: ' + ${maKhachHang}"></span>
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <!-- Tất cả nội dung navbar bên trái -->
+        <div class="user-info-wrapper">
+          <a class="navbar-brand me-4" th:href="@{/customer/movies}">
+            <i class="fas fa-film logo-icon"></i>
+            RẠP PHIM T&M
+          </a>
+          
+          <div class="user-info-container">
+            <div class="navbar-text text-light">
+              <div class="user-detail">
+                <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
+                <span th:if="${maKhachHang}" class="ms-2 badge bg-light text-dark" 
+                      th:text="'Mã KH: ' + ${maKhachHang}"></span>
+              </div>
+            </div>
           </div>
+          
           <a th:if="${username}" th:href="@{/logout}"
              class="btn btn-sm btn-outline-light logout-btn">
             <i class="fas fa-sign-out-alt"></i> Đăng xuất
@@ -33,11 +551,9 @@
   </nav>
 
   <div class="container">
-    <!-- Tiêu đề cải tiến -->
     <div class="title-container">
       <div class="title-wrapper">
-        <h1 class="my-4">🎬 Phim Đang Chiếu</h1>
-        <div class="title-divider"></div>
+        <h1 class="my-4">PHIM ĐANG CHIẾU</h1>
       </div>
     </div>
 
@@ -45,33 +561,56 @@
       Hiện chưa có phim nào đang chiếu.
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-      <div class="col" th:each="phim : ${phims}">
-        <div class="card h-100 shadow-sm">
-          <div class="poster-wrapper ratio ratio-16x9">
-            <img th:if="${phim.duongDanPoster}" 
-                 th:src="@{'/img/' + ${phim.duongDanPoster}}" 
-                 class="card-img-top poster" 
-                 alt="Poster phim"
-                 onerror="this.onerror=null;this.src='@{/img/background.png}'"/>
-            <img th:unless="${phim.duongDanPoster}" 
-                 th:src="@{/img/background.png}"
-                 class="card-img-top poster" 
-                 alt="Poster mặc định"/>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title" th:text="${phim.tenPhim}">Tên phim</h5>
-            <div class="card-text">
-              <p><i class="fas fa-clock"></i> <strong>Thời lượng:</strong> <span th:text="${phim.thoiLuong} + ' phút'">120 phút</span></p>
-              <p><i class="fas fa-calendar-alt"></i> <strong>Khởi chiếu:</strong> 
-                <span th:text="${#temporals.format(phim.ngayKhoiChieu, 'dd/MM/yyyy')}">01/01/2025</span>
-              </p>
+    <!-- Card phim mới -->
+    <div class="movie-container">
+      <div class="card h-100 shadow-sm" th:each="phim : ${phims}">
+        <!-- Phần poster -->
+        <div class="poster-container">
+          <div class="poster-wrapper">
+            <div class="movie-rating">
+              <i class="fas fa-star"></i> 8.9
+            </div>
+            
+            <img th:if="${phim.duongDanPoster}"
+            th:src="@{/img/{file}(file=${phim.duongDanPoster})}"
+            class="poster" alt="Poster phim"
+            onerror="this.onerror=null;this.src='@{/image/logo.png}'"/>
+
+            <div class="no-poster" th:unless="${phim.duongDanPoster}">
+              <i class="fas fa-film fa-3x"></i>
             </div>
           </div>
-          <div class="card-footer bg-transparent">
+        </div>
+        
+        <!-- Phần nội dung -->
+        <div class="card-content">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${phim.tenPhim}">Tên phim</h5>
+            
+            <div class="movie-info">
+              <div class="info-badge">
+                <i class="fas fa-clock"></i> 
+                <span th:text="${phim.thoiLuong} + ' phút'">120 phút</span>
+              </div>
+              <div class="info-badge">
+                <i class="fas fa-calendar-alt"></i> 
+                <span th:text="${#temporals.format(phim.ngayKhoiChieu, 'dd/MM/yyyy')}">01/01/2025</span>
+              </div>
+              <div class="info-badge">
+                <i class="fas fa-ticket-alt"></i> 
+                <span>Phổ biến</span>
+              </div>
+            </div>
+            
+            <p class="movie-description">
+              Một bộ phim đầy cảm xúc với những tình tiết bất ngờ, diễn xuất xuất sắc của dàn diễn viên nổi tiếng. 
+              Câu chuyện kịch tính sẽ đưa khán giả vào hành trình đầy phiêu lưu.
+            </p>
+          </div>
+          <div class="card-footer bg-transparent border-0 p-0 pt-2">
             <a th:href="@{|/customer/movies/select/${phim.maPhim}|}" 
-               class="btn btn-primary w-100 book-ticket">
-              Đặt vé ngay
+               class="btn btn-primary book-ticket">
+              <i class="fas fa-ticket-alt"></i> Đặt vé ngay
             </a>
           </div>
         </div>
@@ -85,15 +624,15 @@
       <div class="row">
         <div class="col-md-4 mb-4 mb-md-0">
           <h5>RẠP PHIM T&M</h5>
-          <p>Địa chỉ: chung cư xuân mai complex, yên nghĩa, hà đông, hà nội</p>
-          <p>Hotline: 0357634696</p>
-          <p>Email: duonghmanh123@gmail.com</p>
+          <p><i class="fas fa-map-marker-alt me-2"></i> Chung cư Xuân Mai Complex, Yên Nghĩa, Hà Đông, Hà Nội</p>
+          <p><i class="fas fa-phone-alt me-2"></i> Hotline: 0357634696</p>
+          <p><i class="fas fa-envelope me-2"></i> Email: duonghmanh123@gmail.com</p>
         </div>
         <div class="col-md-4 mb-4 mb-md-0">
           <h5>Giờ mở cửa</h5>
-          <p>Thứ 2 - Thứ 6: 8:00 - 23:00</p>
-          <p>Thứ 7 - Chủ nhật: 8:00 - 24:00</p>
-          <p>Ngày lễ: 8:00 - 24:00</p>
+          <p><i class="far fa-clock me-2"></i> Thứ 2 - Thứ 6: 8:00 - 23:00</p>
+          <p><i class="far fa-clock me-2"></i> Thứ 7 - Chủ nhật: 8:00 - 24:00</p>
+          <p><i class="far fa-clock me-2"></i> Ngày lễ: 8:00 - 24:00</p>
         </div>
         <div class="col-md-4">
           <h5>Kết nối với chúng tôi</h5>
@@ -111,14 +650,37 @@
     </div>
   </footer>
 
+  <!-- Back to top button -->
+  <div class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
   <script>
-    // Xử lý khi poster lỗi
     document.addEventListener('DOMContentLoaded', function() {
+      // Xử lý lỗi ảnh poster
       document.querySelectorAll('.poster').forEach(img => {
         img.onerror = function() {
-          this.src = 'https://via.placeholder.com/300x450?text=Poster+Phim';
+          this.src = 'https://via.placeholder.com/400x600/4A00E0/ffffff?text=Poster+Không+Có';
         };
+      });
+      
+      // Back to top button
+      const backToTopButton = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.classList.add('show');
+        } else {
+          backToTopButton.classList.remove('show');
+        }
+      });
+      
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       });
     });
   </script>

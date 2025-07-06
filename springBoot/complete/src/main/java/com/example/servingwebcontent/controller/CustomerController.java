@@ -38,7 +38,7 @@ public class CustomerController {
         // Kiểm tra đăng nhập
         if (session.getAttribute("username") == null || 
             session.getAttribute("maKhachHang") == null) {
-            return "redirect:/login";
+            return "login";
         }
 
         // +++ THÊM: lấy mã khách hàng từ session +++

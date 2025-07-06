@@ -2,128 +2,605 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>🎫 Kiểm Tra Vé Sắp Chiếu</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm Tra Vé Sắp Chiếu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f5f7fa;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+            overflow-x: hidden;
         }
-        h1, h3 {
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        header {
             text-align: center;
-            color: #2c3e50;
-        }
-        form {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        button {
-            padding: 8px 14px;
-            font-size: 14px;
-            margin: 5px;
-            border: none;
-            border-radius: 6px;
-            background-color: #3498db;
+            padding: 30px 0 40px;
             color: white;
+            position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            background: rgba(255, 255, 255, 0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* ===== BACK BUTTON ===== */
+        .back-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 500;
             cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        button:hover {
-            background-color: #2980b9;
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        table {
-            width: 90%;
-            margin: auto;
-            border-collapse: collapse;
+        
+        /* ===== MAIN CONTENT ===== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
             margin-top: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            font-size: 14px;
+        
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            border: none;
+            margin-bottom: 30px;
         }
-        th {
-            background-color: #2980b9;
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
             color: white;
+            position: relative;
         }
-        tr:nth-child(even) {
-            background-color: #f0f8ff;
+        
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
         }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        /* ===== BUTTON STYLES ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(90deg, var(--success), #27ae60);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(90deg, #27ae60, var(--success));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px;
+            background: white;
+        }
+        
+        .table thead th {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+        
+        .table th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+        
+        .table tbody td {
+            padding: 16px 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03);
+        }
+        
+        .table tbody tr:hover td {
+            transform: translateX(5px);
+        }
+        
+        .status-cell {
+            font-weight: 600;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .status-paid {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27ae60;
+        }
+        
+        .status-unpaid {
+            background: rgba(231, 76, 60, 0.15);
+            color: #c0392b;
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
         .message {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 16px;
-            font-weight: bold;
+            background-color: white;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--success);
         }
-        .success {
-            color: green;
+        
+        .error {
+            background-color: white;
+            color: var(--danger);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--danger);
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .back-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .no-data-message {
+            text-align: center;
+            padding: 30px;
+            color: #e74c3c;
+            font-weight: 500;
+            background: rgba(231, 76, 60, 0.05);
+            border-radius: 16px;
+            margin-top: 20px;
+        }
+        
+        .no-data-message i {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3498db;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <!-- Thông báo -->
+    <div class="message-container">
+        <div th:if="${message}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
+        </div>
+    </div>
 
-<h1>🎬 Kiểm Tra Vé Sắp Chiếu Trong 30 Phút</h1>
-<div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
-</div>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-film fa-2x"></i>
+                <div class="logo-text">Kiểm Tra Vé Sắp Chiếu</div>
+            </div>
+            
+            <!-- Nút quay lại Dashboard -->
+            <div class="back-container">
+                <a th:href="@{/admin/dashboard}">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <p class="subtitle">Theo dõi và thông báo cho khách hàng về các vé sắp chiếu trong 30 phút</p>
+    </header>
 
-<!-- ✅ Thông báo nếu có -->
-<div th:if="${message}" class="message success">
-    <span th:text="${message}"></span>
-</div>
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <!-- Card chính -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-clock"></i> Danh Sách Vé Sắp Chiếu Trong 30 Phút
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Các nút thao tác -->
+                <div class="action-buttons">
+                    <a th:href="@{/ve30/all}">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-list"></i> Xem tất cả vé sắp chiếu
+                        </button>
+                    </a>
+                    
+                    <form th:action="@{/ve30/thongbao}" method="post">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-bell"></i> Thông báo đến khách hàng
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Hiển thị bảng nếu có dữ liệu -->
+                <div th:if="${veSapChieu != null}">
+                    <div class="section-title" th:if="${maKhachHang == -1}">
+                        <i class="fas fa-check-circle"></i> Tất cả vé sắp chiếu trong hệ thống
+                    </div>
 
-<!-- ✅ Các nút thao tác -->
-<div style="text-align: center; margin-bottom: 20px;">
-    <a th:href="@{/ve30/all}">
-        <button type="button">📋 Xem tất cả vé sắp chiếu</button>
-    </a>
-    <form th:action="@{/ve30/thongbao}" method="post" style="display: inline;">
-        <button type="submit">📨 Thông báo đến khách hàng</button>
-    </form>
-</div>
+                    <div th:if="${veSapChieu.size() > 0}">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Mã Vé</th>
+                                        <th>Mã Suất Chiếu</th>
+                                        <th>Mã Phòng</th>
+                                        <th>Số Ghế</th>
+                                        <th>Giá Vé</th>
+                                        <th>Trạng Thái</th>
+                                        <th>Ngày Đặt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="ve : ${veSapChieu}">
+                                        <td th:text="${ve.maVe}"></td>
+                                        <td th:text="${ve.maSuatChieu}"></td>
+                                        <td th:text="${ve.maPhong}"></td>
+                                        <td th:text="${ve.soGhe}"></td>
+                                        <td th:text="${ve.giaVe} + ' đ'"></td>
+                                        <td>
+                                            <span th:class="${ve.trangThai == 'paid'} ? 'status-cell status-paid' : 'status-cell status-unpaid'"
+                                                  th:text="${ve.trangThai}"></span>
+                                        </td>
+                                        <td th:text="${ve.ngayDat}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-<!-- ✅ Hiển thị bảng nếu có dữ liệu -->
-<div th:if="${veSapChieu != null}">
-    <h3 th:if="${maKhachHang == -1}">
-        ✅ Tất cả vé sắp chiếu trong hệ thống
-    </h3>
-
-    <table th:if="${veSapChieu.size() > 0}">
-        <thead>
-        <tr>
-            <th>Mã Vé</th>
-            <th>Mã Suất Chiếu</th>
-            <th>Mã Phòng</th>
-            <th>Số Ghế</th>
-            <th>Giá Vé</th>
-            <th>Trạng Thái</th>
-            <th>Ngày Đặt</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="ve : ${veSapChieu}">
-            <td th:text="${ve.maVe}"></td>
-            <td th:text="${ve.maSuatChieu}"></td>
-            <td th:text="${ve.maPhong}"></td>
-            <td th:text="${ve.soGhe}"></td>
-            <td th:text="${ve.giaVe} + ' đ'"></td>
-            <td th:text="${ve.trangThai}"></td>
-            <td th:text="${ve.ngayDat}"></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <!-- ❌ Không có vé -->
-    <div th:if="${veSapChieu.size() == 0}" class="message" style="color: red;">
-        ❌ Không có vé nào sắp chiếu trong 30 phút tới.
+                    <!-- Không có vé -->
+                    <div th:if="${veSapChieu.size() == 0}" class="no-data-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Không có vé nào sắp chiếu trong 30 phút tới.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<script>
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 4000);
+    
+    // Hiệu ứng khi di chuột vào hàng
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+</script>
 </body>
 </html>

@@ -2,23 +2,430 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Chọn Phòng Chiếu</title>
+  <title>Chọn Phòng Chiếu | Rạp T&M</title>
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/customer-phong.css}" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* CSS hoàn chỉnh cho giao diện phòng chiếu */
+    /* Font chữ mới */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    /* Reset và base styles */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #1a2a6c, #b21f1f);
+      --secondary-gradient: linear-gradient(90deg, #0f0c29, #302b63, #24243e);
+      --accent-color: #ff4b2b;
+      --card-bg: rgba(30, 30, 46, 0.8);
+      --text-color: #f8f9fa;
+    }
+    
+    body {
+      background: var(--primary-gradient);
+      background-attachment: fixed;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+    /* Navbar cải tiến */
+    .navbar {
+      background: var(--secondary-gradient) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      padding: 12px 0;
+      backdrop-filter: blur(10px);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      color: var(--accent-color);
+      font-size: 1.5em;
+    }
+    
+    /* Header với nút quay lại */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      padding: 0 20px;
+    }
+    
+    .back-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .movie-title {
+      font-weight: 700;
+      font-size: 2rem;
+      text-align: center;
+      background: linear-gradient(to right, #ff8a00, #da1b60);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Card phòng chiếu */
+    .rooms-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .room-card {
+      border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      color: #e9ecef;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transform: translateY(0);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 25px;
+    }
+    
+    .room-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 75, 43, 0.2);
+      background: rgba(40, 40, 60, 0.9);
+      border-color: rgba(255, 75, 43, 0.3);
+    }
+    
+    .room-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .room-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, #4A00E0, #8E2DE2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+    
+    .room-title {
+      font-weight: 700;
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    
+    .room-info {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.1rem;
+    }
+    
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+    
+    .info-text {
+      flex: 1;
+    }
+    
+    .info-label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 3px;
+      color: #ddd;
+    }
+    
+    .info-value {
+      font-weight: 500;
+      color: white;
+    }
+    
+    /* Nút chọn phòng */
+    .select-room {
+      background: linear-gradient(45deg, #FF416C, #FF4B2B);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 12px 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      font-size: 1.1rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+    
+    .select-room::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #FF4B2B, #FF416C);
+      transition: all 0.6s ease;
+      z-index: -1;
+    }
+    
+    .select-room:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(255, 75, 43, 0.4);
+    }
+    
+    .select-room:hover::before {
+      left: 0;
+    }
+    
+    /* Alert thông báo */
+    .alert-info {
+      background: rgba(23, 162, 184, 0.2);
+      border: 1px solid rgba(23, 162, 184, 0.3);
+      color: #e9ecef;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 992px) {
+      .rooms-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .movie-title {
+        font-size: 1.8rem;
+      }
+      
+      .back-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .rooms-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .movie-title {
+        font-size: 1.6rem;
+      }
+      
+      .room-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .room-title {
+        font-size: 1.6rem;
+      }
+    }
+    
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 40px 0 20px;
+      margin-top: 60px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .footer h5 {
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer h5::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--accent-color);
+    }
+    
+    .footer p, .footer a {
+      color: #ddd;
+      transition: all 0.3s;
+      margin-bottom: 8px;
+    }
+    
+    .footer a:hover {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icons a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+    
+    .social-icons a:hover {
+      background: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 30px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .room-card {
+      animation: fadeIn 0.6s ease forwards;
+      opacity: 0;
+    }
+    
+    .room-card:nth-child(2) { animation-delay: 0.1s; }
+    .room-card:nth-child(3) { animation-delay: 0.2s; }
+    .room-card:nth-child(4) { animation-delay: 0.3s; }
+    .room-card:nth-child(5) { animation-delay: 0.4s; }
+    
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .back-to-top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar chung -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-      <a class="navbar-brand" href="#">RẠP PHIM T&M</a>
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-film logo-icon"></i>
+        RẠP PHIM T&M
+      </a>
       <div class="navbar-text text-light ms-auto">
         <span th:if="${username}" th:text="'Xin chào, ' + ${username}"></span>
-        <span th:if="${maKhachHang}" class="ms-3" th:text="'Mã KH: ' + ${maKhachHang}"></span>
+        <span th:if="${maKhachHang}" class="ms-3 badge bg-light text-dark" 
+              th:text="'Mã KH: ' + ${maKhachHang}"></span>
         <a th:if="${username}" th:href="@{/logout}" 
            class="btn btn-sm btn-outline-light ms-3">
-          Đăng xuất
+          <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
         </a>
       </div>
     </div>
@@ -26,34 +433,127 @@
 
   <div class="container">
     <!-- Header với nút quay lại -->
-    <header class="d-flex justify-content-between align-items-center my-4">
-      <a th:href="@{/customer/movies}" class="btn btn-secondary">← Quay lại Phim</a>
-      <h2>Phim: <span th:text="${selectedPhim.tenPhim}">Tên Phim</span></h2>
-    </header>
+    <div class="header-container">
+      <a th:href="@{/customer/movies}" class="btn back-button">
+        <i class="fas fa-arrow-left"></i> Quay lại Phim
+      </a>
+      <h2 class="movie-title">Phim: <span th:text="${selectedPhim.tenPhim}">Tên Phim</span></h2>
+      <div></div> <!-- Phần tử giữ chỗ để căn giữa -->
+    </div>
 
     <!-- Danh sách phòng chiếu -->
-    <div class="row">
-      <div class="col-md-4 mb-4" th:each="phong : ${listPhong}">
-        <div class="card h-100">
-          <div class="card-body">
-            <h5 class="card-title" th:text="'Phòng ' + ${phong.tenPhong}">Phòng A1</h5>
-            <div class="card-text">
-              <p><strong>Số ghế:</strong> <span th:text="${phong.soLuongGhe}">50</span></p>
-              <p><strong>Loại phòng:</strong> <span th:text="${phong.loaiPhong}">2D</span></p>
+    <div class="rooms-container">
+      <div class="room-card" th:each="phong : ${listPhong}">
+        <div class="room-header">
+          <div class="room-icon">
+            <i class="fas fa-door-open"></i>
+          </div>
+          <h3 class="room-title" th:text="'Phòng ' + ${phong.tenPhong}">Phòng A1</h3>
+        </div>
+        
+        <div class="room-info">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-couch"></i>
             </div>
-            <a th:href="@{|/customer/phong/select/${selectedPhim.maPhim}/${phong.maPhong}|}" 
-               class="btn btn-primary mt-2">Chọn phòng</a>
+            <div class="info-text">
+              <span class="info-label">Số ghế</span>
+              <span class="info-value" th:text="${phong.soLuongGhe}">50</span>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-film"></i>
+            </div>
+            <div class="info-text">
+              <span class="info-label">Loại phòng</span>
+              <span class="info-value" th:text="${phong.loaiPhong}">2D</span>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="info-text">
+              <span class="info-label">Chất lượng</span>
+              <span class="info-value">Âm thanh Dolby Atmos</span>
+            </div>
           </div>
         </div>
+        
+        <a th:href="@{|/customer/phong/select/${selectedPhim.maPhim}/${phong.maPhong}|}" 
+           class="btn select-room">
+          <i class="fas fa-check-circle"></i> Chọn phòng
+        </a>
       </div>
     </div>
 
     <!-- Thông báo khi không có phòng -->
     <div th:if="${#lists.isEmpty(listPhong)}" class="alert alert-info mt-4">
-      Hiện không có phòng chiếu nào cho phim này.
+      <i class="fas fa-info-circle me-2"></i> Hiện không có phòng chiếu nào cho phim này.
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>RẠP PHIM T&M</h5>
+          <p><i class="fas fa-map-marker-alt me-2"></i> Chung cư Xuân Mai Complex, Yên Nghĩa, Hà Đông, Hà Nội</p>
+          <p><i class="fas fa-phone-alt me-2"></i> Hotline: 0357634696</p>
+          <p><i class="fas fa-envelope me-2"></i> Email: duonghmanh123@gmail.com</p>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <h5>Giờ mở cửa</h5>
+          <p><i class="far fa-clock me-2"></i> Thứ 2 - Thứ 6: 8:00 - 23:00</p>
+          <p><i class="far fa-clock me-2"></i> Thứ 7 - Chủ nhật: 8:00 - 24:00</p>
+          <p><i class="far fa-clock me-2"></i> Ngày lễ: 8:00 - 24:00</p>
+        </div>
+        <div class="col-md-4">
+          <h5>Kết nối với chúng tôi</h5>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 Rạp Phim T&M. Tất cả quyền được bảo lưu.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <div class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Back to top button
+      const backToTopButton = document.querySelector('.back-to-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.classList.add('show');
+        } else {
+          backToTopButton.classList.remove('show');
+        }
+      });
+      
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
 </body>
 </html>
