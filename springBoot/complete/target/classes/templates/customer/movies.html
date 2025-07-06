@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>🎬 Phim Đang Chiếu | Rạp ABC</title>
+  <title>🎬 Phim Đang Chiếu | Rạp T&M</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
   <!-- Thêm Font Awesome -->
@@ -50,13 +50,14 @@
         <div class="card h-100 shadow-sm">
           <div class="poster-wrapper ratio ratio-16x9">
             <img th:if="${phim.duongDanPoster}" 
-                 th:src="@{${phim.duongDanPoster}}" 
+                 th:src="@{'/img/' + ${phim.duongDanPoster}}" 
                  class="card-img-top poster" 
                  alt="Poster phim"
-                 onerror="this.onerror=null;this.src='https://via.placeholder.com/300x450?text=Poster+Phim'">
-            <div th:unless="${phim.duongDanPoster}" class="no-poster d-flex align-items-center justify-content-center">
-              <span class="text-white">Chưa có poster</span>
-            </div>
+                 onerror="this.onerror=null;this.src='@{/img/background.png}'"/>
+            <img th:unless="${phim.duongDanPoster}" 
+                 th:src="@{/img/background.png}"
+                 class="card-img-top poster" 
+                 alt="Poster mặc định"/>
           </div>
           <div class="card-body">
             <h5 class="card-title" th:text="${phim.tenPhim}">Tên phim</h5>

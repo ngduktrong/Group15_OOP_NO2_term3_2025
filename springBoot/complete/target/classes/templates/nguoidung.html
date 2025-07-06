@@ -4,8 +4,23 @@
     <meta charset="UTF-8">
     <title>Quản lý người dùng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== RESET & BASE STYLES ===== */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,52 +28,87 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: var(--dark);
             line-height: 1.6;
-            padding: 30px;
             min-height: 100vh;
+            padding: 30px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         /* ===== HEADER STYLES ===== */
-        h2 {
-            font-size: 2.2rem;
-            margin-bottom: 25px;
+        header {
             text-align: center;
-            color: #2c3e50;
-            padding: 15px 0;
+            padding: 30px 0 40px;
+            color: white;
             position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
         }
         
-        h2:before {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            border-radius: 2px;
+        .logo i {
+            background: rgba(255, 255, 255, 0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         
-        h2 i {
-            background: #4361ee;
-            color: white;
-            padding: 12px;
-            border-radius: 50%;
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        .logo-text {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
         }
         
         /* ===== BACK BUTTON ===== */
         .back-container {
-            text-align: center;
-            margin-bottom: 25px;
+            position: relative;
+            z-index: 10;
         }
         
         .back-button {
@@ -66,238 +116,313 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: #6c757d;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         
         .back-button:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         
-        .back-button i {
-            font-size: 0.9rem;
-        }
-        
-        /* ===== FORM STYLES ===== */
-        .form-box {
+        /* ===== CARD STYLES ===== */
+        .card {
             background: white;
-            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            border: none;
             margin-bottom: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e5eb;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .form-box:hover {
+        .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         
-        .form-box label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.95rem;
-            margin-top: 15px;
-        }
-        
-        .form-box input {
-            padding: 14px;
-            margin: 5px 0;
-            width: 100%;
-            border: 2px solid #e1e5eb;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-box input:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            outline: none;
-        }
-        
-        .form-box button[type="submit"] {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+        .card-header {
+            padding: 20px 25px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
             color: white;
-            border: none;
-            padding: 14px;
-            margin-top: 20px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+            position: relative;
         }
         
-        .form-box button[type="submit"]:hover {
-            background: linear-gradient(90deg, #3a0ca3, #4361ee);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
-        }
-        
-        .form-box a button {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 14px;
-            margin-top: 10px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
             width: 100%;
-            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
         }
         
-        .form-box a button:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
-        }
-        
-        /* ===== TABLE STYLES ===== */
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: white;
-            margin-top: 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-        
-        th {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            color: white;
-            padding: 16px 15px;
-            text-align: center;
+        .card-title {
+            font-size: 1.4rem;
             font-weight: 600;
-            font-size: 1.05rem;
-        }
-        
-        th:first-child {
-            border-radius: 12px 0 0 0;
-        }
-        
-        th:last-child {
-            border-radius: 0 12px 0 0;
-        }
-        
-        td {
-            padding: 14px 15px;
-            text-align: center;
-            color: #495057;
-            border-bottom: 1px solid #e1e5eb;
-        }
-        
-        tbody tr {
-            transition: background 0.2s ease;
-        }
-        
-        tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.05);
-        }
-        
-        /* ===== ACTIONS STYLES ===== */
-        .actions {
             display: flex;
-            justify-content: center;
+            align-items: center;
             gap: 10px;
         }
         
-        .actions a {
-            display: inline-block;
-            padding: 8px 15px;
-            background: rgba(72, 149, 239, 0.1);
-            color: #4361ee;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(67, 97, 238, 0.2);
+        .card-body {
+            padding: 25px;
         }
         
-        .actions a:hover {
-            background: #4361ee;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
         }
         
-        .actions form {
-            display: inline-block;
-            margin: 0;
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        .actions form button {
-            padding: 8px 15px;
-            background: rgba(247, 37, 133, 0.1);
-            color: #f72585;
-            border: none;
-            border-radius: 6px;
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+            background: white;
+        }
+        
+        .form-input:read-only {
+            background-color: #f1f5f9;
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(247, 37, 133, 0.2);
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
         }
         
-        .actions form button:hover {
-            background: #f72585;
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9);
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.2);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
         
-        /* ===== RESPONSIVE ADJUSTMENTS ===== */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
-            h2 {
-                font-size: 1.8rem;
-            }
-            
-            .form-box {
-                padding: 20px;
-            }
-            
-            th, td {
-                padding: 12px 8px;
-                font-size: 0.9rem;
-            }
-            
-            .actions {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .actions a, .actions form button {
-                width: 100%;
-                text-align: center;
-            }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(90deg, var(--danger), #c0392b);
+            color: white;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #c0392b, var(--danger));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #e67e22, var(--warning));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px;
+            background: white;
+        }
+        
+        .table thead th {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+        
+        .table th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+        
+        .table tbody td {
+            padding: 16px 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03);
+        }
+        
+        .table tbody tr:hover td {
+            transform: translateX(5px);
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        .action-btn.edit {
+            background: #f39c12;
+        }
+        
+        .action-btn.delete {
+            background: var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .message {
+            background-color: white;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--success);
+        }
+        
+        .error {
+            background-color: white;
+            color: var(--danger);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--danger);
         }
         
         /* ===== ANIMATIONS ===== */
@@ -306,81 +431,271 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        tbody tr {
-            animation: fadeIn 0.4s ease forwards;
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         
-        .form-box {
-            animation: fadeIn 0.6s ease forwards;
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .back-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+            
+            .actions-cell {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Layout adjustments */
+        .form-card {
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .user-type {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .type-employee {
+            background: rgba(67, 97, 238, 0.15);
+            color: #4361ee;
+        }
+        
+        .type-customer {
+            background: rgba(247, 37, 133, 0.15);
+            color: #f72585;
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <!-- Thông báo -->
+    <div class="message-container">
+        <div th:if="${message}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
+        </div>
+        <div th:if="${error}" class="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+    </div>
 
-<h2><i class="fas fa-users"></i> Quản lý Người dùng</h2>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-users fa-2x"></i>
+                <div class="logo-text">Quản Lý Người Dùng</div>
+            </div>
+            
+            <!-- Nút quay lại Dashboard -->
+            <div class="back-container">
+                <a th:href="@{/admin/dashboard}">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <p class="subtitle">Quản lý thông tin người dùng, phân quyền và tài khoản một cách chuyên nghiệp</p>
+    </header>
 
-<!-- Nút Quay lại -->
-<div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
+    <!-- Form Card -->
+    <div class="card form-card">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas" th:class="${nguoiDung.maNguoiDung} ? 'fa-edit' : 'fa-user-plus'"></i>
+                <span th:text="${nguoiDung.maNguoiDung} ? 'Cập nhật Người Dùng' : 'Thêm Người Dùng Mới'"></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/nguoidung/save}" method="post" th:object="${nguoiDung}">
+                <input type="hidden" th:field="*{maNguoiDung}" />
+                
+                <div class="form-group">
+                    <label class="form-label" for="hoTen">
+                        <i class="fas fa-user"></i> Họ Tên
+                    </label>
+                    <input type="text" class="form-input" th:field="*{hoTen}" required id="hoTen"/>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="soDienThoai">
+                        <i class="fas fa-phone"></i> Số Điện Thoại
+                    </label>
+                    <input type="text" class="form-input" th:field="*{soDienThoai}" required id="soDienThoai"/>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <i class="fas fa-envelope"></i> Email
+                    </label>
+                    <input type="email" class="form-input" th:field="*{email}" required id="email"/>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="loaiNguoiDung">
+                        <i class="fas fa-user-tag"></i> Loại Người Dùng
+                    </label>
+                    <select class="form-input" th:field="*{loaiNguoiDung}" id="loaiNguoiDung" required>
+                        <option value="" disabled selected>-- Chọn loại người dùng --</option>
+                        <option value="NhanVien">Nhân viên</option>
+                        <option value="KhachHang">Khách hàng</option>
+                    </select>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary btn-full" th:text="${nguoiDung.maNguoiDung} ? 'Cập nhật' : 'Thêm mới'"></button>
+                    
+                    <a th:href="@{/nguoidung}" class="btn btn-secondary btn-full">
+                        <i class="fas fa-redo"></i> Làm mới
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas fa-list"></i> Danh Sách Người Dùng
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ Tên</th>
+                            <th>SĐT</th>
+                            <th>Email</th>
+                            <th>Loại</th>
+                            <th>Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="nd : ${dsNguoiDung}">
+                            <td th:text="${nd.maNguoiDung}"></td>
+                            <td th:text="${nd.hoTen}"></td>
+                            <td th:text="${nd.soDienThoai}"></td>
+                            <td th:text="${nd.email}"></td>
+                            <td>
+                                <span th:class="${nd.loaiNguoiDung == 'NhanVien'} ? 'user-type type-employee' : 'user-type type-customer'"
+                                      th:text="${nd.loaiNguoiDung}"></span>
+                            </td>
+                            <td>
+                                <div class="actions-cell">
+                                    <a th:href="@{'/nguoidung/edit/' + ${nd.maNguoiDung}}" class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    
+                                    <form class="delete-form" th:action="@{'/nguoidung/delete/' + ${nd.maNguoiDung}}" method="post">
+                                        <button type="submit" class="action-btn delete" 
+                                                onclick="return confirm('Bạn có chắc muốn xóa người dùng này?')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- Form Thêm/Sửa -->
-<div class="form-box">
-    <form th:action="@{/nguoidung/save}" method="post" th:object="${nguoiDung}">
-        <input type="hidden" th:field="*{maNguoiDung}" />
-        <label>Họ tên:</label>
-        <input type="text" th:field="*{hoTen}" required />
-
-        <label>SĐT:</label>
-        <input type="text" th:field="*{soDienThoai}" required />
-
-        <label>Email:</label>
-        <input type="email" th:field="*{email}" required />
-
-        <label>Loại người dùng:</label>
-        <select th:field="*{loaiNguoiDung}" class="form-control" required>
-            <option value="" disabled selected>-- Chọn loại người dùng --</option>
-            <option value="NhanVien">Nhân viên</option>
-            <option value="KhachHang">Khách hàng</option>
-        </select>
-
-        <button type="submit" th:text="*{maNguoiDung} == 0 ? 'Thêm mới' : 'Cập nhật'"></button>
-        <a th:href="@{/nguoidung}"><button type="button">Huỷ</button></a>
-    </form>
-</div>
-
-<!-- Bảng danh sách -->
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Họ tên</th>
-            <th>SĐT</th>
-            <th>Email</th>
-            <th>Loại</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="nd : ${dsNguoiDung}">
-            <td th:text="${nd.maNguoiDung}"></td>
-            <td th:text="${nd.hoTen}"></td>
-            <td th:text="${nd.soDienThoai}"></td>
-            <td th:text="${nd.email}"></td>
-            <td th:text="${nd.loaiNguoiDung}"></td>
-            <td class="actions">
-                <a th:href="@{'/nguoidung/edit/' + ${nd.maNguoiDung}}">✏️ Sửa</a>
-                <form th:action="@{/nguoidung/delete/{id}(id=${nd.maNguoiDung})}" method="post" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Bạn có chắc muốn xoá?')">🗑️ Xoá</button>
-                </form>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
+<script>
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 4000);
+    
+    // Hiệu ứng khi di chuột vào hàng
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+    
+    // Hiệu ứng khi focus vào input
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-3px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'none';
+        });
+    });
+</script>
 </body>
 </html>

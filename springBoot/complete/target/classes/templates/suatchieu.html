@@ -2,439 +2,835 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎬 Quản lý Suất Chiếu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Thêm thư viện flatpickr cho lịch chọn ngày giờ -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         :root {
-            --primary-color: #4e73df;
-            --secondary-color: #858796;
-            --success-color: #1cc88a;
-            --warning-color: #f6c23e;
-            --danger-color: #e74a3b;
-            --cinema-color: #2c3e50;
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
-        }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .container-custom {
-            max-width: 1200px;
-            margin: 30px auto;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
             padding: 30px;
-            backdrop-filter: blur(10px);
+            position: relative;
+            overflow-x: hidden;
         }
         
-        .header {
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        header {
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 0 40px;
+            color: white;
             position: relative;
         }
         
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #f8f9fa, #e9ecef, #dee2e6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 10px;
-        }
-        
-        .header h1 i {
-            color: #ff5722;
-            margin-right: 15px;
-        }
-        
-        .card-custom {
-            background: rgba(44, 62, 80, 0.9);
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        .logo {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
-        .card-header-custom {
-            background: linear-gradient(135deg, var(--cinema-color), #1a2a6c);
-            color: white;
-            padding: 15px 20px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .card-body-custom {
-            padding: 25px;
-        }
-        
-        .form-label {
-            color: #e9ecef;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        
-        .form-control-custom {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border-radius: 8px;
-            padding: 12px 15px;
-            transition: all 0.3s;
-            margin-bottom: 20px;
-        }
-        
-        .form-control-custom:focus {
+        .logo i {
             background: rgba(255, 255, 255, 0.15);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
-            color: #fff;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         
-        .btn-custom {
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
+        .logo-text {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* ===== BACK BUTTON ===== */
+        .back-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .back-button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-        }
-        
-        .btn-submit {
-            background: linear-gradient(135deg, var(--success-color), #17a673);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
             color: white;
-        }
-        
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #17a673, var(--success-color));
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .btn-cancel {
-            background: linear-gradient(135deg, var(--secondary-color), #6c757d);
-            color: white;
-        }
-        
-        .btn-cancel:hover {
-            background: linear-gradient(135deg, #6c757d, var(--secondary-color));
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .table-custom {
-            width: 100%;
-            background: rgba(44, 62, 80, 0.8);
-            color: #fff;
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .table-custom thead th {
-            background: linear-gradient(135deg, var(--cinema-color), #1a2a6c);
-            color: white;
-            padding: 15px 20px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-        }
-        
-        .table-custom tbody td {
-            padding: 15px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            vertical-align: middle;
-            transition: all 0.3s ease;
-        }
-        
-        .table-custom tbody tr {
-            transition: all 0.3s ease;
-        }
-        
-        .table-custom tbody tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .table-custom tbody tr:hover {
-            background: rgba(78, 115, 223, 0.15);
-            transform: translateX(5px);
-        }
-        
-        .table-custom tbody tr:hover td {
-            color: #fff;
-        }
-        
-        .action-btn {
-            padding: 8px 15px;
-            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
             font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
             border: none;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+            background: white;
+        }
+        
+        .form-input:read-only {
+            background-color: #f1f5f9;
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        /* Date Picker Customization */
+        .flatpickr-input {
+            background-color: #f8fafc;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
             cursor: pointer;
         }
         
-        .edit-btn {
-            background: linear-gradient(135deg, var(--warning-color), #e0a800);
-            color: #212529;
+        .flatpickr-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
         
-        .edit-btn:hover {
-            background: linear-gradient(135deg, #e0a800, var(--warning-color));
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
             transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            color: #212529;
-            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
         
-        .delete-btn {
-            background: linear-gradient(135deg, var(--danger-color), #bd2130);
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
             color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
         }
         
-        .delete-btn:hover {
-            background: linear-gradient(135deg, #bd2130, var(--danger-color));
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
             transform: translateY(-3px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            color: white;
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
         }
         
-        .message-box {
-            background: rgba(25, 135, 84, 0.9);
+        .btn-success {
+            background: linear-gradient(90deg, var(--success), #27ae60);
             color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(90deg, #27ae60, var(--success));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #e67e22, var(--warning));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(90deg, var(--danger), #c0392b);
+            color: white;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #c0392b, var(--danger));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        /* ===== STATS CARD ===== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
             margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #3498db;
+            line-height: 1.2;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px;
+            background: white;
+        }
+        
+        .table thead th {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+        
+        .table th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+        
+        .table tbody td {
+            padding: 16px 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03);
+        }
+        
+        .table tbody tr:hover td {
+            transform: translateX(5px);
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        .action-btn.edit {
+            background: #f39c12;
+        }
+        
+        .action-btn.delete {
+            background: var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .message {
+            background-color: white;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 12px;
-            animation: fadeIn 0.5s ease;
-            border-left: 4px solid var(--success-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--success);
         }
         
+        .error {
+            background-color: white;
+            color: var(--danger);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--danger);
+        }
+        
+        /* ===== ANIMATIONS ===== */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #adb5bd;
+            color: var(--gray);
         }
         
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.2);
+            color: #dddfeb;
         }
         
-        .btn-group-custom {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .clapper-icon {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 2.5rem;
-            opacity: 0.1;
-        }
-        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
         @media (max-width: 768px) {
-            .container-custom {
+            body {
                 padding: 15px;
             }
             
-            .btn-group-custom {
-                flex-direction: column;
-                gap: 10px;
+            .logo {
+                font-size: 2rem;
             }
             
-            .btn-custom {
-                width: 100%;
+            .logo-text {
+                font-size: 1.8rem;
             }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .back-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
         }
     </style>
 </head>
 <body>
-    <div class="container-custom">
-        <!-- Header -->
-        <div class="header">
-            <h1><i class="bi bi-camera-reels"></i> Quản lý Suất Chiếu</h1>
-            <p class="text-light">Quản lý và sắp xếp các suất chiếu phim trong hệ thống</p>
-            <i class="bi bi-ticket-perforated clapper-icon"></i>
+<div class="container">
+    <!-- Thông báo -->
+    <div class="message-container">
+        <div th:if="${message}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
         </div>
-        <div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
-</div>
-
-        <!-- Thông báo -->
-        <div th:if="${message}" class="message-box">
-            <i class="bi bi-check-circle-fill" style="font-size: 1.5rem;"></i>
-            <div th:text="${message}"></div>
-        </div>
-
-        <!-- Form thêm/sửa -->
-        <div class="card-custom">
-            <div class="card-header-custom">
-                <i class="bi bi-plus-circle me-2"></i>
-                <span th:text="${editMode} ? 'CẬP NHẬT SUẤT CHIẾU' : 'THÊM SUẤT CHIẾU MỚI'"></span>
-            </div>
-            <div class="card-body-custom">
-                <form th:action="@{${editMode} ? '/suatchieu/edit' : '/suatchieu/add'}"
-                    th:object="${suatchieu}" method="post">
-                    <input type="hidden" th:field="*{maSuatChieu}"/>
-
-                    <div class="mb-3">
-                        <label class="form-label">Mã Phim:</label>
-                        <input type="number" class="form-control-custom" th:field="*{maPhim}" required/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Mã Phòng:</label>
-                        <input type="number" class="form-control-custom" th:field="*{maPhong}" required/>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label">Ngày Giờ Chiếu:</label>
-                        <input type="datetime-local" class="form-control-custom" th:field="*{ngayGioChieu}" required/>
-                    </div>
-
-                    <div class="btn-group-custom">
-                        <button type="submit" class="btn-custom btn-submit">
-                            <i class="bi" th:class="${editMode} ? 'bi-arrow-repeat' : 'bi-plus-circle'"></i>
-                            <span th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></span>
-                        </button>
-                        
-                        <a th:href="@{/suatchieu}" class="btn-custom btn-cancel">
-                            <i class="bi bi-x-circle"></i> Hủy bỏ
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Danh sách suất chiếu -->
-        <div class="card-custom">
-            <div class="card-header-custom">
-                <i class="bi bi-list me-2"></i>
-                DANH SÁCH SUẤT CHIẾU
-            </div>
-            <div class="card-body-custom">
-                <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>Mã</th>
-                            <th>Mã Phim</th>
-                            <th>Mã Phòng</th>
-                            <th>Ngày Giờ Chiếu</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="sc : ${suatchieuList}">
-                            <td th:text="${sc.maSuatChieu}"></td>
-                            <td th:text="${sc.maPhim}"></td>
-                            <td th:text="${sc.maPhong}"></td>
-                            <td th:text="${sc.ngayGioChieuFormatted}"></td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <a th:href="@{'/suatchieu/edit/' + ${sc.maSuatChieu}}" class="action-btn edit-btn">
-                                        <i class="bi bi-pencil"></i> Sửa
-                                    </a>
-                                    <form th:action="@{'/suatchieu/delete/' + ${sc.maSuatChieu}}" method="post" style="display:inline;">
-                                        <button type="submit" class="action-btn delete-btn" 
-                                                onclick="return confirm('Bạn có chắc muốn xoá suất chiếu này?')">
-                                            <i class="bi bi-trash"></i> Xoá
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr th:if="${suatchieuList.isEmpty()}">
-                            <td colspan="5" class="empty-state">
-                                <i class="bi bi-calendar-x"></i>
-                                <h4>Chưa có suất chiếu nào</h4>
-                                <p>Hãy thêm suất chiếu mới bằng form bên trên</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div th:if="${error}" class="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Hiệu ứng hover cho các hàng trong bảng
-        document.addEventListener('DOMContentLoaded', function() {
-            const tableRows = document.querySelectorAll('.table-custom tbody tr');
-            tableRows.forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateX(5px)';
-                });
-                
-                row.addEventListener('mouseleave', function() {
-                    this.style.transform = '';
-                });
-            });
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-film fa-2x"></i>
+                <div class="logo-text">Quản Lý Suất Chiếu</div>
+            </div>
             
-            // Hiệu ứng khi nhấn nút
-            const buttons = document.querySelectorAll('button');
-            buttons.forEach(button => {
-                button.addEventListener('mousedown', function() {
-                    this.style.transform = 'translateY(2px)';
-                });
-                
-                button.addEventListener('mouseup', function() {
-                    this.style.transform = '';
-                });
-            });
+            <!-- Nút quay lại Dashboard -->
+            <div class="back-container">
+                <a th:href="@{/admin/dashboard}">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <p class="subtitle">Quản lý và sắp xếp các suất chiếu phim trong hệ thống</p>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Stats -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${tongSuatChieu}">0</div>
+                    <div class="stat-label">
+                        <i class="fas fa-ticket-alt"></i>
+                        Tổng suất chiếu
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${suatChieuHomNay}">0</div>
+                    <div class="stat-label">
+                        <i class="fas fa-calendar-day"></i>
+                        Suất chiếu hôm nay
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas" th:class="${editMode} ? 'fa-edit' : 'fa-plus-circle'"></i>
+                        <span th:text="${editMode} ? 'Cập nhật Suất Chiếu' : 'Thêm Suất Chiếu mới'"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{${editMode} ? '/suatchieu/edit' : '/suatchieu/add'}"
+                          th:object="${suatchieu}" method="post">
+                        <input type="hidden" th:field="*{maSuatChieu}"/>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="maPhim">
+                                <i class="fas fa-video"></i> Mã Phim
+                            </label>
+                            <input type="number" class="form-input" th:field="*{maPhim}" required id="maPhim">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="maPhong">
+                                <i class="fas fa-door-open"></i> Mã Phòng
+                            </label>
+                            <input type="number" class="form-input" th:field="*{maPhong}" required id="maPhong">
+                        </div>
+                        
+                        <div class="form-group input-with-icon">
+                            <label class="form-label" for="ngayGioChieu">
+                                <i class="fas fa-calendar-alt"></i> Ngày Giờ Chiếu
+                            </label>
+                            <input type="text" class="form-input flatpickr-input" th:field="*{ngayGioChieu}" 
+                                   placeholder="Chọn ngày giờ" id="ngayGioChieu" data-input>
+                            <i class="fas fa-calendar-alt calendar-icon"></i>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-success btn-full">
+                                <i class="fas" th:class="${editMode} ? 'fa-sync-alt' : 'fa-plus'"></i>
+                                <span th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></span>
+                            </button>
+                            
+                            <!-- Nút hủy khi đang ở chế độ sửa -->
+                            <a th:href="@{/suatchieu}" class="btn btn-secondary btn-full">
+                                <i class="fas fa-times"></i> Huỷ bỏ
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-list"></i> Danh Sách Suất Chiếu
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Suất</th>
+                                    <th>Mã Phim</th>
+                                    <th>Mã Phòng</th>
+                                    <th>Ngày Giờ Chiếu</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="sc : ${suatchieuList}">
+                                    <td th:text="${sc.maSuatChieu}"></td>
+                                    <td th:text="${sc.maPhim}"></td>
+                                    <td th:text="${sc.maPhong}"></td>
+                                    <td th:text="${sc.ngayGioChieuFormatted}"></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <a th:href="@{'/suatchieu/edit/' + ${sc.maSuatChieu}}" class="action-btn edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            
+                                            <form th:action="@{'/suatchieu/delete/' + ${sc.maSuatChieu}}" 
+                                                  method="post" 
+                                                  onsubmit="return confirm('Bạn có chắc muốn xoá suất chiếu này?')">
+                                                <button type="submit" class="action-btn delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr th:if="${suatchieuList.isEmpty()}">
+                                    <td colspan="5" class="empty-state">
+                                        <i class="fas fa-calendar-times"></i>
+                                        <h4>Chưa có suất chiếu nào</h4>
+                                        <p>Hãy thêm suất chiếu mới bằng nút "Thêm mới"</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thêm thư viện flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
+
+<script>
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
         });
-    </script>
+    }, 4000);
+    
+    // Hiệu ứng khi di chuột vào hàng
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+    
+    // Hiệu ứng khi focus vào input
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-3px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'none';
+        });
+    });
+    
+    // Khởi tạo trình chọn ngày giờ
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cấu hình flatpickr
+        const dateTimeConfig = {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i:S",
+            time_24hr: true,
+            locale: "vn",
+            minDate: "today",
+            defaultDate: new Date(),
+            minuteIncrement: 1,
+            onOpen: function(selectedDates, dateStr, instance) {
+                instance.setDate(instance.input.value || new Date());
+            }
+        };
+        
+        // Khởi tạo datetime picker
+        flatpickr("#ngayGioChieu", dateTimeConfig);
+        
+        // Thêm sự kiện click cho icon lịch
+        document.querySelector('.calendar-icon').addEventListener('click', function() {
+            document.querySelector('#ngayGioChieu')._flatpickr.open();
+        });
+    });
+</script>
 </body>
 </html>

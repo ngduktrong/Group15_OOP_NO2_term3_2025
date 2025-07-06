@@ -2,96 +2,951 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Hóa Đơn</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 30px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* ===== HEADER STYLES ===== */
+        header {
+            text-align: center;
+            padding: 30px 0 40px;
+            color: white;
+            position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            background: rgba(255, 255, 255, 0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* ===== BACK BUTTON ===== */
+        .back-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 1100px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            border: none;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+            background: white;
+        }
+        
+        .form-input:read-only {
+            background-color: #f1f5f9;
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(90deg, var(--success), #27ae60);
+            color: white;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2);
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(90deg, #27ae60, var(--success));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #e67e22, var(--warning));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(90deg, var(--danger), #c0392b);
+            color: white;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #c0392b, var(--danger));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        /* ===== STATS CARD ===== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #3498db;
+            line-height: 1.2;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px;
+            background: white;
+        }
+        
+        .table thead th {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+        
+        .table th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+        
+        .table tbody td {
+            padding: 16px 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03);
+        }
+        
+        .table tbody tr:hover td {
+            transform: translateX(5px);
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        .action-btn.edit {
+            background: #f39c12;
+        }
+        
+        .action-btn.delete {
+            background: var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .message {
+            background-color: white;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--success);
+        }
+        
+        .error {
+            background-color: white;
+            color: var(--danger);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--danger);
+        }
+        
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+        
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #dddfeb;
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .back-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .revenue-display {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .revenue-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .revenue-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8fafc;
+        }
+        
+        /* Nút cập nhật */
+        .update-btn {
+            background: linear-gradient(90deg, #ff9800, #f57c00);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 152, 0, 0.2);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .update-btn:hover {
+            background: linear-gradient(90deg, #f57c00, #ff9800);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <h1>📄 Quản lý Hóa Đơn</h1>
-    <div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
-</div>
-
-    <!-- ✅ Thông báo -->
-    <p th:if="${message}" th:text="${message}" class="message" style="color: green;"></p>
-
-    <!-- ✅ Tìm kiếm -->
-    <form method="get" th:action="@{/hoadon}" class="form-inline" style="margin-bottom: 1em;">
-        <input type="date" name="ngay" th:value="${searchDate}" placeholder="Ngày lập">
-        <input type="number" name="maKH" th:value="${maKH}" placeholder="Mã KH">
-        <input type="date" name="tuNgay" th:value="${tuNgay}" placeholder="Từ ngày">
-        <input type="date" name="denNgay" th:value="${denNgay}" placeholder="Đến ngày">
-        <button type="submit">🔍 Tìm</button>
-    </form>
-
-    <!-- ✅ Doanh thu -->
-    <div th:if="${doanhThu != null}">
-        <p>💰 Doanh thu ngày [[${searchDate}]]: <strong>[[${doanhThu}]] đ</strong></p>
-    </div>
-    <div th:if="${tongDoanhThuKhoang != null}">
-        <p>💰 Doanh thu từ [[${tuNgay}]] đến [[${denNgay}]]: <strong>[[${tongDoanhThuKhoang}]] đ</strong></p>
+    <!-- Thông báo -->
+    <div class="message-container">
+        <div th:if="${message}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
+        </div>
+        <div th:if="${error}" class="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
     </div>
 
-    <!-- ✅ Form Thêm/Sửa Hóa Đơn -->
-    <h2 th:text="${hoaDon.maHoaDon} > 0 ? '✏️ Sửa hóa đơn' : '➕ Thêm hóa đơn mới'"></h2>
-    <form th:action="@{${hoaDon.maHoaDon} > 0 ? '/hoadon/update' : '/hoadon/add'}"
-          method="post"
-          th:object="${hoaDon}"
-          class="form-inline"
-          style="margin-bottom: 1em; gap: 1em; flex-wrap: wrap">
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-file-invoice-dollar fa-2x"></i>
+                <div class="logo-text">Quản Lý Hóa Đơn</div>
+            </div>
+            
+            <!-- Nút quay lại Dashboard -->
+            <div class="back-container">
+                <a th:href="@{/admin/dashboard}">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <p class="subtitle">Quản lý thông tin hóa đơn, tính toán doanh thu và tìm kiếm</p>
+    </header>
 
-        <input type="hidden" th:field="*{maHoaDon}">
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Stats -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${hoaDonList.size()}">0</div>
+                    <div class="stat-label">
+                        <i class="fas fa-file-invoice"></i>
+                        Tổng số hóa đơn
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" th:text="${#numbers.formatDecimal(#aggregates.sum(hoaDonList.![tongTien]), 1, 'COMMA', 2, 'POINT')}">0</div>
+                    <div class="stat-label">
+                        <i class="fas fa-money-bill-wave"></i>
+                        Tổng doanh thu
+                    </div>
+                </div>
+            </div>
 
-        <label>Mã NV:</label>
-        <input type="number" th:field="*{maNhanVien}" placeholder="Mã NV" required>
-
-        <label>Mã KH:</label>
-        <input type="number" th:field="*{maKhachHang}" placeholder="Mã KH" required>
-
-        <label>Tổng tiền:</label>
-        <input type="number" step="0.01" th:field="*{tongTien}" placeholder="Tổng tiền" required>
-
-        <!-- ✅ Không cần nhập NgayLap vì đã cập nhật tự động từ Vé -->
-        <button type="submit" th:text="${hoaDon.maHoaDon} > 0 ? '💾 Cập nhật' : '➕ Thêm mới'"></button>
-    </form>
-
-    <!-- ✅ Danh sách Hóa đơn -->
-    <h2>📋 Danh sách Hóa Đơn</h2>
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-        <thead style="background-color: #f2f2f2;">
-        <tr>
-            <th>ID</th>
-            <th>Mã NV</th>
-            <th>Mã KH</th>
-            <th>Ngày lập</th>
-            <th>Tổng tiền</th>
-            <th>Hành động</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="hd : ${hoaDonList}">
-            <td th:text="${hd.maHoaDon}"></td>
-            <td th:text="${hd.maNhanVien}"></td>
-            <td th:text="${hd.maKhachHang}"></td>
-            <td th:text="${hd.ngayLap}"></td>
-            <td th:text="${#numbers.formatDecimal(hd.tongTien, 1, 'COMMA', 2, 'POINT')} + ' đ'"></td>
-            <td>
-                <a th:href="@{'/hoadon/edit/' + ${hd.maHoaDon}}">✏️</a>
-                <form th:action="@{/hoadon/delete}" method="post" style="display:inline;">
-                    <input type="hidden" name="maHoaDon" th:value="${hd.maHoaDon}">
-                    <button type="submit" onclick="return confirm('Bạn chắc chắn muốn xóa?')">🗑️</button>
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-title">
+                    <i class="fas fa-search"></i> Tìm kiếm và Tính doanh thu
+                </div>
+                
+                <form method="get" th:action="@{/hoadon}" class="search-form">
+                    <!-- Tìm theo ngày -->
+                    <div class="form-group">
+                        <label class="form-label" for="ngay">
+                            <i class="fas fa-calendar-day"></i> Tính doanh thu theo ngày
+                        </label>
+                        <input type="date" class="form-input" name="ngay" th:value="${searchDate}" id="ngay">
+                    </div>
+                    
+                    <!-- Tìm theo khoảng ngày -->
+                    <div class="search-group">
+                        <div class="form-group">
+                            <label class="form-label" for="tuNgay">
+                                <i class="fas fa-calendar-alt"></i> Từ ngày
+                            </label>
+                            <input type="date" class="form-input" name="tuNgay" th:value="${tuNgay}" id="tuNgay">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="denNgay">
+                                <i class="fas fa-calendar-alt"></i> Đến ngày
+                            </label>
+                            <input type="date" class="form-input" name="denNgay" th:value="${denNgay}" id="denNgay">
+                        </div>
+                    </div>
+                    
+                    <!-- Tìm theo mã khách hàng -->
+                    <div class="form-group">
+                        <label class="form-label" for="maKH">
+                            <i class="fas fa-user"></i> Tìm theo mã khách hàng
+                        </label>
+                        <input type="number" class="form-input" name="maKH" th:value="${maKH}" placeholder="Nhập mã khách hàng" id="maKH">
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                        
+                        <!-- Nút cập nhật -->
+                <form th:action="@{/hoadon/update}" method="post">
+                <button type="submit" class="update-btn">
+                    <i class="fas fa-sync-alt"></i> Cập nhật
+                </button>
                 </form>
-            </td>
-        </tr>
-        <tr th:if="${hoaDonList.empty}">
-            <td colspan="6" style="text-align: center;">Không có hóa đơn nào.</td>
-        </tr>
-        </tbody>
-    </table>
+
+                    </div>
+                </form>
+                
+                <!-- Hiển thị doanh thu -->
+                <div class="revenue-display" th:if="${doanhThu != null}">
+                    <div class="revenue-title">
+                        <i class="fas fa-coins"></i> Doanh thu ngày [[${searchDate}]]
+                    </div>
+                    <div class="revenue-value">[[${#numbers.formatDecimal(doanhThu, 1, 'COMMA', 2, 'POINT')}]] đ</div>
+                </div>
+                
+                <div class="revenue-display" th:if="${tongDoanhThuKhoang != null}">
+                    <div class="revenue-title">
+                        <i class="fas fa-coins"></i> Doanh thu từ [[${tuNgay}]] đến [[${denNgay}]]
+                    </div>
+                    <div class="revenue-value">[[${#numbers.formatDecimal(tongDoanhThuKhoang, 1, 'COMMA', 2, 'POINT')}]] đ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Form Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas" th:class="${hoaDon.maHoaDon} > 0 ? 'fa-edit' : 'fa-plus-circle'"></i>
+                        <span th:text="${hoaDon.maHoaDon} > 0 ? 'Cập nhật Hóa Đơn' : 'Thêm Hóa Đơn mới'"></span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{${hoaDon.maHoaDon} > 0 ? '/hoadon/update' : '/hoadon/add'}"
+                          th:object="${hoaDon}" 
+                          method="post">
+                          
+                        <input type="hidden" th:field="*{maHoaDon}">
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="maNhanVien">
+                                <i class="fas fa-user-tie"></i> Mã Nhân Viên
+                            </label>
+                            <input type="number" class="form-input" th:field="*{maNhanVien}" placeholder="Nhập mã nhân viên" required id="maNhanVien">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="maKhachHang">
+                                <i class="fas fa-user"></i> Mã Khách Hàng
+                            </label>
+                            <input type="number" class="form-input" th:field="*{maKhachHang}" placeholder="Nhập mã khách hàng" required id="maKhachHang">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="tongTien">
+                                <i class="fas fa-money-bill-wave"></i> Tổng Tiền
+                            </label>
+                            <input type="number" step="0.01" class="form-input" th:field="*{tongTien}" placeholder="Nhập tổng tiền" required id="tongTien">
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" 
+                                    th:class="${hoaDon.maHoaDon} > 0 ? 'btn btn-success' : 'btn btn-primary' + ' btn-full'">
+                                <i class="fas" th:class="${hoaDon.maHoaDon} > 0 ? 'fa-sync-alt' : 'fa-plus'"></i>
+                                <span th:text="${hoaDon.maHoaDon} > 0 ? 'Cập nhật' : 'Thêm mới'"></span>
+                            </button>
+                            
+                            <!-- Nút hủy khi đang ở chế độ sửa -->
+                            <a th:if="${hoaDon.maHoaDon} > 0" th:href="@{/hoadon}">
+                                <button type="button" class="btn btn-secondary btn-full">
+                                    <i class="fas fa-times"></i> Huỷ bỏ
+                                </button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Danh sách hóa đơn -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-list"></i> Danh Sách Hóa Đơn
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Mã NV</th>
+                                    <th>Mã KH</th>
+                                    <th>Ngày lập</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="hd : ${hoaDonList}">
+                                    <td th:text="${hd.maHoaDon}"></td>
+                                    <td th:text="${hd.maNhanVien}"></td>
+                                    <td th:text="${hd.maKhachHang}"></td>
+                                    <td th:text="${hd.ngayLap}"></td>
+                                    <td th:text="${#numbers.formatDecimal(hd.tongTien, 1, 'COMMA', 2, 'POINT')} + ' đ'"></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <a th:href="@{'/hoadon/edit/' + ${hd.maHoaDon}}" class="action-btn edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            
+                                            <form th:action="@{'/hoadon/delete/' + ${hd.maHoaDon}}" 
+                                                  method="post">
+                                                <button type="submit" class="action-btn delete"
+                                                        onclick="return confirm('Bạn có chắc muốn xoá hóa đơn này?')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <tr th:if="${hoaDonList.isEmpty()}">
+                                    <td colspan="6" class="empty-state">
+                                        <i class="fas fa-file-invoice"></i>
+                                        <h4>Chưa có hóa đơn nào</h4>
+                                        <p>Hãy thêm hóa đơn mới bằng nút "Thêm mới"</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 4000);
+    
+    // Hiệu ứng khi di chuột vào hàng
+    document.querySelectorAll('.table tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
+    });
+    
+    // Hiệu ứng khi focus vào input
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-3px)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'none';
+        });
+    });
+</script>
 </body>
 </html>

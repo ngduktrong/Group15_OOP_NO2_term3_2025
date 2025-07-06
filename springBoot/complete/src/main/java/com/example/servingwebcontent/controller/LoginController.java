@@ -70,7 +70,11 @@ public class LoginController {
             } else if ("user".equalsIgnoreCase(loai) && "user".equalsIgnoreCase(role)) {
                 session.setAttribute("username", username);
                 session.setAttribute("role", "user");
+                
+                // +++ THÊM: lưu mã khách hàng riêng vào session +++
                 session.setAttribute("maKhachHang", tk.getMaNguoiDung());
+                // +++ TÙY CHỌN: lưu luôn object TaiKhoan để dùng khi cần +++
+                session.setAttribute("user", tk);
 
                 List<Phim> phims = phimService.getAllPhim();
                 model.addAttribute("phims", phims);

@@ -3,81 +3,754 @@
 <head>
   <meta charset="UTF-8">
   <title>🎬 Quản lý Phim</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 30px; }
-    h1 { color: #2c3e50; }
-    form, table { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); margin-bottom: 30px; }
-    input, textarea, select, button {
-      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px;
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a0ca3;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --light: #f8f9fa;
+      --dark: #2c3e50;
+      --gray: #6c757d;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --warning: #f39c12;
+      --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    button { background: #2ecc71; color: white; cursor: pointer; border: none; }
-    button:hover { background: #27ae60; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 12px; border: 1px solid #e1e1e1; text-align: left; }
-    th { background: #3498db; color: white; }
-    tr:hover { background: #f2f2f2; }
-    .actions { display: flex; gap: 6px; }
-    .message { color: green; font-weight: bold; margin-bottom: 10px; }
-    img { width: 60px; }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 30px;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      z-index: -1;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* ===== HEADER STYLES ===== */
+    header {
+      text-align: center;
+      padding: 30px 0 40px;
+      color: white;
+      position: relative;
+    }
+    
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      font-size: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo i {
+      background: rgba(255, 255, 255, 0.15);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo-text {
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .subtitle {
+      font-weight: 300;
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    
+    /* ===== BACK BUTTON ===== */
+    .back-container {
+      position: relative;
+      z-index: 10;
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* ===== MAIN CONTENT ===== */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 1100px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* ===== CARD STYLES ===== */
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+      border: none;
+      margin-bottom: 30px;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+      padding: 20px 25px;
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      color: white;
+      position: relative;
+    }
+    
+    .card-header::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+    }
+    
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card-body {
+      padding: 25px;
+    }
+    
+    /* ===== FORM STYLES ===== */
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e1e5eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: var(--transition);
+      font-family: 'Poppins', sans-serif;
+      background: #f8fafc;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+      outline: none;
+      background: white;
+    }
+    
+    .form-input:read-only {
+      background-color: #f1f5f9;
+      color: var(--gray);
+      cursor: not-allowed;
+    }
+    
+    textarea.form-input {
+      min-height: 100px;
+      resize: vertical;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      color: white;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #2980b9, #3498db);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+    }
+    
+    .btn-secondary {
+      background: linear-gradient(90deg, #6c757d, #495057);
+      color: white;
+      box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: linear-gradient(90deg, #495057, #343a40);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-full {
+      width: 100%;
+    }
+    
+    /* ===== TABLE STYLES ===== */
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 700px;
+      background: white;
+    }
+    
+    .table thead th {
+      background: linear-gradient(90deg, #3498db, #2980b9);
+      color: white;
+      padding: 16px 20px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 1rem;
+      position: sticky;
+      top: 0;
+    }
+    
+    .table th:first-child {
+      border-radius: 16px 0 0 0;
+    }
+    
+    .table th:last-child {
+      border-radius: 0 16px 0 0;
+    }
+    
+    .table tbody td {
+      padding: 16px 20px;
+      color: var(--dark);
+      border-bottom: 1px solid #f1f5f9;
+      transition: var(--transition);
+    }
+    
+    .table tbody tr {
+      transition: var(--transition);
+    }
+    
+    .table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .table tbody tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    
+    .table tbody tr:hover {
+      background-color: rgba(52, 152, 219, 0.03);
+    }
+    
+    .table tbody tr:hover td {
+      transform: translateX(5px);
+    }
+    
+    .poster-img {
+      width: 60px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+    
+    .poster-img:hover {
+      transform: scale(1.8);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+      position: relative;
+    }
+    
+    .actions-cell {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+    
+    .action-btn.edit {
+      background: #f39c12;
+    }
+    
+    .action-btn.delete {
+      background: var(--danger);
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* ===== MESSAGE STYLES ===== */
+    .message-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      max-width: 400px;
+    }
+    
+    .message {
+      background-color: white;
+      color: var(--success);
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+      transform: translateX(0);
+      opacity: 1;
+      border-left: 4px solid var(--success);
+    }
+    
+    .error {
+      background-color: white;
+      color: var(--danger);
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+      transform: translateX(0);
+      opacity: 1;
+      border-left: 4px solid var(--danger);
+    }
+    
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
+    
+    /* ===== RESPONSIVE ADJUSTMENTS ===== */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      .logo {
+        font-size: 2rem;
+      }
+      
+      .logo-text {
+        font-size: 1.8rem;
+      }
+      
+      .header-top {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      
+      .table-responsive {
+        overflow-x: auto;
+      }
+      
+      .back-button {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+      }
+      
+      .table th, .table td {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .table td:nth-child(4),
+      .table td:nth-child(5),
+      .table td:nth-child(6) {
+        display: none;
+      }
+      
+      .table th:nth-child(4),
+      .table th:nth-child(5),
+      .table th:nth-child(6) {
+        display: none;
+      }
+    }
+    
+    /* ===== UTILITY CLASSES ===== */
+    .text-center {
+      text-align: center;
+    }
+    
+    .mb-20 {
+      margin-bottom: 20px;
+    }
+    
+    .mt-10 {
+      margin-top: 10px;
+    }
+    
+    .mt-20 {
+      margin-top: 20px;
+    }
+    
+    .form-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
-  
+<div class="container">
+  <!-- Thông báo -->
+  <div class="message-container">
+    <div th:if="${message}" class="message">
+      <i class="fas fa-check-circle"></i>
+      <span th:text="${message}"></span>
+    </div>
+    <div th:if="${error}" class="error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span th:text="${error}"></span>
+    </div>
+  </div>
 
-<h1>🎬 Quản lý phim</h1>
-<div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
+  <!-- Header -->
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <i class="fas fa-film fa-2x"></i>
+        <div class="logo-text">Quản Lý Phim</div>
+      </div>
+      
+      <!-- Nút quay lại Dashboard -->
+      <div class="back-container">
+        <a th:href="@{/admin/dashboard}">
+          <button class="back-button">
+            <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+          </button>
+        </a>
+      </div>
+    </div>
+    
+    <p class="subtitle">Quản lý thông tin phim, lịch chiếu và nội dung phim</p>
+  </header>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+    <!-- Left Column -->
+    <div class="left-column">
+      <!-- Form Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas" th:class="${editMode} ? 'fa-edit' : 'fa-plus-circle'"></i>
+            <span th:text="${editMode} ? 'Cập nhật Phim' : 'Thêm Phim mới'"></span>
+          </div>
+        </div>
+        <div class="card-body">
+          <form th:action="${editMode} ? @{'/phim/edit/' + ${phim.maPhim}} : @{/phim/add}" method="post" th:object="${phim}">
+            <input type="hidden" th:field="*{maPhim}"/>
+            
+            <div class="form-group">
+              <label class="form-label" for="tenPhim">
+                <i class="fas fa-ticket-alt"></i> Tên phim
+              </label>
+              <input type="text" class="form-input" th:field="*{tenPhim}" required id="tenPhim"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="thoiLuong">
+                <i class="fas fa-clock"></i> Thời lượng (phút)
+              </label>
+              <input type="number" class="form-input" th:field="*{thoiLuong}" min="1" required id="thoiLuong"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="ngayKhoiChieu">
+                <i class="fas fa-calendar-day"></i> Ngày khởi chiếu
+              </label>
+              <input type="date" class="form-input" th:field="*{ngayKhoiChieu}" required id="ngayKhoiChieu"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="nuocSanXuat">
+                <i class="fas fa-globe-asia"></i> Quốc gia
+              </label>
+              <input type="text" class="form-input" th:field="*{nuocSanXuat}" required id="nuocSanXuat"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="dinhDang">
+                <i class="fas fa-video"></i> Định dạng
+              </label>
+              <input type="text" class="form-input" th:field="*{dinhDang}" required id="dinhDang"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="daoDien">
+                <i class="fas fa-user-tie"></i> Đạo diễn
+              </label>
+              <input type="text" class="form-input" th:field="*{daoDien}" required id="daoDien"/>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="moTa">
+                <i class="fas fa-file-alt"></i> Mô tả
+              </label>
+              <textarea class="form-input" th:field="*{moTa}" rows="3" id="moTa"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="duongDanPoster">
+                <i class="fas fa-image"></i> Poster (file name)
+              </label>
+              <input type="text" class="form-input" th:field="*{duongDanPoster}" id="duongDanPoster"/>
+            </div>
+            
+            <div class="form-buttons">
+              <button type="submit" class="btn btn-primary btn-full" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
+              
+              <a th:href="@{/phim}" class="btn btn-secondary btn-full">
+                <i class="fas fa-redo"></i> Làm mới
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-list"></i> Danh Sách Phim
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Mã</th>
+                  <th>Tên</th>
+                  <th>Thời lượng</th>
+                  <th>Ngày chiếu</th>
+                  <th>Q.Gia</th>
+                  <th>Định dạng</th>
+                  <th>Đạo diễn</th>
+                  <th>Poster</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="p : ${phims}">
+                  <td th:text="${p.maPhim}"></td>
+                  <td th:text="${p.tenPhim}"></td>
+                  <td th:text="${p.thoiLuong} + ' phút'"></td>
+                  <td th:text="${p.ngayKhoiChieu}"></td>
+                  <td th:text="${p.nuocSanXuat}"></td>
+                  <td th:text="${p.dinhDang}"></td>
+                  <td th:text="${p.daoDien}"></td>
+                  <td>
+                    <img th:if="${p.duongDanPoster}" 
+                         th:src="@{'/images/' + ${p.duongDanPoster}}" 
+                         alt="Poster" class="poster-img"/>
+                    <span th:unless="${p.duongDanPoster}">-</span>
+                  </td>
+                  <td>
+                    <div class="actions-cell">
+                      <a th:href="@{'/phim/edit/' + ${p.maPhim}}" class="action-btn edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      
+                      <form class="delete-form" th:action="@{'/phim/delete/' + ${p.maPhim}}" method="post">
+                        <button type="submit" class="action-btn delete" 
+                                onclick="return confirm('Bạn có chắc muốn xóa phim này?')">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ✅ Thông báo -->
-<div th:if="${message}" class="message" th:text="${message}"></div>
-
-<!-- ✅ Form thêm / sửa -->
-<form th:action="@{${editMode} ? '/phim/edit/' + ${phim.maPhim} : '/phim/add'}" method="post" th:object="${phim}">
-  <input type="hidden" th:field="*{maPhim}"/>
-  <label>Tên phim:</label> <input type="text" th:field="*{tenPhim}" required/>
-  <label>Thời lượng (phút):</label> <input type="number" th:field="*{thoiLuong}" min="1" required/>
-  <label>Ngày khởi chiếu:</label> <input type="date" th:field="*{ngayKhoiChieu}" required/>
-  <label>Quốc gia:</label> <input type="text" th:field="*{nuocSanXuat}" required/>
-  <label>Định dạng:</label> <input type="text" th:field="*{dinhDang}" required/>
-  <label>Đạo diễn:</label> <input type="text" th:field="*{daoDien}" required/>
-  <label>Mô tả:</label> <textarea th:field="*{moTa}" rows="3"></textarea>
-  <label>Poster (file name):</label> <input type="text" th:field="*{duongDanPoster}"/>
-  <button type="submit" th:text="${editMode} ? 'Cập nhật phim' : 'Thêm phim'"></button>
-</form>
-
-<!-- ✅ Danh sách phim -->
-<table>
-  <thead>
-    <tr>
-      <th>Mã</th><th>Tên</th><th>Thời lượng</th><th>Ngày chiếu</th><th>Q.Gia</th>
-      <th>Định dạng</th><th>Đạo diễn</th><th>Mô tả</th><th>Poster</th><th>Thao tác</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr th:each="p : ${phims}">
-      <td th:text="${p.maPhim}"/>
-      <td th:text="${p.tenPhim}"/>
-      <td th:text="${p.thoiLuong}"/>
-      <td th:text="${p.ngayKhoiChieu}"/>
-      <td th:text="${p.nuocSanXuat}"/>
-      <td th:text="${p.dinhDang}"/>
-      <td th:text="${p.daoDien}"/>
-      <td th:text="${p.moTa}"/>
-      <td><img th:src="@{'/images/' + ${p.duongDanPoster}}" alt="Poster"/></td>
-      <td class="actions">
-        <a th:href="@{'/phim/edit/' + ${p.maPhim}}">✏️</a>
-        <form th:action="@{'/phim/delete/' + ${p.maPhim}}" method="post" style="display:inline;">
-          <button type="submit" onclick="return confirm('Xoá phim này?')">🗑️</button>
-        </form>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+<script>
+  // Tự động ẩn thông báo sau 4 giây
+  setTimeout(() => {
+    const messages = document.querySelectorAll('.message, .error');
+    messages.forEach(msg => {
+      msg.style.animation = 'fadeOut 0.5s ease forwards';
+      setTimeout(() => msg.remove(), 500);
+    });
+  }, 4000);
+  
+  // Hiệu ứng khi di chuột vào hàng
+  document.querySelectorAll('.table tbody tr').forEach(row => {
+    row.addEventListener('mouseenter', function() {
+      this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+    });
+    
+    row.addEventListener('mouseleave', function() {
+      this.style.boxShadow = 'none';
+    });
+  });
+  
+  // Hiệu ứng khi focus vào input
+  document.querySelectorAll('.form-input').forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.style.transform = 'translateY(-3px)';
+    });
+    
+    input.addEventListener('blur', function() {
+      this.parentElement.style.transform = 'none';
+    });
+  });
+  
+  // Hiệu ứng khi di chuột qua poster
+  document.querySelectorAll('.poster-img').forEach(img => {
+    img.addEventListener('mouseenter', function() {
+      this.style.transform = 'scale(1.8)';
+      this.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+      this.style.zIndex = '10';
+    });
+    
+    img.addEventListener('mouseleave', function() {
+      this.style.transform = 'scale(1)';
+      this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+      this.style.zIndex = '1';
+    });
+  });
+</script>
 </body>
 </html>

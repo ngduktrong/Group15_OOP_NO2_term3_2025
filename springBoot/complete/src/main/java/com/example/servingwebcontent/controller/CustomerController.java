@@ -41,9 +41,12 @@ public class CustomerController {
             return "redirect:/login";
         }
 
+        // +++ THÊM: lấy mã khách hàng từ session +++
+        Integer maKhachHang = (Integer) session.getAttribute("maKhachHang");
+
         // Thông tin user
         model.addAttribute("username", session.getAttribute("username"));
-        model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
+        model.addAttribute("maKhachHang", maKhachHang);
 
         // Danh sách phim
         List<Phim> phims = phimService.getAllPhim();
@@ -62,17 +65,20 @@ public class CustomerController {
         // Kiểm tra đăng nhập
         if (session.getAttribute("username") == null || 
             session.getAttribute("maKhachHang") == null) {
-            return "redirect:/login";
+            return "login";
         }
+
+        // +++ THÊM: lấy mã khách hàng từ session +++
+        Integer maKhachHang = (Integer) session.getAttribute("maKhachHang");
 
         // Thông tin user
         model.addAttribute("username", session.getAttribute("username"));
-        model.addAttribute("maKhachHang", session.getAttribute("maKhachHang"));
+        model.addAttribute("maKhachHang", maKhachHang);
 
         // Lấy thông tin phim đã chọn
         Phim selectedPhim = phimService.getPhimById(maPhim);
         if (selectedPhim == null) {
-            return "redirect:/customer/movies";
+            return "customer/movies";
         }
         model.addAttribute("selectedPhim", selectedPhim);
         session.setAttribute("selectedPhim", selectedPhim);

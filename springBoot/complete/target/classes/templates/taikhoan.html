@@ -4,318 +4,443 @@
     <meta charset="UTF-8">
     <title>Quản lý Tài Khoản</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== BASE STYLES ===== */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #2c3e50;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+            color: var(--dark);
             line-height: 1.6;
-            padding: 30px;
             min-height: 100vh;
-            transition: background 0.5s ease;
+            padding: 30px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            z-index: -1;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         /* ===== HEADER STYLES ===== */
-        h2 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
+        header {
             text-align: center;
-            color: #2c3e50;
-            padding: 15px 0;
+            padding: 30px 0 40px;
+            color: white;
             position: relative;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
         }
         
-        h2:before {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            border-radius: 2px;
-            transition: width 0.3s ease;
+        .logo i {
+            background: rgba(255, 255, 255, 0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         
-        h2:hover:before {
-            width: 120px;
+        .logo-text {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-family: 'Montserrat', sans-serif;
         }
         
-        h3 {
-            font-size: 1.5rem;
-            margin: 20px 0 15px;
-            color: #2c3e50;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e1e5eb;
-        }
-        
-        /* ===== MESSAGE STYLES ===== */
-        .message {
-            color: #28a745;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .error {
-            color: #dc3545;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* ===== FORM STYLES ===== */
-        .form-container {
-            background: white;
-            padding: 30px;
-            margin: 0 auto 30px;
-            border-radius: 12px;
+        .subtitle {
+            font-weight: 300;
+            font-size: 1.2rem;
             max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e5eb;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto;
+            opacity: 0.9;
         }
         
-        .form-container:hover {
+        /* ===== BACK BUTTON ===== */
+        .back-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            border: none;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
         }
         
-        .form-container > div {
-            margin-bottom: 20px;
+        .card-header {
+            padding: 20px 25px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            position: relative;
+        }
+        
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-        }
-        
-        label {
-            display: inline-block;
-            width: 180px;
-            font-weight: 600;
-            color: #495057;
-            transition: color 0.3s ease;
-        }
-        
-        input, select {
-            flex: 1;
-            padding: 12px 15px;
-            margin: 5px 0;
-            border: 2px solid #e1e5eb;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        input:focus, select:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            outline: none;
-        }
-        
-        input[readonly] {
-            background-color: #f8f9fa;
-            color: #6c757d;
-        }
-        
-        button[type="submit"] {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-        }
-        
-        button[type="submit"]:hover {
-            background: linear-gradient(90deg, #3a0ca3, #4361ee);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
-        }
-        
-        a[th|if] {
-            display: inline-block;
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            margin-left: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
-        }
-        
-        a[th|if]:hover {
-            background: #5a6268;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
-        }
-        
-        /* ===== TABLE STYLES ===== */
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: white;
-            margin-top: 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-        
-        th {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
-            color: white;
-            padding: 16px 15px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 1.05rem;
-            transition: background 0.3s ease;
-        }
-        
-        th:hover {
-            background: linear-gradient(90deg, #3a0ca3, #4361ee);
-        }
-        
-        td {
-            padding: 14px 15px;
-            text-align: center;
-            color: #495057;
-            border-bottom: 1px solid #e1e5eb;
-            transition: all 0.2s ease;
-        }
-        
-        tbody tr {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        tbody tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.05);
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* ===== ACTIONS STYLES ===== */
-        td:last-child {
-            display: flex;
-            justify-content: center;
             gap: 10px;
         }
         
-        a {
-            display: inline-block;
-            padding: 8px 15px;
-            background: rgba(72, 149, 239, 0.1);
-            color: #4361ee;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(67, 97, 238, 0.2);
+        .card-body {
+            padding: 25px;
         }
         
-        a:hover {
-            background: #4361ee;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
+        /* ===== FORM STYLES ===== */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
         }
         
-        form[style] {
-            display: inline-block;
-            margin: 0;
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
-        form button {
-            padding: 8px 15px;
-            background: rgba(247, 37, 133, 0.1);
-            color: #f72585;
-            border: none;
-            border-radius: 6px;
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+            outline: none;
+            background: white;
+        }
+        
+        .form-input:read-only {
+            background-color: #f1f5f9;
+            color: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(247, 37, 133, 0.2);
+            transition: var(--transition);
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
         }
         
-        form button:hover {
-            background: #f72585;
+        .btn-primary {
+            background: linear-gradient(90deg, #3498db, #2980b9);
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.2);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
         }
         
-        /* ===== RESPONSIVE ADJUSTMENTS ===== */
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            
-            h2 {
-                font-size: 1.8rem;
-            }
-            
-            .form-container {
-                padding: 20px;
-            }
-            
-            .form-container > div {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            label {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-            
-            input, select {
-                width: 100%;
-            }
-            
-            button[type="submit"], a[th|if] {
-                width: 100%;
-                margin: 10px 0 0 0;
-                text-align: center;
-            }
-            
-            td:last-child {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            a, form button {
-                width: 100%;
-                text-align: center;
-            }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(90deg, var(--danger), #c0392b);
+            color: white;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.2);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #c0392b, var(--danger));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #e67e22, var(--warning));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        /* ===== TABLE STYLES ===== */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 700px;
+            background: white;
+        }
+        
+        .table thead th {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 1rem;
+            position: sticky;
+            top: 0;
+        }
+        
+        .table th:first-child {
+            border-radius: 16px 0 0 0;
+        }
+        
+        .table th:last-child {
+            border-radius: 0 16px 0 0;
+        }
+        
+        .table tbody td {
+            padding: 16px 20px;
+            color: var(--dark);
+            border-bottom: 1px solid #f1f5f9;
+            transition: var(--transition);
+        }
+        
+        .table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(52, 152, 219, 0.03);
+        }
+        
+        .table tbody tr:hover td {
+            transform: translateX(5px);
+        }
+        
+        .status-cell {
+            font-weight: 600;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .status-admin {
+            background: rgba(67, 97, 238, 0.15);
+            color: #4361ee;
+        }
+        
+        .status-user {
+            background: rgba(247, 37, 133, 0.15);
+            color: #f72585;
+        }
+        
+        .actions-cell {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        
+        .action-btn.edit {
+            background: #f39c12;
+        }
+        
+        .action-btn.delete {
+            background: var(--danger);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ===== MESSAGE STYLES ===== */
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+        
+        .message {
+            background-color: white;
+            color: var(--success);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--success);
+        }
+        
+        .error {
+            background-color: white;
+            color: var(--danger);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.5s ease, fadeOut 0.5s ease 3.5s forwards;
+            transform: translateX(0);
+            opacity: 1;
+            border-left: 4px solid var(--danger);
         }
         
         /* ===== ANIMATIONS ===== */
@@ -324,162 +449,252 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .message, .error, .form-container, table {
-            animation: fadeIn 0.5s ease forwards;
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         
-        /* ===== RIPPLE EFFECT ===== */
-        .ripple {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
         }
         
-        @keyframes ripple {
-            to {
-                transform: scale(2.5);
-                opacity: 0;
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
             }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .table-responsive {
+                overflow-x: auto;
+            }
+            
+            .back-button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+            
+            .actions-cell {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+        
+        .mt-10 {
+            margin-top: 10px;
+        }
+        
+        .mt-20 {
+            margin-top: 20px;
+        }
+        
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Layout adjustments */
+        .form-card {
+            max-width: 700px;
+            margin: 0 auto 30px;
         }
     </style>
 </head>
 <body>
-<h2><i class="fas fa-user-circle"></i> Quản lý tài khoản</h2>
-<div class="back-container">
-    <a th:href="@{/admin/dashboard}">
-        <button class="back-button">
-            <i class="fas fa-arrow-left"></i> Quay lại giao diện chính
-        </button>
-    </a>
-</div>
+<div class="container">
+    <!-- Thông báo -->
+    <div class="message-container">
+        <div th:if="${message}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
+        </div>
+        <div th:if="${error}" class="error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+    </div>
 
-<!-- Thông báo -->
-<div th:if="${message}" class="message">
-    <p th:text="${message}"></p>
-</div>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <i class="fas fa-user-lock fa-2x"></i>
+                <div class="logo-text">Quản Lý Tài Khoản</div>
+            </div>
+            
+            <!-- Nút quay lại Dashboard -->
+            <div class="back-container">
+                <a th:href="@{/admin/dashboard}">
+                    <button class="back-button">
+                        <i class="fas fa-arrow-left"></i> Quay lại Giao diện chính
+                    </button>
+                </a>
+            </div>
+        </div>
+        
+        <p class="subtitle">Quản lý tài khoản người dùng, phân quyền và bảo mật hệ thống</p>
+    </header>
 
-<h3 th:text="${editMode} ? 'Chỉnh sửa tài khoản' : 'Thêm tài khoản mới'"></h3>
-
-<!-- Form thêm/sửa -->
-<form th:action="${editMode} ? @{'/taikhoan/edit/' + ${taiKhoan.tenDangNhap}} : @{/taikhoan/add}"
-      method="post" th:object="${taiKhoan}" class="form-container">
-    <div>
-        <label><i class="fas fa-user"></i> Tên đăng nhập:</label>
-        <input type="text" th:field="*{tenDangNhap}" th:readonly="${editMode}" required/>
-    </div>
-    <div>
-        <label><i class="fas fa-lock"></i> Mật khẩu:</label>
-        <input type="password" th:field="*{matKhau}" required/>
-    </div>
-    <div>
-        <label><i class="fas fa-users-cog"></i> Loại tài khoản:</label>
-        <select th:field="*{loaiTaiKhoan}">
-            <option value="admin" th:selected="${taiKhoan.loaiTaiKhoan == 'admin'}">Admin</option>
-            <option value="user" th:selected="${taiKhoan.loaiTaiKhoan == 'user'}">User</option>
-        </select>
-    </div>
-    <div>
-        <label><i class="fas fa-id-card"></i> Mã người dùng:</label>
-        <input type="number" th:field="*{maNguoiDung}" required/>
-    </div>
-    <div>
-        <button type="submit" th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
-        <a th:if="${editMode}" th:href="@{/taikhoan}" style="margin-left: 10px;">Hủy</a>
-    </div>
-</form>
-
-<!-- Danh sách tài khoản -->
-<h3><i class="fas fa-list"></i> Danh sách tài khoản</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Tên đăng nhập</th>
-        <th>Mật khẩu</th>
-        <th>Loại</th>
-        <th>Mã người dùng</th>
-        <th>Hành động</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="tk : ${taiKhoans}">
-        <td th:text="${tk.tenDangNhap}"></td>
-        <td th:text="${tk.matKhau}"></td>
-        <td th:text="${tk.loaiTaiKhoan}"></td>
-        <td th:text="${tk.maNguoiDung}"></td>
-        <td>
-            <a th:href="@{'/taikhoan/edit/' + ${tk.tenDangNhap}}">
-                <i class="fas fa-edit"></i> Sửa
-            </a>
-            <form th:action="@{'/taikhoan/delete/' + ${tk.tenDangNhap}}" method="post"
-                  style="display:inline;" onsubmit="return confirm('Xác nhận xóa tài khoản này?');">
-                <button type="submit">
-                    <i class="fas fa-trash-alt"></i> Xóa
-                </button>
+    <!-- Form Card -->
+    <div class="card form-card">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas" th:class="${editMode} ? 'fa-edit' : 'fa-user-plus'"></i>
+                <span th:text="${editMode} ? 'Cập nhật Tài Khoản' : 'Thêm Tài Khoản Mới'"></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <form th:action="${editMode} ? @{'/taikhoan/edit/' + ${taiKhoan.tenDangNhap}} : @{/taikhoan/add}" 
+                  method="post" th:object="${taiKhoan}">
+                <div class="form-group">
+                    <label class="form-label" for="tenDangNhap">
+                        <i class="fas fa-user"></i> Tên Đăng Nhập
+                    </label>
+                    <input type="text" class="form-input" th:field="*{tenDangNhap}" 
+                           th:readonly="${editMode}" required id="tenDangNhap"/>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="matKhau">
+                        <i class="fas fa-lock"></i> Mật Khẩu
+                    </label>
+                    <input type="password" class="form-input" th:field="*{matKhau}" 
+                           required id="matKhau"/>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="loaiTaiKhoan">
+                        <i class="fas fa-users-cog"></i> Loại Tài Khoản
+                    </label>
+                    <select class="form-input" th:field="*{loaiTaiKhoan}" 
+                            id="loaiTaiKhoan" required>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="maNguoiDung">
+                        <i class="fas fa-id-card"></i> Mã Người Dùng
+                    </label>
+                    <input type="number" class="form-input" th:field="*{maNguoiDung}" 
+                           required id="maNguoiDung"/>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary" 
+                            th:text="${editMode} ? 'Cập nhật' : 'Thêm mới'"></button>
+                    
+                    <a th:if="${editMode}" th:href="@{/taikhoan}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Hủy
+                    </a>
+                </div>
             </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
+        </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas fa-list"></i> Danh Sách Tài Khoản
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên đăng nhập</th>
+                            <th>Mật khẩu</th>
+                            <th>Loại</th>
+                            <th>Mã người dùng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="tk : ${taiKhoans}">
+                            <td th:text="${tk.tenDangNhap}"></td>
+                            <td th:text="${tk.matKhau}"></td>
+                            <td>
+                                <span th:class="${tk.loaiTaiKhoan == 'admin'} ? 'status-cell status-admin' : 'status-cell status-user'"
+                                      th:text="${tk.loaiTaiKhoan}"></span>
+                            </td>
+                            <td th:text="${tk.maNguoiDung}"></td>
+                            <td>
+                                <div class="actions-cell">
+                                    <a th:href="@{'/taikhoan/edit/' + ${tk.tenDangNhap}}" class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    
+                                    <form class="delete-form" th:action="@{'/taikhoan/delete/' + ${tk.tenDangNhap}}" method="post">
+                                        <button type="submit" class="action-btn delete" 
+                                                onclick="return confirm('Bạn có chắc muốn xóa tài khoản này?')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    // Thêm hiệu ứng ripple cho nút
-    document.querySelectorAll('button').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-            
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
+    // Tự động ẩn thông báo sau 4 giây
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.message, .error');
+        messages.forEach(msg => {
+            msg.style.animation = 'fadeOut 0.5s ease forwards';
+            setTimeout(() => msg.remove(), 500);
         });
-    });
+    }, 4000);
     
-    // Hiệu ứng hover cho hàng trong bảng
-    document.querySelectorAll('tbody tr').forEach(row => {
+    // Hiệu ứng khi di chuột vào hàng
+    document.querySelectorAll('.table tbody tr').forEach(row => {
         row.addEventListener('mouseenter', function() {
-            this.style.transform = 'scale(1.01)';
-            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
         });
         
         row.addEventListener('mouseleave', function() {
-            this.style.transform = 'scale(1)';
             this.style.boxShadow = 'none';
         });
     });
     
-    // Hiệu ứng khi nhấn nút
-    document.querySelectorAll('button').forEach(button => {
-        button.addEventListener('mousedown', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-        
-        button.addEventListener('mouseup', function() {
-            this.style.transform = 'scale(1)';
-        });
-    });
-    
     // Hiệu ứng khi focus vào input
-    document.querySelectorAll('input, select').forEach(input => {
+    document.querySelectorAll('.form-input').forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.style.transform = 'translateX(5px)';
+            this.parentElement.style.transform = 'translateY(-3px)';
         });
         
         input.addEventListener('blur', function() {
-            this.parentElement.style.transform = 'translateX(0)';
+            this.parentElement.style.transform = 'none';
         });
     });
 </script>
