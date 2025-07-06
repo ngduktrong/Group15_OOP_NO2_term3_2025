@@ -32,9 +32,13 @@ public class TaiKhoanService {
     public boolean deleteTaiKhoan(String tenDangNhap) {
         return taiKhoanDao.delete(tenDangNhap);
     }
+
     public TaiKhoan getByUsername(String tenDangNhap) {
         return taiKhoanDao.getByUsername(tenDangNhap);
     }
 
-    
+    // ✅ Hàm thêm người dùng mặc định (loại KhachHang) và trả về MaNguoiDung
+    public int createNguoiDungMacDinh(String hoTen) {
+        return taiKhoanDao.insertNguoiDungMacDinh(hoTen);
+    }
 }

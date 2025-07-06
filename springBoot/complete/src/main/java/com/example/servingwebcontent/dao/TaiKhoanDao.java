@@ -138,4 +138,30 @@ public class TaiKhoanDao {
             e.printStackTrace();
         }
     }
+    public int insertNguoiDungMacDinh(String hoTen) {
+    int maNguoiDungMoi = -1;
+    String sql = "INSERT INTO NguoiDung (HoTen, SoDienThoai, Email, LoaiNguoiDung) VALUES (?, ?, ?, 'KhachHang')";
+
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        stmt.setString(1, hoTen);
+        stmt.setString(2, ""); // placeholder SĐT
+        stmt.setString(3, hoTen.toLowerCase().replaceAll("\\s+", "") + "@example.com"); // placeholder email
+
+        int rows = stmt.executeUpdate();
+        if (rows > 0) {
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    maNguoiDungMoi = rs.getInt(1);
+                }
+            }
+        }
+    } catch (SQLException | ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+
+    return maNguoiDungMoi;
+    }
+
 }
