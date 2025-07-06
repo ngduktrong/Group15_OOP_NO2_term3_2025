@@ -28,14 +28,30 @@ public class SuatChieuService {
     }
 
     public boolean createSuatChieu(SuatChieu sc) {
-        if (phimExists(sc.getMaPhim()) && phongExists(sc.getMaPhong())) {
-            suatChieuDao.create(sc);
-            System.out.println("✅ Thêm suất chiếu thành công: " + sc.getMaPhim() + " | Phòng: " + sc.getMaPhong());
-            return true;
-        } else {
+        if (!phimExists(sc.getMaPhim()) || !phongExists(sc.getMaPhong())) {
             System.out.println("❌ Không thể thêm suất chiếu: MaPhim hoặc MaPhong không tồn tại.");
             return false;
         }
+
+        int thoiLuongPhim = getThoiLuongPhim(sc.getMaPhim());
+        if (thoiLuongPhim == -1) {
+            System.out.println("❌ Không thể lấy thời lượng phim.");
+            return false;
+        }
+
+        boolean phongTrong = suatChieuDao.isPhongTrong(
+            sc.getMaPhong(),
+            java.sql.Timestamp.valueOf(sc.getNgayGioChieu()),
+            thoiLuongPhim
+        );
+        if (!phongTrong) {
+            System.out.println("❌ Phòng đã có suất chiếu trong khung giờ này.");
+            return false;
+        }
+
+        suatChieuDao.create(sc, thoiLuongPhim);
+        System.out.println("✅ Thêm suất chiếu thành công: " + sc.getMaPhim() + " | Phòng: " + sc.getMaPhong());
+        return true;
     }
 
     public void updateSuatChieu(SuatChieu sc) {
@@ -48,7 +64,7 @@ public class SuatChieuService {
         System.out.println("🗑️ Đã xoá suất chiếu: " + id);
     }
 
-    // Kiểm tra MaPhim có tồn tại
+    // ✅ Kiểm tra MaPhim có tồn tại
     private boolean phimExists(int maPhim) {
         String sql = "SELECT 1 FROM Phim WHERE MaPhim = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -63,7 +79,7 @@ public class SuatChieuService {
         }
     }
 
-    // Kiểm tra MaPhong có tồn tại
+    // ✅ Kiểm tra MaPhong có tồn tại
     private boolean phongExists(int maPhong) {
         String sql = "SELECT 1 FROM PhongChieu WHERE MaPhong = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -77,9 +93,28 @@ public class SuatChieuService {
             return false;
         }
     }
+
+    // ✅ Lấy thời lượng phim từ bảng Phim
+    private int getThoiLuongPhim(int maPhim) {
+        String sql = "SELECT ThoiLuong FROM Phim WHERE MaPhim = ?";
+        try (Connection c = AivenConnection.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, maPhim);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ThoiLuong");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1; // Không tìm thấy
+    }
+
     public List<SuatChieu> getByMaPhim(int maPhim) {
         return suatChieuDao.getByMaPhim(maPhim);
     }
+
     public List<SuatChieu> getByMaPhongAndPhim(int maPhong, int maPhim) {
         return suatChieuDao.getByMaPhongAndPhim(maPhong, maPhim);
     }

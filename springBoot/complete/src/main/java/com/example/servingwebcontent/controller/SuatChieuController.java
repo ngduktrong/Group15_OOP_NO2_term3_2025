@@ -20,7 +20,7 @@ public class SuatChieuController {
         this.suatChieuService = suatChieuService;
     }
 
-    // Hiển thị danh sách và form thêm mới
+    // ✅ Hiển thị danh sách và form thêm mới
     @GetMapping({"", "/", "/view"})
     public String viewSuatChieu(Model model) {
         List<SuatChieu> list = suatChieuService.getAllSuatChieu();
@@ -31,7 +31,7 @@ public class SuatChieuController {
         return "suatchieu";
     }
 
-    // Hiển thị form sửa
+    // ✅ Hiển thị form sửa
     @GetMapping("/edit/{id}")
     public String editSuatChieu(@PathVariable("id") int id, Model model) {
         SuatChieu sc = suatChieuService.getSuatChieuById(id);
@@ -44,20 +44,25 @@ public class SuatChieuController {
         return "suatchieu";
     }
 
-    // Thêm mới suất chiếu
+    // ✅ Thêm mới suất chiếu (kiểm tra logic trong Service)
     @PostMapping("/add")
     public String addSuatChieu(@ModelAttribute SuatChieu suatchieu, Model model) {
         boolean success = suatChieuService.createSuatChieu(suatchieu);
+
         model.addAttribute("suatchieuList", suatChieuService.getAllSuatChieu());
         model.addAttribute("suatchieu", new SuatChieu());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", success
-            ? "✅ Thêm suất chiếu thành công!"
-            : "❌ Không thể thêm suất chiếu: Mã phim hoặc mã phòng không tồn tại.");
-    return "suatchieu";
+
+        if (success) {
+            model.addAttribute("message", "✅ Thêm suất chiếu thành công!");
+        } else {
+            model.addAttribute("message", "❌ Thêm thất bại: Mã phim/mã phòng không hợp lệ hoặc phòng đã có suất chiếu trùng giờ!");
+        }
+
+        return "suatchieu";
     }
 
-    // Cập nhật suất chiếu
+    // ✅ Cập nhật suất chiếu
     @PostMapping("/edit")
     public String updateSuatChieu(@ModelAttribute SuatChieu suatchieu, Model model) {
         suatChieuService.updateSuatChieu(suatchieu);
@@ -68,7 +73,7 @@ public class SuatChieuController {
         return "suatchieu";
     }
 
-    // Xoá suất chiếu
+    // ✅ Xoá suất chiếu
     @PostMapping("/delete/{id}")
     public String deleteSuatChieu(@PathVariable("id") int id, Model model) {
         suatChieuService.deleteSuatChieu(id);
