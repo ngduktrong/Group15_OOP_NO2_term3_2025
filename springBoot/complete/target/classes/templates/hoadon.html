@@ -889,8 +889,9 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             
-                                            <form th:action="@{'/hoadon/delete/' + ${hd.maHoaDon}}" 
-                                                  method="post">
+                                            <form th:action="@{/hoadon/delete}" method="post">
+                                                <input type="hidden" name="maHoaDon" th:value="${hd.maHoaDon}">
+                                                  
                                                 <button type="submit" class="action-btn delete"
                                                         onclick="return confirm('Bạn có chắc muốn xoá hóa đơn này?')">
                                                     <i class="fas fa-trash-alt"></i>

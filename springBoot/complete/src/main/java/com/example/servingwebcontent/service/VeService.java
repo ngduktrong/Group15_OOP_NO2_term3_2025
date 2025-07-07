@@ -126,4 +126,8 @@ public class VeService {
         }
         return success;
     }
+    public List<String> getSoGheDaDat(int maSuatChieu) {
+    return veDao.getSoGheDaDatBySuatChieu(maSuatChieu);
+    }
+
 }

@@ -34,20 +34,29 @@ public class CustomerGheController {
 
     @Autowired
     private com.example.servingwebcontent.service.PhimService phimService;
+    @Autowired
+    private com.example.servingwebcontent.service.VeService veService; // Thêm service
 
     @GetMapping("/{maPhong}")
     public String listGheByPhong(
-            @PathVariable int maPhong,
-            @RequestParam int maSuatChieu,
-            Model model) {
-        List<Ghe> list = gheService.getByMaPhong(maPhong);
-        SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
-        
-        model.addAttribute("listGhe", list);
-        model.addAttribute("maPhong", maPhong);
-        model.addAttribute("suatChieu", suatChieu);
-        return "list-ghe-customer";
+        @PathVariable int maPhong,
+        @RequestParam int maSuatChieu,
+        Model model) {
+    
+    List<Ghe> list = gheService.getByMaPhong(maPhong);
+    SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
+
+    // 👉 Lấy danh sách ghế đã được đặt (với TrangThai = 'paid') cho suất chiếu này
+    List<String> gheDaDat = veService.getSoGheDaDat(maSuatChieu); // Dạng List<String>
+
+    model.addAttribute("listGhe", list);
+    model.addAttribute("gheDaDat", gheDaDat); // 👈 truyền sang view
+    model.addAttribute("maPhong", maPhong);
+    model.addAttribute("suatChieu", suatChieu);
+
+    return "list-ghe-customer";
     }
+
 
     @PostMapping("/chon-ghe")
         public String processSeatSelection(

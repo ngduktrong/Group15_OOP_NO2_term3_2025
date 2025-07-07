@@ -265,5 +265,20 @@ public class VeDao {
     }
     return result;
     }
-    
+    public List<String> getSoGheDaDatBySuatChieu(int maSuatChieu) {
+    List<String> list = new ArrayList<>();
+    String sql = "SELECT SoGhe FROM Ve WHERE MaSuatChieu = ? AND TrangThai = 'paid'";
+    try (Connection conn = AivenConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, maSuatChieu);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            list.add(rs.getString("SoGhe"));
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+    }
+
 }
