@@ -23,49 +23,47 @@ public class HoaDonService {
         this.nhanVienDao = nhanVienDao;
     }
 
-    // ✅ Lấy toàn bộ hóa đơn
     public List<HoaDon> getAllHoaDon() {
         return hoaDonDao.getAll();
     }
 
-    // ✅ Lấy hóa đơn theo ID
     public HoaDon getHoaDonById(int id) {
         return hoaDonDao.getById(id);
     }
 
-    // ✅ Tạo hóa đơn mới + cập nhật NgayLap từ vé
-    public boolean createHoaDon(HoaDon hoaDon) {
+    // ✅ Tạo hóa đơn mới → trả về mã hóa đơn
+    public int createHoaDon(HoaDon hoaDon) {
         try {
             if (hoaDon.getTongTien() < 0) {
                 System.out.println("❌ Tổng tiền không được âm!");
-                return false;
+                return -1;
             }
 
             if (!isValidKhachHang(hoaDon.getMaKhachHang())) {
                 System.out.println("❌ Mã khách hàng không tồn tại!");
-                return false;
+                return -1;
             }
 
             if (!isValidNhanVien(hoaDon.getMaNhanVien())) {
                 System.out.println("❌ Mã nhân viên không tồn tại!");
-                return false;
+                return -1;
             }
 
-            hoaDonDao.create(hoaDon);
-
-            // ⏱️ Sau khi tạo -> cập nhật NgayLap từ vé
-            capNhatNgayLapTuVe(hoaDon.getMaHoaDon());
-
-            System.out.println("✅ Tạo hóa đơn thành công!");
-            return true;
+            int maHoaDon = hoaDonDao.createHoaDon(hoaDon);
+            if (maHoaDon != -1) {
+                System.out.println("✅ Tạo hóa đơn thành công!");
+                return maHoaDon;
+            } else {
+                System.out.println("❌ Không tạo được hóa đơn!");
+                return -1;
+            }
 
         } catch (Exception e) {
             System.out.println("❌ Tạo hóa đơn thất bại: " + e.getMessage());
-            return false;
+            return -1;
         }
     }
 
-    // ✅ Cập nhật hóa đơn
     public boolean updateHoaDon(HoaDon hoaDon) {
         if (hoaDonDao.getById(hoaDon.getMaHoaDon()) == null) {
             System.out.println("❌ Không tìm thấy hóa đơn để cập nhật!");
@@ -94,7 +92,6 @@ public class HoaDonService {
         return true;
     }
 
-    // ✅ Xóa hóa đơn
     public boolean deleteHoaDon(int id) {
         if (hoaDonDao.getById(id) != null) {
             hoaDonDao.delete(id);
@@ -106,44 +103,36 @@ public class HoaDonService {
         }
     }
 
-    // ✅ Tìm hóa đơn theo mã khách hàng
     public List<HoaDon> getHoaDonByMaKhachHang(int maKH) {
         return hoaDonDao.getByMaKhachHang(maKH);
     }
 
-    // ✅ Tìm hóa đơn theo ngày lập
     public List<HoaDon> getHoaDonByNgayLap(String ngayLap) {
         return hoaDonDao.getByNgayLap(ngayLap);
     }
 
-    // ✅ Tìm hóa đơn trong khoảng ngày lập
     public List<HoaDon> getHoaDonByKhoangNgay(String tuNgay, String denNgay) {
         return hoaDonDao.getByKhoangNgay(tuNgay, denNgay);
     }
 
-    // ✅ Tính tổng doanh thu theo ngày
     public double getTongDoanhThuTheoNgay(String ngayLap) {
         return hoaDonDao.getTongDoanhThuTheoNgay(ngayLap);
     }
 
-    // ✅ Tính tổng doanh thu theo khoảng ngày
     public double getTongDoanhThuTheoKhoangNgay(String tuNgay, String denNgay) {
         return hoaDonDao.getTongDoanhThuTheoKhoangNgay(tuNgay, denNgay);
     }
 
-    // ✅ Cập nhật NgayLap từ bảng Vé khi trạng thái vé = 'paid'
+    // ✅ Gọi từ controller khi vé đã thanh toán
     public void capNhatNgayLapTuVe(int maHoaDon) {
         hoaDonDao.capNhatNgayLapTuVe(maHoaDon);
     }
 
-    // 🔍 Kiểm tra khách hàng có tồn tại (cho phép null)
     private boolean isValidKhachHang(Integer maKH) {
         return maKH == null || khachHangDao.getByID(maKH) != null;
     }
 
-    // 🔍 Kiểm tra nhân viên có tồn tại (cho phép null)
     private boolean isValidNhanVien(Integer maNV) {
         return maNV == null || nhanVienDao.getById(maNV) != null;
     }
 }
-// ✅ Phương thức này sẽ cập nhật NgayLap trong hóa đơn từ vé khi trạng thái vé = 'paid'

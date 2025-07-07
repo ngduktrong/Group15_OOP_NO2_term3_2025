@@ -39,6 +39,7 @@ public class VeService {
     }
 
     public boolean createVe(Ve ve) {
+        // Kiểm tra khóa ngoại
         if (suatChieuDao.getById(ve.getMaSuatChieu()) == null) {
             System.out.println("❌ Mã suất chiếu không tồn tại!");
             return false;
@@ -54,16 +55,19 @@ public class VeService {
             return false;
         }
 
+        // Kiểm tra vé trùng
         List<Ve> existing = veDao.getAll();
         for (Ve v : existing) {
             if (v.getMaSuatChieu() == ve.getMaSuatChieu()
                     && v.getMaPhong() == ve.getMaPhong()
-                    && v.getSoGhe().equalsIgnoreCase(ve.getSoGhe())) {
-                System.out.println("❌ Ghế này đã được đặt trong suất chiếu/phòng tương ứng.");
+                    && v.getSoGhe().equalsIgnoreCase(ve.getSoGhe())
+                    && !"Chưa thanh toán".equalsIgnoreCase(v.getTrangThai())) {
+                System.out.println("❌ Ghế này đã được đặt.");
                 return false;
             }
         }
 
+        // Nếu hợp lệ → insert vé
         veDao.create(ve);
         System.out.println("✅ Thêm vé thành công!");
         return true;
@@ -126,8 +130,8 @@ public class VeService {
         }
         return success;
     }
-    public List<String> getSoGheDaDat(int maSuatChieu) {
-    return veDao.getSoGheDaDatBySuatChieu(maSuatChieu);
-    }
 
+    public List<String> getSoGheDaDat(int maSuatChieu) {
+        return veDao.getSoGheDaDatBySuatChieu(maSuatChieu);
+    }
 }

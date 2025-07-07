@@ -1,45 +1,26 @@
 package com.example.servingwebcontent.controller;
 
-import com.example.servingwebcontent.models.HoaDon;
-import com.example.servingwebcontent.models.Ve;
-import com.example.servingwebcontent.service.HoaDonService;
-import com.example.servingwebcontent.service.VeService;
+import com.example.servingwebcontent.models.*;
+import com.example.servingwebcontent.service.*;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-// Thêm các import sau
-import com.example.servingwebcontent.models.SuatChieu;
-import com.example.servingwebcontent.models.Phim;
-import com.example.servingwebcontent.service.SuatChieuService;
-import com.example.servingwebcontent.service.PhimService;
+import java.util.*;
 
 @Controller
 @RequestMapping("/customer/hoadon")
 public class CustomerHoaDonController {
 
-    @Autowired
-    private HoaDonService hoaDonService;
-
-    @Autowired
-    private VeService veService;
-    
-    // Thêm 2 service mới
-    @Autowired
-    private SuatChieuService suatChieuService;
-    
-    @Autowired
-    private PhimService phimService;
+    @Autowired private HoaDonService hoaDonService;
+    @Autowired private VeService veService;
+    @Autowired private SuatChieuService suatChieuService;
+    @Autowired private PhimService phimService;
 
     @PostMapping("/thanh-toan")
     public String thanhToanHoaDon(
@@ -50,68 +31,64 @@ public class CustomerHoaDonController {
             HttpSession session,
             Model model) {
 
-        // Kiểm tra đăng nhập
         if (session.getAttribute("maKhachHang") == null) {
             return "redirect:/login";
         }
 
         int maKhachHang = (int) session.getAttribute("maKhachHang");
-        
-        // Tạo mã hóa đơn ngẫu nhiên
-        Random rand = new Random();
-        int maHoaDon = 100000 + rand.nextInt(900000); // Số 6 chữ số
-        
-        // Tạo hóa đơn
+
+        // ✅ Tạo hóa đơn (chưa thanh toán)
         HoaDon hoaDon = new HoaDon();
-        hoaDon.setMaHoaDon(maHoaDon);
         hoaDon.setMaKhachHang(maKhachHang);
-        hoaDon.setMaNhanVien(6); // Mã nhân viên mặc định
+        hoaDon.setMaNhanVien(6); // default: tại quầy
         hoaDon.setTongTien(tongTien);
-        
-        // Tạo ngày lập (hiện tại)
-        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        hoaDon.setNgayLap(now.toString());
-        
-        // Lưu hóa đơn
-        hoaDonService.createHoaDon(hoaDon);
-        
-        // Tạo các vé
+        hoaDon.setNgayLap(null); // sẽ cập nhật sau khi xác nhận
+
+        int maHoaDon = hoaDonService.createHoaDon(hoaDon);
+        if (maHoaDon <= 0) {
+            model.addAttribute("message", "❌ Không thể tạo hóa đơn!");
+            return "error";
+        }
+        hoaDon.setMaHoaDon(maHoaDon); // gán lại để render sang view
+
+        // ✅ Tạo danh sách vé (trạng thái: Chưa thanh toán)
         List<Ve> listVe = new ArrayList<>();
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+
         for (String soGhe : selectedSeats) {
-            // Tạo mã vé ngẫu nhiên
-            int maVe = 1000 + rand.nextInt(9000); // Số 4 chữ số
-            
             Ve ve = new Ve();
-            ve.setMaVe(maVe);
             ve.setMaSuatChieu(maSuatChieu);
             ve.setMaPhong(maPhong);
             ve.setSoGhe(soGhe);
             ve.setMaHoaDon(maHoaDon);
-            ve.setGiaVe(50000); // Giá vé cố định
-            ve.setTrangThai("paid"); // Đã thanh toán
-            ve.setNgayDat(now.toString()); // Ngày đặt vé là ngày lập hóa đơn
-            
-            // Lưu vé
-            veService.createVe(ve);
-            listVe.add(ve);
+            ve.setGiaVe(50000);
+            ve.setTrangThai("pending");
+            ve.setNgayDat(now.toString());
+
+            boolean success = veService.createVe(ve);
+            if (success) {
+                listVe.add(ve);
+            }
         }
-        
-        // Lấy thông tin suất chiếu để lấy mã phim
-        SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
+
+        // ✅ Lấy tên phim từ suất chiếu
         String tenPhim = "Không rõ";
+        SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
         if (suatChieu != null) {
-            // Lấy thông tin phim
             Phim phim = phimService.getPhimById(suatChieu.getMaPhim());
             if (phim != null) {
                 tenPhim = phim.getTenPhim();
             }
         }
-        
-        // Thêm dữ liệu vào model để hiển thị trang vé
-        model.addAttribute("listVe", listVe);
+
+        // ✅ Truyền dữ liệu sang view
         model.addAttribute("hoaDon", hoaDon);
-        model.addAttribute("tenPhim", tenPhim); // Thêm tên phim
-        
+        model.addAttribute("listVe", listVe);
+        model.addAttribute("tenPhim", tenPhim);
+
+        // ✅ Lưu lại mã hóa đơn để sử dụng ở bước xác nhận
+        session.setAttribute("maHoaDonVuaTao", maHoaDon);
+
         return "list-ve-customer";
     }
 }

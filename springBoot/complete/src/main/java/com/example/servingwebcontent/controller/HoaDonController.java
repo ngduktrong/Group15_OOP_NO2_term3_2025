@@ -58,9 +58,12 @@ public class HoaDonController {
     // ✅ Thêm hóa đơn mới + cập nhật NgayLap
     @PostMapping("/add")
     public String addHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
-        boolean success = hoaDonService.createHoaDon(hoaDon);
+        int maHoaDon = hoaDonService.createHoaDon(hoaDon);
 
-        String message = success ? "✅ Thêm hóa đơn thành công!" : "❌ Thêm hóa đơn thất bại!";
+        String message = (maHoaDon != -1)
+                ? "✅ Thêm hóa đơn thành công với mã: " + maHoaDon
+                : "❌ Thêm hóa đơn thất bại!";
+
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
         model.addAttribute("hoaDon", new HoaDon());
@@ -72,7 +75,10 @@ public class HoaDonController {
     public String updateHoaDon(@ModelAttribute HoaDon hoaDon, Model model) {
         boolean success = hoaDonService.updateHoaDon(hoaDon);
 
-        String message = success ? "✅ Cập nhật hóa đơn thành công!" : "❌ Cập nhật hóa đơn thất bại!";
+        String message = success
+                ? "✅ Cập nhật hóa đơn thành công!"
+                : "❌ Cập nhật hóa đơn thất bại!";
+
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
         model.addAttribute("hoaDon", new HoaDon());
@@ -84,7 +90,10 @@ public class HoaDonController {
     public String deleteHoaDon(@RequestParam("maHoaDon") int id, Model model) {
         boolean success = hoaDonService.deleteHoaDon(id);
 
-        String message = success ? "✅ Xóa hóa đơn thành công!" : "❌ Xóa hóa đơn thất bại!";
+        String message = success
+                ? "✅ Xóa hóa đơn thành công!"
+                : "❌ Xóa hóa đơn thất bại!";
+
         model.addAttribute("message", message);
         model.addAttribute("hoaDonList", hoaDonService.getAllHoaDon());
         model.addAttribute("hoaDon", new HoaDon());

@@ -11,9 +11,9 @@ import java.util.List;
 @Repository
 public class HoaDonDao {
 
-    // ✅ Tạo hóa đơn mới
-    public void create(HoaDon hd) {
-        String sql = "INSERT INTO HoaDon (MaNhanVien, MaKhachHang, TongTien) VALUES (?, ?, ?)";
+    // ✅ Tạo hóa đơn mới và trả về mã vừa sinh ra
+    public int createHoaDon(HoaDon hd) {
+        String sql = "INSERT INTO HoaDon (MaNhanVien, MaKhachHang, TongTien, NgayLap) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -21,20 +21,25 @@ public class HoaDonDao {
             pst.setObject(1, hd.getMaNhanVien(), Types.INTEGER);
             pst.setObject(2, hd.getMaKhachHang(), Types.INTEGER);
             pst.setDouble(3, hd.getTongTien());
+            pst.setString(4, hd.getNgayLap()); // Có thể null
 
-            pst.executeUpdate();
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows == 0) return -1;
+
             try (ResultSet keys = pst.getGeneratedKeys()) {
                 if (keys.next()) {
-                    hd.setMaHoaDon(keys.getInt(1));
+                    int maHoaDon = keys.getInt(1);
+                    hd.setMaHoaDon(maHoaDon); // gán lại nếu cần
+                    return maHoaDon;
                 }
             }
 
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
-    // ✅ Lấy hóa đơn theo ID
     public HoaDon getById(int id) {
         String sql = "SELECT * FROM HoaDon WHERE MaHoaDon = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -51,7 +56,6 @@ public class HoaDonDao {
         return null;
     }
 
-    // ✅ Lấy tất cả hóa đơn
     public List<HoaDon> getAll() {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon ORDER BY NgayLap DESC";
@@ -69,16 +73,16 @@ public class HoaDonDao {
         return list;
     }
 
-    // ✅ Cập nhật hóa đơn
     public void update(HoaDon hd) {
-        String sql = "UPDATE HoaDon SET MaNhanVien = ?, MaKhachHang = ?, TongTien = ? WHERE MaHoaDon = ?";
+        String sql = "UPDATE HoaDon SET MaNhanVien = ?, MaKhachHang = ?, TongTien = ?, NgayLap = ? WHERE MaHoaDon = ?";
         try (Connection conn = AivenConnection.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setObject(1, hd.getMaNhanVien(), Types.INTEGER);
             pst.setObject(2, hd.getMaKhachHang(), Types.INTEGER);
             pst.setDouble(3, hd.getTongTien());
-            pst.setInt(4, hd.getMaHoaDon());
+            pst.setString(4, hd.getNgayLap());
+            pst.setInt(5, hd.getMaHoaDon());
 
             pst.executeUpdate();
 
@@ -87,7 +91,6 @@ public class HoaDonDao {
         }
     }
 
-    // ✅ Xóa hóa đơn
     public void delete(int id) {
         String sql = "DELETE FROM HoaDon WHERE MaHoaDon = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -101,7 +104,6 @@ public class HoaDonDao {
         }
     }
 
-    // ✅ Lấy theo mã khách hàng
     public List<HoaDon> getByMaKhachHang(int maKH) {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon WHERE MaKhachHang = ?";
@@ -119,7 +121,6 @@ public class HoaDonDao {
         return list;
     }
 
-    // ✅ Lấy theo ngày cụ thể
     public List<HoaDon> getByNgayLap(String ngayLap) {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon WHERE DATE(NgayLap) = ?";
@@ -137,7 +138,6 @@ public class HoaDonDao {
         return list;
     }
 
-    // ✅ Tổng doanh thu theo ngày
     public double getTongDoanhThuTheoNgay(String ngayLap) {
         String sql = "SELECT SUM(TongTien) AS DoanhThu FROM HoaDon WHERE DATE(NgayLap) = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -154,7 +154,6 @@ public class HoaDonDao {
         return 0.0;
     }
 
-    // ✅ Lấy hóa đơn trong khoảng ngày
     public List<HoaDon> getByKhoangNgay(String tuNgay, String denNgay) {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT * FROM HoaDon WHERE DATE(NgayLap) BETWEEN ? AND ?";
@@ -173,7 +172,6 @@ public class HoaDonDao {
         return list;
     }
 
-    // ✅ Tổng doanh thu trong khoảng ngày
     public double getTongDoanhThuTheoKhoangNgay(String tuNgay, String denNgay) {
         String sql = "SELECT SUM(TongTien) AS DoanhThu FROM HoaDon WHERE DATE(NgayLap) BETWEEN ? AND ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -191,7 +189,32 @@ public class HoaDonDao {
         return 0.0;
     }
 
-    // ✅ Hàm chuyển đổi từ ResultSet thành HoaDon
+    // ✅ Cập nhật NgayLap từ bảng Vé đã thanh toán
+    public void capNhatNgayLapTuVe(int maHoaDon) {
+        String sql = """
+            UPDATE HoaDon
+            SET NgayLap = (
+                SELECT MAX(NgayDat)
+                FROM Ve
+                WHERE MaHoaDon = ?
+                  AND TrangThai = 'paid'
+            )
+            WHERE MaHoaDon = ?
+        """;
+
+        try (Connection conn = AivenConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, maHoaDon);
+            pst.setInt(2, maHoaDon);
+            pst.executeUpdate();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ✅ Convert ResultSet → HoaDon
     private HoaDon mapResultSetToHoaDon(ResultSet rs) throws SQLException {
         HoaDon hd = new HoaDon();
         hd.setMaHoaDon(rs.getInt("MaHoaDon"));
@@ -205,29 +228,5 @@ public class HoaDonDao {
         hd.setNgayLap(rs.getString("NgayLap"));
         hd.setTongTien(rs.getDouble("TongTien"));
         return hd;
-    }
-    // ✅ Cập nhật NgayLap của HoaDon từ thời gian đặt vé mới nhất
-    public void capNhatNgayLapTuVe(int maHoaDon) {
-    String sql = """
-        UPDATE HoaDon
-        SET NgayLap = (
-            SELECT MAX(NgayDat)
-            FROM Ve
-            WHERE MaHoaDon = ?
-              AND TrangThai = 'paid'
-        )
-        WHERE MaHoaDon = ?
-    """;
-
-    try (Connection conn = AivenConnection.getConnection();
-         PreparedStatement pst = conn.prepareStatement(sql)) {
-
-        pst.setInt(1, maHoaDon);
-        pst.setInt(2, maHoaDon);
-        pst.executeUpdate();
-
-    } catch (SQLException | ClassNotFoundException e) {
-        e.printStackTrace();
-    }
     }
 }
