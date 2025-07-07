@@ -3,17 +3,16 @@
 Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phim, giúp tối ưu hóa quy trình vận hành và đặt vé thông qua việc sử dụng ngôn ngữ Java và thư viện Java SpringBoot. Ứng dụng cung cấp các chức năng thiết yếu như quản lý phim, lịch chiếu, phòng chiếu, đặt vé và khách hàng, hóa đơn , ghế ngồi  từ đó tạo ra một hệ thống trực quan, hiệu quả và dễ sử dụng cho cả nhân viên và người dùng.
 <h2>Mục Tiêu </h2>
 springBoot-main/
-<h2>📂 Cấu trúc thư mục dự án</h2>
-springBoot-main/
-├── controller/                             # Các Controller (KhachHang, Ve, Suatchieu,...)
-├── service/                                # Business logic
-├── Dao/                                    # Tầng giao tiếp CSDL
-├── models/                                 # Các Entity (Ve, Suatchieu, KhachHang,...)
-├── templates/                              # Giao diện Thymeleaf
-├── static/                                 # CSS, JS, hình ảnh
-├── ServingWebContentApplication.java       # Class khởi chạy ứng dụng
-├── application.properties                  # File cấu hình CSDL
-└── README.md                               # Mô tả dự án
+springBoot-main/                 
+├── controller/      # Các Controller xử lý request (KhachHang, Ve, Suatchieu...)
+├── service/         # Business logic (xử lý nghiệp vụ)
+├── dao/             # Tầng DAO giao tiếp với CSDL
+├── models/          # Các Entity (Ve, Suatchieu, KhachHang...)
+├── templates/       # Giao diện Thymeleaf
+├── static/          # Tài nguyên tĩnh: CSS, JS, hình ảnh
+├── ServingWebContentApplication.java  # Class khởi chạy ứng dụng
+├── application.properties           # File cấu hình CSDL
+└── README.md        # Mô tả dự án
 
 1. Giao diện
 
