@@ -56,7 +56,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 ![Sơ  đồ set and delete ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/X%C3%B3a%20and%20s%E1%BB%ADa.png?raw=true)
 
 <h3>Chuc năng chính : Thông báo vé đến giờ chiều của khách hàng </h3>
-![SƠ dồ ]( https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/Screenshot%202025-07-07%20235334.png?raw=true) 
+![SƠ dồ ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/DiagramChucNang.png?raw=true) 
 - Mô tả : Hệ thống kiểm tra các vé mà khách đã đặt , mếu có suất chiếu sắp diễn ra thì sẽ hiển thị thông báo 
 ## 🔍 Phân rã chức năng:
 
