@@ -166,13 +166,7 @@ public class LoginController {
         return "admin-dashboard";
     }
 
-    @GetMapping("/user/dashboard")
-    public String userDashboard(Model model) {
-        model.addAttribute("username", "user");
-        model.addAttribute("role", "user");
-        return "user-dashboard";
-    }
-
+    
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
