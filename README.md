@@ -32,9 +32,8 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
        Khách hàng : Đăng ký , đặt vé , xem lịch chiếu .<br>
        Nhân viên : Tạo Phim , Suất  Chiếu , Phòng chiếu <br>
    - Dữ liệu sẽ được lưu trữ và truy xuất trong Database
-
+   <h2>📂 Cấu trúc thư mục dự án</h2>
    <pre><code>
-    <h2>📂 Cấu trúc thư mục dự án</h2>
     springBoot-main/
     ├── controller/                             # Các Controller (KhachHang, Ve, SuatChieu,...)
     ├── service/                                # Business logic
