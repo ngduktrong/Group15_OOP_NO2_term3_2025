@@ -102,12 +102,12 @@ Xin chào bạn iu 💌
 ⏰ Bing bong~ Chiếc vé xem phim xinh xắn của bạn sắp tới giờ chiếu rồi đó nha!
 🎟️ Hãy chuẩn bị thật nhanh, mang theo tâm trạng thật chill để cùng TrọMạKaa Cinema hòa mình vào thế giới điện ảnh nhé!
 
-📍Địa điểm: Rạp TrọMạKaa thân quen
+📍Địa điểm: Rạp T&M Cinema thân quen
 🕒 Thời gian chiếu: Hãy mở lịch sử đặt vé của bạn iuuu iuu nhé !
 
 💡 Nhớ đến sớm một chút để chọn vị trí ngồi ưng ý và thưởng thức bắp rang bơ thơm nức mũi nha~
 
-Cảm ơn bạn đã chọn TrọMạKaa — nơi cảm xúc lên ngôi 💖
+Cảm ơn bạn đã chọn T&M Cinema — nơi cảm xúc lên ngôi 💖
 Hẹn gặp bạn tại rạp nhé!
 """);
         }
