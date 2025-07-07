@@ -78,7 +78,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 - Viết phương thức `thongBaoVeSapChieu(String maKhachHang)`
 
   <h3>Thông báo vé có suất chiếu trong vòng 30 phút</h3>
-  ![Sơ đồ vé sắp chiếu ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/image.png?raw=true)
+  ![Sơ đồ vé sắp chiếu ](https://github.com/ngduktrong/Group15_OOP_NO2_term3_2025/blob/main/img/Screenshot%202025-07-07%20235334.png?raw=true)
 
 
 
