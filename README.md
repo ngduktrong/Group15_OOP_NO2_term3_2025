@@ -19,9 +19,9 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
        Thêm suất: Chọn phim, phòng, thời gian<br>
        Cập nhật: sửa thời gian, phòng<br>
    + Quản lý Vé :  Xem trạng thái ghế đã đặt theo suất chiếu, cập nhật/trả vé. <br>
-       Tạo hóa đơn khi đặt vé gồm ngyaf giờ thanh toán , tổng tiền , ...<br>
+       Tạo hóa đơn khi đặt vé gồm ngày giờ thanh toán , tổng tiền , ...<br>
        Truy vấn danh sách Ve theo SuatChieu<br>
-       Hiển thị trạng thái: available, booked, paid, cancelled, pending<br>
+       Hiển thị trạng thái:  paid, pending<br>
        Cập nhật trạng thái vé (nếu có yêu cầu hủy/trả)<br>
    + Quản lý Hóa Đơn  :Xem thông tin hóa đơn đã thanh toán<br>
        Mối hóa đơn có dánh sách vé <br>
