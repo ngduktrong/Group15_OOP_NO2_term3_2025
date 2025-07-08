@@ -30,13 +30,6 @@ CREATE TABLE IF NOT EXISTS KhachHang (
     FOREIGN KEY (MaNguoiDung) REFERENCES NguoiDung(MaNguoiDung) ON DELETE CASCADE
 );
 
--- Bảng ResetToken
-CREATE TABLE IF NOT EXISTS ResetToken (
-	Token VARCHAR(255) PRIMARY KEY, 
-    Email NVARCHAR(100) NOT NULL, 
-    expirarion_time TIMESTAMP NOT NULL, 
-    FOREIGN KEY (Email) REFERENCES NguoiDung(Email) ON DELETE CASCADE
-);
 
 -- Bảng NhanVien
 CREATE TABLE IF NOT EXISTS NhanVien (
@@ -122,15 +115,6 @@ CREATE TABLE  IF NOT EXISTS Ve (
     FOREIGN KEY (MaPhong , SoGhe ) REFERENCES Ghe(MaPhong, SoGhe) ON DELETE NO ACTION ,
     CONSTRAINT UQ_SuatChieu_SoGhe UNIQUE (MaSuatChieu ,SoGhe) 
 );
--- Tao bang ChiTietHoaDon 
-CREATE TABLE IF NOT EXISTS ChiTietHoaDon (
-	MaHoaDon INT NOT NULL ,
-    MaVe INT NOT NULL ,
-    FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon) ON DELETE CASCADE ,
-    FOREIGN KEY (MaVe) REFERENCES Ve(MaVe) ON DELETE CASCADE 
-);
-
-
 -- ========================================
 -- DU LIEU MAU CHO HE THONG QUAN LY RCP
 -- ========================================
@@ -213,8 +197,4 @@ INSERT INTO Ve (MaSuatChieu, MaPhong, SoGhe, MaHoaDon, GiaVe, TrangThai, NgayDat
 (1, 1, 'A01', 1, 100000, 'paid', NOW()),
 (2, 2, 'A02', 2, 150000, 'paid', NOW());
 
--- 11. THEM CHI TIET HOA DON
-INSERT INTO ChiTietHoaDon (MaHoaDon, MaVe) VALUES
-(1, 1),
-(2, 2);
 USE quanlyrcp;
