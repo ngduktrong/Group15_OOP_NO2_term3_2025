@@ -2,6 +2,7 @@ package com.example.servingwebcontent.controller;
 
 import com.example.servingwebcontent.models.Phim;
 import com.example.servingwebcontent.service.PhimService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,26 @@ public class PhimController {
         this.phimService = phimService;
     }
 
-    // Hiển thị danh sách phim + form thêm mới
+    private boolean hasAccess(HttpSession session) {
+        Object roleObj = session.getAttribute("role");
+        if (roleObj == null) {
+            return false;
+        }
+        String role = roleObj.toString();
+        return role.equalsIgnoreCase("admin") || role.equalsIgnoreCase("user");
+    }
+
+    private String noAccessPage(Model model) {
+        model.addAttribute("message", "Bạn cần đăng nhập với quyền ADMIN hoặc USER để truy cập.");
+        return "login";  // Hoặc "error/noAccess" nếu bạn có trang lỗi riêng
+    }
+
     @GetMapping({"", "/", "/view"})
-    public String viewPhim(Model model) {
+    public String viewPhim(Model model, HttpSession session) {
+        if (!hasAccess(session)) {
+            return noAccessPage(model);
+        }
+
         List<Phim> list = phimService.getAllPhim();
         model.addAttribute("phims", list);
         model.addAttribute("phim", new Phim());
@@ -34,9 +52,12 @@ public class PhimController {
         return "phim";
     }
 
-    // Hiển thị form cập nhật phim
     @GetMapping("/edit/{id}")
-    public String editPhim(@PathVariable("id") int id, Model model) {
+    public String editPhim(@PathVariable("id") int id, Model model, HttpSession session) {
+        if (!hasAccess(session)) {
+            return noAccessPage(model);
+        }
+
         Phim phim = phimService.getPhimById(id);
         if (phim == null) phim = new Phim();
 
@@ -47,45 +68,54 @@ public class PhimController {
         return "phim";
     }
 
-    // Xử lý thêm mới phim
     @PostMapping("/add")
-    public String addPhim(@ModelAttribute Phim phim, Model model) {
-        phimService.createPhim(phim);
-        logger.info("🟢 [THÊM] Phim mới: {}", phim.getTenPhim());
+    public String addPhim(@ModelAttribute Phim phim, Model model, HttpSession session) {
+        if (!hasAccess(session)) {
+            return noAccessPage(model);
+        }
+
+        boolean success = phimService.createPhim(phim);
+        logger.info("[THÊM] Phim mới: {}", phim.getTenPhim());
 
         model.addAttribute("phims", phimService.getAllPhim());
         model.addAttribute("phim", new Phim());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", "✅ Thêm phim thành công!");
+        model.addAttribute("message", success ? "Thêm phim thành công!" : "Thêm phim thất bại!");
         return "phim";
     }
 
-    // Xử lý cập nhật phim
     @PostMapping("/edit/{id}")
     public String updatePhim(@PathVariable("id") int id,
-                             @ModelAttribute Phim phim, Model model) {
+                             @ModelAttribute Phim phim, Model model, HttpSession session) {
+        if (!hasAccess(session)) {
+            return noAccessPage(model);
+        }
+
         phim.setMaPhim(id);
-        phimService.updatePhim(phim);
-        logger.info("🟡 [SỬA] Phim ID: {} - Tên mới: {}", id, phim.getTenPhim());
+        boolean success = phimService.updatePhim(phim);
+        logger.info("[SỬA] Phim ID: {} - Tên mới: {}", id, phim.getTenPhim());
 
         model.addAttribute("phims", phimService.getAllPhim());
         model.addAttribute("phim", new Phim());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", "✅ Cập nhật phim thành công!");
+        model.addAttribute("message", success ? "Cập nhật phim thành công!" : "Cập nhật phim thất bại!");
         return "phim";
     }
 
-    // Xử lý xoá phim
     @PostMapping("/delete/{id}")
-    public String deletePhim(@PathVariable("id") int id, Model model) {
+    public String deletePhim(@PathVariable("id") int id, Model model, HttpSession session) {
+        if (!hasAccess(session)) {
+            return noAccessPage(model);
+        }
+
         Phim phim = phimService.getPhimById(id);
-        phimService.deletePhim(id);
-        logger.warn("🔴 [XOÁ] Phim ID: {} - Tên: {}", id, phim != null ? phim.getTenPhim() : "Không rõ");
+        boolean success = phimService.deletePhim(id);
+        logger.warn("[XOÁ] Phim ID: {} - Tên: {}", id, phim != null ? phim.getTenPhim() : "Không rõ");
 
         model.addAttribute("phims", phimService.getAllPhim());
         model.addAttribute("phim", new Phim());
         model.addAttribute("editMode", false);
-        model.addAttribute("message", "✅ Xoá phim thành công!");
+        model.addAttribute("message", success ? "Xoá phim thành công!" : " Xoá phim thất bại!");
         return "phim";
     }
 }

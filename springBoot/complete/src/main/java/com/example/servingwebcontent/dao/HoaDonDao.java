@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class HoaDonDao {
 
-    // ✅ Tạo hóa đơn mới và trả về mã vừa sinh ra
+    // Tạo hóa đơn mới và trả về mã vừa sinh ra
     public int createHoaDon(HoaDon hd) {
         String sql = "INSERT INTO HoaDon (MaNhanVien, MaKhachHang, TongTien, NgayLap) VALUES (?, ?, ?, ?)";
 
@@ -189,7 +189,7 @@ public class HoaDonDao {
         return 0.0;
     }
 
-    // ✅ Cập nhật NgayLap từ bảng Vé đã thanh toán
+    // Cập nhật NgayLap từ bảng Vé đã thanh toán
     public void capNhatNgayLapTuVe(int maHoaDon) {
         String sql = """
             UPDATE HoaDon
@@ -214,7 +214,7 @@ public class HoaDonDao {
         }
     }
 
-    // ✅ Convert ResultSet → HoaDon
+    // Convert ResultSet → HoaDon
     private HoaDon mapResultSetToHoaDon(ResultSet rs) throws SQLException {
         HoaDon hd = new HoaDon();
         hd.setMaHoaDon(rs.getInt("MaHoaDon"));

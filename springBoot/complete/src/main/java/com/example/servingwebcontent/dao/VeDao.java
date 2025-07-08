@@ -59,13 +59,13 @@ public class VeDao {
 
             int affected = pst.executeUpdate();
             if (affected == 0) {
-                System.out.println("⚠️ Không insert được vé vào DB.");
+                System.out.println("Không insert được vé vào DB.");
             }
 
             try (ResultSet keys = pst.getGeneratedKeys()) {
                 if (keys.next()) {
                     ve.setMaVe(keys.getInt(1));
-                    System.out.println("✅ Đã tạo vé mới: " + ve.getMaVe());
+                    System.out.println(" Đã tạo vé mới: " + ve.getMaVe());
                 }
             }
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class VeDao {
     }
 
     /**
-     * ✅ Lấy vé theo mã hóa đơn
+     * Lấy vé theo mã hóa đơn
      */
     public List<Ve> getVeByMaHoaDon(int maHoaDon) {
         List<Ve> list = new ArrayList<>();
@@ -152,7 +152,7 @@ public class VeDao {
     }
 
     /**
-     * ✅ Tính tổng số vé đã thanh toán (TrangThai = 'paid')
+     *  Tính tổng số vé đã thanh toán (TrangThai = 'paid')
      */
     public int getSoVeDaThanhToan() {
         String sql = "SELECT COUNT(*) AS SoLuong FROM Ve WHERE TrangThai = 'paid'";

@@ -37,7 +37,7 @@ public class PhongChieuService {
         phongChieuDao.delete(id);
     }
 
-    // ✅ Thêm kiểm tra tồn tại
+    //  Thêm kiểm tra tồn tại
     public boolean existsById(int id) {
         return phongChieuDao.getById(id) != null;
     }

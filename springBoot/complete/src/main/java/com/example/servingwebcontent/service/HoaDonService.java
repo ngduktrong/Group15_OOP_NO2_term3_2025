@@ -31,74 +31,74 @@ public class HoaDonService {
         return hoaDonDao.getById(id);
     }
 
-    // ✅ Tạo hóa đơn mới → trả về mã hóa đơn
+    //  Tạo hóa đơn mới → trả về mã hóa đơn
     public int createHoaDon(HoaDon hoaDon) {
         try {
             if (hoaDon.getTongTien() < 0) {
-                System.out.println("❌ Tổng tiền không được âm!");
+                System.out.println(" Tổng tiền không được âm!");
                 return -1;
             }
 
             if (!isValidKhachHang(hoaDon.getMaKhachHang())) {
-                System.out.println("❌ Mã khách hàng không tồn tại!");
+                System.out.println(" Mã khách hàng không tồn tại!");
                 return -1;
             }
 
             if (!isValidNhanVien(hoaDon.getMaNhanVien())) {
-                System.out.println("❌ Mã nhân viên không tồn tại!");
+                System.out.println(" Mã nhân viên không tồn tại!");
                 return -1;
             }
 
             int maHoaDon = hoaDonDao.createHoaDon(hoaDon);
             if (maHoaDon != -1) {
-                System.out.println("✅ Tạo hóa đơn thành công!");
+                System.out.println("Tạo hóa đơn thành công!");
                 return maHoaDon;
             } else {
-                System.out.println("❌ Không tạo được hóa đơn!");
+                System.out.println(" Không tạo được hóa đơn!");
                 return -1;
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Tạo hóa đơn thất bại: " + e.getMessage());
+            System.out.println(" Tạo hóa đơn thất bại: " + e.getMessage());
             return -1;
         }
     }
 
     public boolean updateHoaDon(HoaDon hoaDon) {
         if (hoaDonDao.getById(hoaDon.getMaHoaDon()) == null) {
-            System.out.println("❌ Không tìm thấy hóa đơn để cập nhật!");
+            System.out.println(" Không tìm thấy hóa đơn để cập nhật!");
             return false;
         }
 
         if (hoaDon.getTongTien() < 0) {
-            System.out.println("❌ Tổng tiền không được âm!");
+            System.out.println(" Tổng tiền không được âm!");
             return false;
         }
 
         if (!isValidKhachHang(hoaDon.getMaKhachHang())) {
-            System.out.println("❌ Mã khách hàng không tồn tại!");
+            System.out.println(" Mã khách hàng không tồn tại!");
             return false;
         }
 
         if (!isValidNhanVien(hoaDon.getMaNhanVien())) {
-            System.out.println("❌ Mã nhân viên không tồn tại!");
+            System.out.println(" Mã nhân viên không tồn tại!");
             return false;
         }
 
         hoaDonDao.update(hoaDon);
         capNhatNgayLapTuVe(hoaDon.getMaHoaDon());
 
-        System.out.println("✅ Cập nhật hóa đơn thành công!");
+        System.out.println(" Cập nhật hóa đơn thành công!");
         return true;
     }
 
     public boolean deleteHoaDon(int id) {
         if (hoaDonDao.getById(id) != null) {
             hoaDonDao.delete(id);
-            System.out.println("✅ Xóa hóa đơn thành công!");
+            System.out.println(" Xóa hóa đơn thành công!");
             return true;
         } else {
-            System.out.println("❌ Không tìm thấy hóa đơn để xóa!");
+            System.out.println(" Không tìm thấy hóa đơn để xóa!");
             return false;
         }
     }
@@ -123,7 +123,7 @@ public class HoaDonService {
         return hoaDonDao.getTongDoanhThuTheoKhoangNgay(tuNgay, denNgay);
     }
 
-    // ✅ Gọi từ controller khi vé đã thanh toán
+    //  Gọi từ controller khi vé đã thanh toán
     public void capNhatNgayLapTuVe(int maHoaDon) {
         hoaDonDao.capNhatNgayLapTuVe(maHoaDon);
     }

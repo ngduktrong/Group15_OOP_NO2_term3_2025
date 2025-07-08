@@ -35,50 +35,50 @@ public class GheService {
 
         // Kiểm tra mã phòng có tồn tại không
         if (phong == null) {
-            System.err.println("❌ Mã phòng không hợp lệ!");
+            System.err.println(" Mã phòng không hợp lệ!");
             return false;
         }
 
         // Kiểm tra số ghế hiện tại
         List<Ghe> gheTrongPhong = gheDao.getByMaPhong(ghe.getMaPhong());
         if (gheTrongPhong.size() >= phong.getSoLuongGhe()) {
-            System.err.println("❌ Không thể thêm ghế: số lượng ghế đã đạt tối đa!");
+            System.err.println(" Không thể thêm ghế: số lượng ghế đã đạt tối đa!");
             return false;
         }
 
         // Kiểm tra trùng số ghế
         Ghe gheTonTai = gheDao.getById(ghe.getSoGhe(), ghe.getMaPhong());
         if (gheTonTai != null) {
-            System.err.println("❌ Ghế đã tồn tại trong phòng này!");
+            System.err.println(" Ghế đã tồn tại trong phòng này!");
             return false;
         }
 
         gheDao.create(ghe);
-        System.out.println("✅ Thêm ghế thành công: " + ghe.getSoGhe() + " (Phòng " + ghe.getMaPhong() + ")");
+        System.out.println(" Thêm ghế thành công: " + ghe.getSoGhe() + " (Phòng " + ghe.getMaPhong() + ")");
         return true;
     }
 
     public boolean updateGhe(Ghe ghe) {
         Ghe gheCu = gheDao.getById(ghe.getSoGhe(), ghe.getMaPhong());
         if (gheCu == null) {
-            System.err.println("❌ Không tìm thấy ghế để cập nhật!");
+            System.err.println(" Không tìm thấy ghế để cập nhật!");
             return false;
         }
 
         gheDao.update(ghe);
-        System.out.println("✅ Cập nhật ghế thành công: " + ghe.getSoGhe());
+        System.out.println(" Cập nhật ghế thành công: " + ghe.getSoGhe());
         return true;
     }
 
     public boolean deleteGhe(String soGhe, int maPhong) {
         Ghe ghe = gheDao.getById(soGhe, maPhong);
         if (ghe == null) {
-            System.err.println("❌ Không tìm thấy ghế để xoá!");
+            System.err.println("Không tìm thấy ghế để xoá!");
             return false;
         }
 
         gheDao.delete(soGhe, maPhong);
-        System.out.println("✅ Xoá ghế thành công: " + soGhe + " (Phòng " + maPhong + ")");
+        System.out.println(" Xoá ghế thành công: " + soGhe + " (Phòng " + maPhong + ")");
         return true;
     }
 
@@ -90,9 +90,9 @@ public class GheService {
         Ghe ghe = gheDao.getById(soGhe, 0); 
         if (ghe != null) {
             gheDao.delete(soGhe, ghe.getMaPhong());
-            System.out.println("✅ Xoá ghế thành công: " + soGhe);
+            System.out.println(" Xoá ghế thành công: " + soGhe);
         } else {
-            System.err.println("❌ Không tìm thấy ghế để xoá: " + soGhe);
+            System.err.println(" Không tìm thấy ghế để xoá: " + soGhe);
         }
     }
 

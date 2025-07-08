@@ -37,7 +37,7 @@ public class CustomerHoaDonController {
 
         int maKhachHang = (int) session.getAttribute("maKhachHang");
 
-        // ✅ Tạo hóa đơn (chưa thanh toán)
+        // Tạo hóa đơn (chưa thanh toán)
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaKhachHang(maKhachHang);
         hoaDon.setMaNhanVien(6); // default: tại quầy
@@ -46,12 +46,12 @@ public class CustomerHoaDonController {
 
         int maHoaDon = hoaDonService.createHoaDon(hoaDon);
         if (maHoaDon <= 0) {
-            model.addAttribute("message", "❌ Không thể tạo hóa đơn!");
+            model.addAttribute("message", " Không thể tạo hóa đơn!");
             return "error";
         }
         hoaDon.setMaHoaDon(maHoaDon); // gán lại để render sang view
 
-        // ✅ Tạo danh sách vé (trạng thái: Chưa thanh toán)
+        // Tạo danh sách vé (trạng thái: Chưa thanh toán)
         List<Ve> listVe = new ArrayList<>();
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
 
@@ -71,7 +71,7 @@ public class CustomerHoaDonController {
             }
         }
 
-        // ✅ Lấy tên phim từ suất chiếu
+        // Lấy tên phim từ suất chiếu
         String tenPhim = "Không rõ";
         SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
         if (suatChieu != null) {
@@ -81,12 +81,12 @@ public class CustomerHoaDonController {
             }
         }
 
-        // ✅ Truyền dữ liệu sang view
+        // Truyền dữ liệu sang view
         model.addAttribute("hoaDon", hoaDon);
         model.addAttribute("listVe", listVe);
         model.addAttribute("tenPhim", tenPhim);
 
-        // ✅ Lưu lại mã hóa đơn để sử dụng ở bước xác nhận
+        // Lưu lại mã hóa đơn để sử dụng ở bước xác nhận
         session.setAttribute("maHoaDonVuaTao", maHoaDon);
 
         return "list-ve-customer";

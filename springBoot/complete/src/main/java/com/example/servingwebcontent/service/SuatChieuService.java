@@ -29,13 +29,13 @@ public class SuatChieuService {
 
     public boolean createSuatChieu(SuatChieu sc) {
         if (!phimExists(sc.getMaPhim()) || !phongExists(sc.getMaPhong())) {
-            System.out.println("❌ Không thể thêm suất chiếu: MaPhim hoặc MaPhong không tồn tại.");
+            System.out.println(" Không thể thêm suất chiếu: MaPhim hoặc MaPhong không tồn tại.");
             return false;
         }
 
         int thoiLuongPhim = getThoiLuongPhim(sc.getMaPhim());
         if (thoiLuongPhim == -1) {
-            System.out.println("❌ Không thể lấy thời lượng phim.");
+            System.out.println(" Không thể lấy thời lượng phim.");
             return false;
         }
 
@@ -45,26 +45,26 @@ public class SuatChieuService {
             thoiLuongPhim
         );
         if (!phongTrong) {
-            System.out.println("❌ Phòng đã có suất chiếu trong khung giờ này.");
+            System.out.println(" Phòng đã có suất chiếu trong khung giờ này.");
             return false;
         }
 
         suatChieuDao.create(sc, thoiLuongPhim);
-        System.out.println("✅ Thêm suất chiếu thành công: " + sc.getMaPhim() + " | Phòng: " + sc.getMaPhong());
+        System.out.println(" Thêm suất chiếu thành công: " + sc.getMaPhim() + " | Phòng: " + sc.getMaPhong());
         return true;
     }
 
     public void updateSuatChieu(SuatChieu sc) {
         suatChieuDao.update(sc);
-        System.out.println("✏️ Cập nhật suất chiếu: " + sc.getMaSuatChieu());
+        System.out.println(" Cập nhật suất chiếu: " + sc.getMaSuatChieu());
     }
 
     public void deleteSuatChieu(int id) {
         suatChieuDao.delete(id);
-        System.out.println("🗑️ Đã xoá suất chiếu: " + id);
+        System.out.println(" Đã xoá suất chiếu: " + id);
     }
 
-    // ✅ Kiểm tra MaPhim có tồn tại
+    //  Kiểm tra MaPhim có tồn tại
     private boolean phimExists(int maPhim) {
         String sql = "SELECT 1 FROM Phim WHERE MaPhim = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -79,7 +79,7 @@ public class SuatChieuService {
         }
     }
 
-    // ✅ Kiểm tra MaPhong có tồn tại
+    //  Kiểm tra MaPhong có tồn tại
     private boolean phongExists(int maPhong) {
         String sql = "SELECT 1 FROM PhongChieu WHERE MaPhong = ?";
         try (Connection c = AivenConnection.getConnection();
@@ -94,7 +94,7 @@ public class SuatChieuService {
         }
     }
 
-    // ✅ Lấy thời lượng phim từ bảng Phim
+    //  Lấy thời lượng phim từ bảng Phim
     private int getThoiLuongPhim(int maPhim) {
         String sql = "SELECT ThoiLuong FROM Phim WHERE MaPhim = ?";
         try (Connection c = AivenConnection.getConnection();

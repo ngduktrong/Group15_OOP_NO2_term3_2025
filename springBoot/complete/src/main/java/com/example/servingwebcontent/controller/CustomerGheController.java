@@ -46,11 +46,11 @@ public class CustomerGheController {
     List<Ghe> list = gheService.getByMaPhong(maPhong);
     SuatChieu suatChieu = suatChieuService.getSuatChieuById(maSuatChieu);
 
-    // 👉 Lấy danh sách ghế đã được đặt (với TrangThai = 'paid') cho suất chiếu này
+    // Lấy danh sách ghế đã được đặt (với TrangThai = 'paid') cho suất chiếu này
     List<String> gheDaDat = veService.getSoGheDaDat(maSuatChieu); // Dạng List<String>
 
     model.addAttribute("listGhe", list);
-    model.addAttribute("gheDaDat", gheDaDat); // 👈 truyền sang view
+    model.addAttribute("gheDaDat", gheDaDat); //  truyền sang view
     model.addAttribute("maPhong", maPhong);
     model.addAttribute("suatChieu", suatChieu);
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class GheDao {
 
-    // ✅ Lấy toàn bộ ghế (ĐÃ SỬA)
+    // Lấy toàn bộ ghế (ĐÃ SỬA)
     public List<Ghe> getAll() {
         List<Ghe> list = new ArrayList<>();
         String sql = "SELECT soGhe, maPhong FROM Ghe"; // Bỏ TrangThai
@@ -34,7 +34,7 @@ public class GheDao {
         return list;
     }
 
-    // ✅ Lấy ghế theo ID (soGhe + maPhong) (ĐÃ SỬA)
+    // Lấy ghế theo ID (soGhe + maPhong) (ĐÃ SỬA)
     public Ghe getById(String soGhe, int maPhong) {
         String sql = "SELECT soGhe, maPhong FROM Ghe WHERE soGhe = ? AND maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -58,7 +58,7 @@ public class GheDao {
         return null;
     }
 
-    // ✅ Tìm ghế theo SoGhe (ĐÃ SỬA)
+    //  Tìm ghế theo SoGhe (ĐÃ SỬA)
     public Ghe getBySoGhe(String soGhe) {
         String sql = "SELECT soGhe, maPhong FROM Ghe WHERE soGhe = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -79,7 +79,7 @@ public class GheDao {
         return null;
     }
 
-    // ✅ Lấy danh sách ghế theo mã phòng (ĐÃ SỬA)
+    // Lấy danh sách ghế theo mã phòng (ĐÃ SỬA)
     public List<Ghe> getByMaPhong(int maPhong) {
         List<Ghe> list = new ArrayList<>();
         String sql = "SELECT soGhe, maPhong FROM Ghe WHERE maPhong = ?";
@@ -101,7 +101,7 @@ public class GheDao {
         return list;
     }
 
-    // ✅ Thêm ghế mới (ĐÃ SỬA)
+    // Thêm ghế mới (ĐÃ SỬA)
     public void create(Ghe ghe) {
         String sql = "INSERT INTO Ghe (soGhe, maPhong) VALUES (?, ?)"; // Bỏ TrangThai
         try (Connection conn = AivenConnection.getConnection();
@@ -115,7 +115,7 @@ public class GheDao {
         }
     }
 
-    // ✅ Cập nhật thông tin ghế (ĐÃ SỬA)
+    // Cập nhật thông tin ghế (ĐÃ SỬA)
     public void update(Ghe ghe) {
         String sql = "UPDATE Ghe SET maPhong = ? WHERE soGhe = ?"; // Bỏ TrangThai
         try (Connection conn = AivenConnection.getConnection();
@@ -129,7 +129,7 @@ public class GheDao {
         }
     }
 
-    // ✅ Xoá ghế theo soGhe (ĐÃ SỬA)
+    // Xoá ghế theo soGhe (ĐÃ SỬA)
     public void delete(String soGhe) {
         String sql = "DELETE FROM Ghe WHERE soGhe = ?";
         try (Connection conn = AivenConnection.getConnection();
@@ -142,7 +142,7 @@ public class GheDao {
         }
     }
     
-    // ✅ Xoá ghế theo soGhe và maPhong (THÊM MỚI - nên dùng)
+    // Xoá ghế theo soGhe và maPhong (THÊM MỚI - nên dùng)
     public void delete(String soGhe, int maPhong) {
         String sql = "DELETE FROM Ghe WHERE soGhe = ? AND maPhong = ?";
         try (Connection conn = AivenConnection.getConnection();

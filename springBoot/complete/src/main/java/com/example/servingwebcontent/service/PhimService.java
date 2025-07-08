@@ -30,7 +30,7 @@ public class PhimService {
             phimDao.create(phim);
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Lỗi tạo phim:");
+            System.out.println(" Lỗi tạo phim:");
             e.printStackTrace();
             return false;
         }
@@ -41,7 +41,7 @@ public class PhimService {
             phimDao.update(phim);
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Lỗi cập nhật phim:");
+            System.out.println(" Lỗi cập nhật phim:");
             e.printStackTrace();
             return false;
         }
@@ -52,7 +52,7 @@ public class PhimService {
             phimDao.delete(id);
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Lỗi xóa phim:");
+            System.out.println(" Lỗi xóa phim:");
             e.printStackTrace();
             return false;
         }

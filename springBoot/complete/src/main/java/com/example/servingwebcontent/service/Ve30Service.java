@@ -18,15 +18,15 @@ public class Ve30Service {
     private VeDao veDAO;
 
     private void printHeader(String title) {
-        System.out.println("\n================== 📌 " + title + " ==================\n");
+        System.out.println("\n==================  " + title + " ==================\n");
     }
 
     private void printFooter(String message) {
-        System.out.println("\n================== ✅ " + message + " ==================\n");
+        System.out.println("\n==================  " + message + " ==================\n");
     }
 
     /**
-     * ✅ Lấy tất cả vé của một khách hàng
+     *  Lấy tất cả vé của một khách hàng
      */
     public List<Ve> getVeListByKhachHang(int maKhachHang) {
         printHeader("LẤY VÉ CỦA KHÁCH HÀNG MÃ " + maKhachHang);
@@ -37,7 +37,7 @@ public class Ve30Service {
     }
 
     /**
-     * ✅ Lấy tất cả vé trong hệ thống
+     *  Lấy tất cả vé trong hệ thống
      */
     public List<Ve> getAllVe() {
         printHeader("LẤY TOÀN BỘ VÉ TRONG HỆ THỐNG");
@@ -48,7 +48,7 @@ public class Ve30Service {
     }
 
     /**
-     * ✅ Lọc vé sắp chiếu trong 30 phút tới
+     *  Lọc vé sắp chiếu trong 30 phút tới
      */
     public List<Ve> locVeSapChieuTrong30Phut(List<Ve> danhSachVe) {
         printHeader("BẮT ĐẦU LỌC VÉ SẮP CHIẾU TRONG 30 PHÚT");
@@ -78,7 +78,7 @@ public class Ve30Service {
                     System.out.printf("➡️  Vé %-4d | Giờ chiếu: %-20s | ", maVe, gioChieu);
 
                     if (gioChieu.isAfter(now) && gioChieu.isBefore(in30Min)) {
-                        System.out.println("✅ HỢP LỆ");
+                        System.out.println(" HỢP LỆ");
                         Ve ve = new Ve(
                             maVe,
                             rs.getInt("MaSuatChieu"),
@@ -109,7 +109,7 @@ public class Ve30Service {
     }
 
     /**
-     * ✅ Lấy danh sách mã khách hàng có vé sắp chiếu
+     *  Lấy danh sách mã khách hàng có vé sắp chiếu
      */
     public List<Integer> getDanhSachMaKhachHangSapChieu() {
         printHeader("LẤY DANH SÁCH MÃ KHÁCH HÀNG SẮP CHIẾU");
@@ -120,7 +120,7 @@ public class Ve30Service {
     }
 
     /**
-     * ✅ Lấy danh sách vé sắp chiếu toàn hệ thống
+     *  Lấy danh sách vé sắp chiếu toàn hệ thống
      */
     public List<Ve> getDanhSachVeSapChieuToanBo() {
         printHeader("LỌC TOÀN BỘ VÉ SẮP CHIẾU TOÀN HỆ THỐNG");

@@ -23,11 +23,11 @@ public class NhanVienDao {
 
         int rowsInserted = ps.executeUpdate();
         if (rowsInserted > 0) {
-            System.out.println("✅ Thêm nhân viên: " + nv.getMaNguoiDung());
+            System.out.println(" Thêm nhân viên: " + nv.getMaNguoiDung());
             return true;
         }
     } catch (SQLException | ClassNotFoundException e) {
-        System.out.println("❌ Lỗi khi thêm nhân viên:");
+        System.out.println(" Lỗi khi thêm nhân viên:");
         e.printStackTrace();
     }
     return false;
@@ -45,7 +45,7 @@ public class NhanVienDao {
             ps.setInt(4, nv.getMaNguoiDung());
             ps.executeUpdate();
 
-            System.out.println("✅ Cập nhật nhân viên: " + nv.getMaNguoiDung());
+            System.out.println("Cập nhật nhân viên: " + nv.getMaNguoiDung());
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

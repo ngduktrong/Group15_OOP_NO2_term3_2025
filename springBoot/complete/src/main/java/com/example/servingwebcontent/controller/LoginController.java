@@ -66,14 +66,18 @@ public class LoginController {
             if ("admin".equalsIgnoreCase(loai) && "admin".equalsIgnoreCase(role)) {
                 session.setAttribute("username", username);
                 session.setAttribute("role", "admin");
+                session.setAttribute("maNguoiDung", tk.getMaNguoiDung());
+                session.setAttribute("user", tk);
+
+                model.addAttribute("username", username);
+                model.addAttribute("maNguoiDung", tk.getMaNguoiDung());
+                model.addAttribute("role", "admin");
                 return "admin-dashboard";
+
             } else if ("user".equalsIgnoreCase(loai) && "user".equalsIgnoreCase(role)) {
                 session.setAttribute("username", username);
                 session.setAttribute("role", "user");
-                
-                // +++ THÊM: lưu mã khách hàng riêng vào session +++
                 session.setAttribute("maKhachHang", tk.getMaNguoiDung());
-                // +++ TÙY CHỌN: lưu luôn object TaiKhoan để dùng khi cần +++
                 session.setAttribute("user", tk);
 
                 List<Phim> phims = phimService.getAllPhim();
@@ -133,15 +137,14 @@ public class LoginController {
             return "register";
         }
 
-        // ✅ Thêm người dùng mới
+        // Thêm người dùng mặc định
         int maNguoiDungMoi = taiKhoanService.createNguoiDungMacDinh(username, phone);
-
         if (maNguoiDungMoi == -1) {
             model.addAttribute("error", "Không thể tạo người dùng.");
             return "register";
         }
 
-        // ✅ Tạo tài khoản
+        // Tạo tài khoản mới
         TaiKhoan newUser = new TaiKhoan();
         newUser.setTenDangNhap(username);
         newUser.setMatKhau(password);
@@ -160,13 +163,22 @@ public class LoginController {
     }
 
     @GetMapping("/admin/dashboard")
-    public String adminDashboard(Model model) {
-        model.addAttribute("username", "admin");
+    public String adminDashboard(HttpSession session, Model model) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+        Integer maNguoiDung = (Integer) session.getAttribute("maNguoiDung");
+
+        if (username == null || role == null || !role.equals("admin")) {
+            model.addAttribute("error", "Bạn cần đăng nhập với quyền admin để truy cập.");
+            return "login";
+        }
+
+        model.addAttribute("username", username);
+        model.addAttribute("maNguoiDung", maNguoiDung);
         model.addAttribute("role", "admin");
         return "admin-dashboard";
     }
 
-    
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

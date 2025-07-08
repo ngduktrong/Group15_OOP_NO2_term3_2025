@@ -33,7 +33,7 @@ public class TaiKhoanDao {
             System.out.println("📄 Đã lấy danh sách tài khoản (" + list.size() + "):");
             list.forEach(t -> System.out.println("🔸 " + t.getTenDangNhap()));
         } catch (Exception e) {
-            System.out.println("❌ Lỗi khi lấy danh sách tài khoản:");
+            System.out.println(" Lỗi khi lấy danh sách tài khoản:");
             e.printStackTrace();
         }
         return list;
@@ -52,11 +52,11 @@ public class TaiKhoanDao {
 
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                System.out.println("✅ Thêm tài khoản: " + tk.getTenDangNhap());
+                System.out.println(" Thêm tài khoản: " + tk.getTenDangNhap());
                 return true;
             }
         } catch (Exception e) {
-            System.out.println("❌ Lỗi khi thêm tài khoản:");
+            System.out.println(" Lỗi khi thêm tài khoản:");
             e.printStackTrace();
         }
         return false;
@@ -75,11 +75,11 @@ public class TaiKhoanDao {
 
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                System.out.println("📝 Cập nhật tài khoản: " + tk.getTenDangNhap());
+                System.out.println("Cập nhật tài khoản: " + tk.getTenDangNhap());
                 return true;
             }
         } catch (Exception e) {
-            System.out.println("❌ Lỗi khi cập nhật tài khoản:");
+            System.out.println(" Lỗi khi cập nhật tài khoản:");
             e.printStackTrace();
         }
         return false;
@@ -94,11 +94,11 @@ public class TaiKhoanDao {
             stmt.setString(1, tenDangNhap);
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                System.out.println("🗑 Xóa tài khoản: " + tenDangNhap);
+                System.out.println(" Xóa tài khoản: " + tenDangNhap);
                 return true;
             }
         } catch (Exception e) {
-            System.out.println("❌ Lỗi khi xóa tài khoản:");
+            System.out.println("Lỗi khi xóa tài khoản:");
             e.printStackTrace();
         }
         return false;
@@ -113,7 +113,7 @@ public class TaiKhoanDao {
             stmt.setString(1, tenDangNhap);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    System.out.println("🔍 Tìm thấy tài khoản: " + tenDangNhap);
+                    System.out.println("Tìm thấy tài khoản: " + tenDangNhap);
                     return new TaiKhoan(
                             rs.getString("TenDangNhap"),
                             rs.getString("MatKhau"),
@@ -122,9 +122,9 @@ public class TaiKhoanDao {
                     );
                 }
             }
-            System.out.println("⚠️ Không tìm thấy tài khoản: " + tenDangNhap);
+            System.out.println("Không tìm thấy tài khoản: " + tenDangNhap);
         } catch (Exception e) {
-            System.out.println("❌ Lỗi khi lấy tài khoản theo tên đăng nhập:");
+            System.out.println("Lỗi khi lấy tài khoản theo tên đăng nhập:");
             e.printStackTrace();
         }
         return null;
@@ -145,7 +145,7 @@ public class TaiKhoanDao {
         }
     }
 
-    // ✅ Thêm người dùng mới vào bảng NguoiDung (với thông tin từ form đăng ký)
+    // Thêm người dùng mới vào bảng NguoiDung (với thông tin từ form đăng ký)
     public int insertNguoiDungMacDinh(String hoTen, String soDienThoai) {
         int maNguoiDungMoi = -1;
         String sql = "INSERT INTO NguoiDung (HoTen, SoDienThoai, Email, LoaiNguoiDung) VALUES (?, ?, ?, 'KhachHang')";
@@ -164,15 +164,15 @@ public class TaiKhoanDao {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
                         maNguoiDungMoi = rs.getInt(1);
-                        System.out.println("✅ Thêm người dùng thành công: " + hoTen + " (ID = " + maNguoiDungMoi + ")");
+                        System.out.println("Thêm người dùng thành công: " + hoTen + " (ID = " + maNguoiDungMoi + ")");
                     }
                 }
             }
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("⚠️ Số điện thoại đã tồn tại: " + soDienThoai);
+            System.out.println("Số điện thoại đã tồn tại: " + soDienThoai);
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("❌ Lỗi khi thêm người dùng mặc định:");
+            System.out.println("Lỗi khi thêm người dùng mặc định:");
             e.printStackTrace();
         }
 
