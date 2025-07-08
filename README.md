@@ -6,7 +6,7 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 
 1. Giao diện
 
-    - Giao diện đồ họa bằng Java cho dự án
+    - Giao diện đồ họa bằng HTML + CSS + Thymleaf + java scrip
       
 2. Chức năng chính
    + Quản lý Phim : <br>
@@ -54,6 +54,8 @@ Dự án này nhằm xây dựng một ứng dụng quản lý rạp chiếu phi
 
 <h2> Readme Giới thiệu Project </h2>
 [Link](https://ngduktrong.github.io/Group15_OOP_NO2_term3_2025/)
+<h2>Link Demo Youtube dự án </h2>
+[Link](https://youtu.be/GOU-oDzszp0?si=5MNe2XBzPSC6qhTk)
 
 <h2> Sơ đồ khối </h2>
 
