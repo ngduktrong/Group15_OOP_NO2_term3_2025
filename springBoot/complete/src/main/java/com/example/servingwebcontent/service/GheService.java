@@ -7,6 +7,7 @@ import com.example.servingwebcontent.models.PhongChieu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -22,9 +23,16 @@ public class GheService {
     }
 
     public List<Ghe> getAllGhe() {
-        return gheDao.getAll();
+        List<Ghe> danhSach = gheDao.getAll();
+        danhSach.sort(this::compareGhe);
+        return danhSach;
     }
-    
+
+    public List<Ghe> getByMaPhong(int maPhong) {
+        List<Ghe> danhSach = gheDao.getByMaPhong(maPhong);
+        danhSach.sort(this::compareGhe);
+        return danhSach;
+    }
 
     public Ghe getGheById(String soGhe, int maPhong) {
         return gheDao.getById(soGhe, maPhong);
@@ -32,21 +40,17 @@ public class GheService {
 
     public boolean createGhe(Ghe ghe) {
         PhongChieu phong = phongChieuDao.getById(ghe.getMaPhong());
-
-        // Kiểm tra mã phòng có tồn tại không
         if (phong == null) {
             System.err.println(" Mã phòng không hợp lệ!");
             return false;
         }
 
-        // Kiểm tra số ghế hiện tại
         List<Ghe> gheTrongPhong = gheDao.getByMaPhong(ghe.getMaPhong());
         if (gheTrongPhong.size() >= phong.getSoLuongGhe()) {
             System.err.println(" Không thể thêm ghế: số lượng ghế đã đạt tối đa!");
             return false;
         }
 
-        // Kiểm tra trùng số ghế
         Ghe gheTonTai = gheDao.getById(ghe.getSoGhe(), ghe.getMaPhong());
         if (gheTonTai != null) {
             System.err.println(" Ghế đã tồn tại trong phòng này!");
@@ -82,19 +86,63 @@ public class GheService {
         return true;
     }
 
-    public List<Ghe> getByMaPhong(int maPhong) {
-        return gheDao.getByMaPhong(maPhong);
-    }
-    public void delete(String soGhe) {
-       
-        Ghe ghe = gheDao.getById(soGhe, 0); 
-        if (ghe != null) {
-            gheDao.delete(soGhe, ghe.getMaPhong());
-            System.out.println(" Xoá ghế thành công: " + soGhe);
-        } else {
-            System.err.println(" Không tìm thấy ghế để xoá: " + soGhe);
+    public void createAuto(int maPhong, int soHang, int soGheMoiHang) {
+        PhongChieu phong = phongChieuDao.getById(maPhong);
+        if (phong == null) {
+            System.err.println(" Mã phòng không hợp lệ khi tạo ghế hàng loạt!");
+            return;
         }
+
+        int gheToiDa = phong.getSoLuongGhe();
+        List<Ghe> gheHienTai = gheDao.getByMaPhong(maPhong);
+        int demThem = 0;
+
+        for (char row = 'A'; row < 'A' + soHang; row++) {
+            for (int num = 1; num <= soGheMoiHang; num++) {
+                if (gheHienTai.size() + demThem >= gheToiDa) {
+                    System.err.println(" Vượt quá số lượng ghế tối đa của phòng!");
+                    return;
+                }
+
+                String soGhe = row + String.valueOf(num);
+                Ghe gheMoi = new Ghe(soGhe, maPhong);
+
+                if (gheDao.getById(soGhe, maPhong) == null) {
+                    gheDao.create(gheMoi);
+                    demThem++;
+                } else {
+                    System.out.println(" Bỏ qua ghế đã tồn tại: " + soGhe);
+                }
+            }
+        }
+
+        System.out.println(" Đã thêm " + demThem + " ghế cho phòng " + maPhong);
     }
 
-    
+    public void delete(String soGhe) {
+        List<Ghe> gheList = gheDao.getAll();
+        for (Ghe g : gheList) {
+            if (g.getSoGhe().equals(soGhe)) {
+                gheDao.delete(soGhe, g.getMaPhong());
+                System.out.println(" Xoá ghế thành công: " + soGhe);
+                return;
+            }
+        }
+        System.err.println(" Không tìm thấy ghế để xoá: " + soGhe);
+    }
+
+    // So sánh ghế theo maPhong -> soGhe (tự nhiên)
+    private int compareGhe(Ghe g1, Ghe g2) {
+        int cmpPhong = Integer.compare(g1.getMaPhong(), g2.getMaPhong());
+        if (cmpPhong != 0) return cmpPhong;
+
+        // So sánh mã ghế (A1 < A2 < A10)
+        String p1 = g1.getSoGhe().replaceAll("\\d", "");
+        String p2 = g2.getSoGhe().replaceAll("\\d", "");
+        int num1 = Integer.parseInt(g1.getSoGhe().replaceAll("\\D", ""));
+        int num2 = Integer.parseInt(g2.getSoGhe().replaceAll("\\D", ""));
+
+        int cmpRow = p1.compareTo(p2);
+        return (cmpRow != 0) ? cmpRow : Integer.compare(num1, num2);
+    }
 }

@@ -265,6 +265,18 @@
             box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
         }
         
+        .btn-secondary {
+            background: linear-gradient(90deg, #6c757d, #495057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #495057, #343a40);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+        }
+        
         .btn-success {
             background: linear-gradient(90deg, var(--success), #27ae60);
             color: white;
@@ -275,6 +287,18 @@
             background: linear-gradient(90deg, #27ae60, var(--success));
             transform: translateY(-3px);
             box-shadow: 0 6px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #e67e22);
+            color: white;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2);
+        }
+        
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #e67e22, var(--warning));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
         }
         
         .btn-danger {
@@ -544,6 +568,16 @@
             gap: 10px;
             margin-top: 15px;
         }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -553,6 +587,10 @@
         <div th:if="${errorMessage}" class="error">
             <i class="fas fa-exclamation-circle"></i>
             <span th:text="${errorMessage}"></span>
+        </div>
+        <div th:if="${successMessage}" class="message">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${successMessage}"></span>
         </div>
     </div>
 
@@ -581,10 +619,6 @@
     <div class="dashboard">
         <!-- Left Column -->
         <div class="left-column">
-            <!-- Stats -->
-          
-                
-
             <!-- Form Card -->
             <div class="card">
                 <div class="card-header">
@@ -594,30 +628,64 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/ghe/add}" method="post">
+                    <form id="gheForm" th:action="@{/ghe/add}" method="post">
+                        <!-- Chế độ thêm -->
                         <div class="form-group">
-                            <label class="form-label" for="soGhe">
-                                <i class="fas fa-hashtag"></i> Số Ghế
+                            <label class="form-label" for="mode">
+                                <i class="fas fa-cogs"></i> Chế độ thêm
                             </label>
-                            <input type="text" class="form-input" id="soGhe" name="soGhe" required placeholder="Nhập số ghế" />
-                            <div class="example" style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
-                                <i class="fas fa-info-circle"></i> VD: A01
+                            <select class="form-input" id="mode" name="mode" onchange="toggleMode()">
+                                <option value="single">Thêm Ghế Đơn</option>
+                                <option value="batch">Thêm Ghế Hàng Loạt</option>
+                            </select>
+                        </div>
+
+                        <!-- Ghế đơn -->
+                        <div id="singleModeFields">
+                            <div class="form-group">
+                                <label class="form-label" for="soGhe">
+                                    <i class="fas fa-hashtag"></i> Số Ghế
+                                </label>
+                                <input type="text" class="form-input" id="soGhe" name="soGhe" placeholder="VD: A01" />
                             </div>
                         </div>
-                        
+
+                        <!-- Chung -->
                         <div class="form-group">
                             <label class="form-label" for="maPhong">
                                 <i class="fas fa-door-open"></i> Mã Phòng
                             </label>
                             <input type="number" class="form-input" id="maPhong" name="maPhong" required placeholder="Nhập mã phòng" min="1" />
-                            <div class="example" style="font-size: 0.85rem; color: var(--gray); margin-top: 5px;">
-                                <i class="fas fa-info-circle"></i> VD: 1
+                        </div>
+
+                        <!-- Ghế hàng loạt -->
+                        <div id="batchModeFields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="soHang">
+                                            <i class="fas fa-layer-group"></i> Số Hàng
+                                        </label>
+                                        <input type="number" class="form-input" id="soHang" name="soHang" placeholder="VD: 3" min="1" />
+                                    </div>
+                                </div>
+                                <div class="form-col">
+                                    <div class="form-group">
+                                        <label class="form-label" for="soGheMoiHang">
+                                            <i class="fas fa-th-large"></i> Ghế Mỗi Hàng
+                                        </label>
+                                        <input type="number" class="form-input" id="soGheMoiHang" name="soGheMoiHang" placeholder="VD: 5" min="1" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-buttons">
-                            <button type="submit" class="btn btn-success btn-full">
+                            <button type="submit" class="btn btn-success">
                                 <i class="fas fa-plus"></i> Thêm Ghế
+                            </button>
+                            <button type="reset" class="btn btn-secondary">
+                                <i class="fas fa-redo"></i> Nhập lại
                             </button>
                         </div>
                     </form>
@@ -638,15 +706,17 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Số Ghế</th>
                                     <th>Mã Phòng</th>
-                                    <th>Hành động</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="ghe : ${gheList}">
-                                    <td th:text="${ghe.soGhe}"></td>
-                                    <td th:text="${ghe.maPhong}"></td>
+                                <tr th:each="ghe, gheStat : ${gheList}">
+                                    <td th:text="${gheStat.index + 1}">1</td>
+                                    <td th:text="${ghe.soGhe}">A01</td>
+                                    <td th:text="${ghe.maPhong}">1</td>
                                     <td>
                                         <div class="actions-cell">
                                             <form th:action="@{/ghe/delete}" method="post">
@@ -662,7 +732,7 @@
                                 </tr>
                                 
                                 <tr th:if="${gheList.isEmpty()}">
-                                    <td colspan="3" class="empty-state">
+                                    <td colspan="4" class="empty-state">
                                         <i class="fas fa-chair"></i>
                                         <h4>Chưa có ghế nào</h4>
                                         <p>Hãy thêm ghế mới bằng nút "Thêm ghế"</p>
@@ -686,28 +756,49 @@
             setTimeout(() => msg.remove(), 500);
         });
     }, 4000);
-    
+
     // Hiệu ứng khi di chuột vào hàng
     document.querySelectorAll('.table tbody tr').forEach(row => {
         row.addEventListener('mouseenter', function() {
             this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
         });
-        
+
         row.addEventListener('mouseleave', function() {
             this.style.boxShadow = 'none';
         });
     });
-    
+
     // Hiệu ứng khi focus vào input
     document.querySelectorAll('.form-input').forEach(input => {
         input.addEventListener('focus', function() {
             this.parentElement.style.transform = 'translateY(-3px)';
         });
-        
+
         input.addEventListener('blur', function() {
             this.parentElement.style.transform = 'none';
         });
     });
+
+    // Chuyển đổi giữa Thêm Ghế Đơn và Ghế Hàng Loạt
+    function toggleMode() {
+        const mode = document.getElementById("mode").value;
+        const singleFields = document.getElementById("singleModeFields");
+        const batchFields = document.getElementById("batchModeFields");
+        const form = document.getElementById("gheForm");
+
+        if (mode === "single") {
+            singleFields.style.display = "block";
+            batchFields.style.display = "none";
+            form.action = "/ghe/add";
+        } else {
+            singleFields.style.display = "none";
+            batchFields.style.display = "block";
+            form.action = "/ghe/add-auto";
+        }
+    }
+
+    // Gọi toggleMode() khi trang load để set form đúng chế độ
+    document.addEventListener("DOMContentLoaded", toggleMode);
 </script>
 </body>
 </html>
