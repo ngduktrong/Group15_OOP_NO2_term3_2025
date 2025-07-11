@@ -433,10 +433,19 @@
 </head>
 <body>
 <header>
-    <div class="header-left">
-        <div class="logo">🎬</div>
-        <h1>Hệ Thống Quản Lý Rạp Chiếu Phim T&M Admin</h1>
+    <div class="header-left d-flex align-items-center gap-3">
+        <div class="logo rounded-circle bg-dark text-white d-flex justify-content-center align-items-center" 
+    style="width: 50px; height: 50px; font-size: 24px; font-weight: bold;">
+        🎬
+        </div>
+        <div>
+        <h1 class="mb-0 text-primary fw-bold" style="font-size: 24px;">
+        Hệ Thống Quản Lý Rạp Chiếu Phim
+        </h1>
+        <small class="text-muted" style="font-size: 16px;">T&M Cinema - Your Movie Experience</small>
+        </div>
     </div>
+
     <a th:href="@{/logout}" class="logout-btn">
         <i class="fas fa-sign-out-alt"></i> Đăng xuất
     </a>
@@ -457,12 +466,34 @@
         
     </nav>
     <main>
-        <div class="welcome-section">
-            <h2><i class="fas fa-hand-sparkles"></i> Xin chào Admin :<span th:text="${username}"</h2>
-            <h2>Xin chào: ></span></h2>
-            <p>Mã người dùng của bạn: <span th:text="${maNguoiDung}"></span></p>
-            <p>Chào mừng bạn đến với hệ thống quản lý rạp chiếu phim. Tại đây bạn có thể quản lý mọi hoạt động của rạp, từ quản lý phim, suất chiếu đến theo dõi doanh thu và quản lý nhân viên.</p>
+        <div class="welcome-section" style="padding: 20px; background-color: #f9f9f9; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">
+            <i class="fas fa-hand-sparkles me-2"></i>
+            Xin chào Admin: <span th:text="${username}" style="color: #007BFF;"></span>
+        </h2>
+
+        <p style="font-size: 16px; margin: 8px 0;">
+            Mã người dùng của bạn: <strong><span th:text="${maNguoiDung}"></span></strong>
+        </p>
+
+        <p style="font-size: 16px; color: #444; margin: 8px 0;">
+        <strong>Phát triển bởi</strong>: Nguyễn Đức Trọng &nbsp;|&nbsp;
+        <strong>Hotline</strong>: 
+        <a href="tel:0983241301" style="color: #007BFF; text-decoration: none;">0983 241 301</a> &nbsp;|&nbsp;
+        <a href="https://www.facebook.com/Duktrong/" target="_blank" style="color: #4267B2; text-decoration: none;">
+            <i class="fab fa-facebook-square"></i> Facebook
+        </a> &nbsp;|&nbsp;
+        <a href="https://www.youtube.com/watch?v=GOU-oDzszp0&t=280s" target="_blank" style="color: #FF0000; text-decoration: none;">
+            <i class="fab fa-youtube"></i> YouTube
+        </a>
+    </p>
+
+    <p style="font-size: 15px; line-height: 1.6; margin-top: 15px;">
+        Chào mừng bạn đến với <strong>hệ thống quản lý rạp chiếu phim</strong>. Tại đây, bạn có thể quản lý toàn bộ hoạt động như:
+        phim, suất chiếu, phòng chiếu, doanh thu và nhân viên một cách dễ dàng và hiệu quả.
+    </p>
         </div>
+
 
         
 
