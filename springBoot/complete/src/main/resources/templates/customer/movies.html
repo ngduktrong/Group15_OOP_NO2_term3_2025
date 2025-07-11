@@ -572,7 +572,7 @@
             </div>
             
             <img th:if="${phim.duongDanPoster}"
-            th:src="@{/img/{file}(file=${phim.duongDanPoster})}"
+            th:src="@{/image/{file}(file=${phim.duongDanPoster})}"
             class="poster" alt="Poster phim"
             onerror="this.onerror=null;this.src='@{/image/logo.png}'"/>
 
